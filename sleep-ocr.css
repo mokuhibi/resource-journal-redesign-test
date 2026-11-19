@@ -1,0 +1,49 @@
+#app-panel.sleep-ocr-panel{width:680px}
+.sleep-ocr-warning{font-size:13px;line-height:1.6}
+.sleep-ocr-tools{margin:8px 0}.sleep-ocr-tools button{min-height:44px;font-size:13px}
+.sleep-ocr-fields{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0}
+.sleep-ocr-fields :is(input,select){flex:1 1 110px;min-width:0;width:auto;min-height:44px;margin:0}
+.sleep-ocr-fields input[type=number]{flex-basis:90px}
+.sleep-ocr-fields button{min-height:44px}
+.sleep-ocr-group{margin:12px 0;padding-top:8px;border-top:1px solid var(--mh-border)}
+.sleep-ocr-group h3{font-size:15px}
+.sleep-ocr-item{min-width:0}
+.sleep-ocr-item details{padding:0 0 8px}.sleep-ocr-item summary,.sleep-ocr-sources>summary{min-height:44px;align-content:center;font-size:13px}
+.sleep-ocr-item .sleep-entry-name{min-width:0;text-align:left;overflow-wrap:anywhere}
+.sleep-ocr-item .sleep-entry-name>strong{font-weight:400}
+.sleep-ocr-date>.date-field{flex:1 1 130px;min-width:0}
+.sleep-ocr-fields>.date-field{min-width:0;flex:1 1 130px}
+.sleep-ocr-preview{overflow:hidden;width:100%;background:var(--mh-surface)}.sleep-ocr-preview img{display:block;width:100%;height:auto}
+.sleep-ocr-suggestions,.sleep-ocr-checks{display:flex;gap:8px;flex-wrap:wrap}
+.sleep-ocr-suggestions button{font-size:13px;min-height:44px;padding:6px}
+.sleep-ocr-panel label.check{display:flex;align-items:center;gap:8px;min-height:44px;margin:4px 0;font-size:13px}
+.sleep-ocr-panel label.check input{width:20px;height:20px;min-height:20px;margin:0;flex:none}
+.sleep-ocr-actions{display:flex;justify-content:flex-end;gap:8px;position:sticky;bottom:0;padding:12px 0 max(12px,env(safe-area-inset-bottom));background:var(--mh-surface);border-top:1px solid var(--mh-border)}
+.sleep-ocr-actions button{min-height:44px;font-size:14px}
+.sleep-ocr-review-count{position:sticky;top:0;z-index:1;margin:0;padding:10px 0;background:var(--mh-surface);font-weight:700}
+.sleep-ocr-review-group{border:1px solid var(--mh-border);border-radius:var(--mh-radius);padding:8px;margin:10px 0}
+.sleep-ocr-review-group h3{font-size:14px;margin:0 0 6px}
+.sleep-ocr-review-row{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--mh-border);padding:6px 0;font-size:13px}
+.sleep-ocr-review-row.is-removed{opacity:.45}
+.sleep-ocr-review-row>span:first-child{min-width:0;overflow-wrap:anywhere}
+.sleep-ocr-review-choices{display:flex;gap:4px;flex:none}
+.sleep-ocr-review-choices button{min-height:44px;padding:4px 8px;font-size:13px}
+.sleep-ocr-review-choices button[aria-pressed=true]{background:var(--mh-selected);border-color:var(--mh-accent)}
+#app-panel.sleep-ocr-review-panel{display:flex;flex-direction:column;max-height:calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));background:var(--mh-surface)}
+#app-panel.sleep-ocr-review-panel:not([open]){display:none}
+#app-panel.sleep-ocr-review-panel .app-panel-head{flex:none;background:var(--mh-surface)}
+#app-panel.sleep-ocr-review-panel .app-panel-head button{display:none}
+#app-panel.sleep-ocr-review-panel .app-panel-body{display:flex;flex-direction:column;min-height:0;max-height:none;overflow:hidden;padding:0 16px;background:var(--mh-surface)}
+#app-panel.sleep-ocr-review-panel .sleep-ocr-review-count{position:static;flex:none;padding:12px 0 8px;font-size:14px}
+#app-panel.sleep-ocr-review-panel .sleep-ocr-warning{flex:none;margin:0 0 8px}
+#app-panel.sleep-ocr-review-panel .sleep-ocr-review-list{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+#app-panel.sleep-ocr-review-panel .sleep-ocr-actions{position:static;flex:none;margin:0 -16px;padding:12px 16px max(12px,env(safe-area-inset-bottom));background:var(--mh-surface)}
+.sleep-ocr-review-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px}
+.sleep-ocr-review-info{min-width:0;display:flex;flex-direction:column;gap:2px}
+.sleep-ocr-review-info small{font-size:11px;color:var(--mh-muted)}
+.sleep-ocr-review-title{display:flex;align-items:baseline;justify-content:space-between;gap:4px}
+.sleep-ocr-review-title small{font-size:11px;font-weight:400;white-space:nowrap;color:var(--mh-muted)}
+.sleep-ocr-review-detail{display:flex;align-items:baseline;gap:4px;min-width:0;line-height:1.35}
+.sleep-ocr-review-detail>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sleep-ocr-review-detail>span:last-child{flex:none;white-space:nowrap}
+@media(max-width:390px){.sleep-ocr-review-choices{flex-direction:column;gap:2px}.sleep-ocr-review-choices button{min-height:44px;padding:2px 6px;font-size:12px}}

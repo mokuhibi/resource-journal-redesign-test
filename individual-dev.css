@@ -1,0 +1,121 @@
+/* Ver.1.1.0 DEV: confined to team and its choice dialogs. */
+#team #roster-panel .individual-roster-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+#team #roster-panel .roster-views{display:flex;gap:4px;flex-wrap:wrap;margin:12px 0}
+#team .roster-views button{font-size:13px;min-height:44px;padding:6px 8px}
+#team .roster-views button[aria-pressed=true]{background:var(--mh-selected);color:var(--mh-accent)}
+#team .provisional-badge{display:inline-block;font-size:11px;color:var(--mh-accent)}
+#team #team-panel #team-slots>.team-slot-row{position:relative;display:block;border:0!important}
+#team #team-panel #team-slots .team-slot-row>.team-slot-button{padding-top:32px;height:100%;min-height:120px}
+#team #team-panel #team-slots .team-slot-row>span{position:absolute;top:4px;left:5px;pointer-events:none}
+#team #team-panel #team-slots .team-slot-edit{position:absolute;top:0;right:0;width:32px;height:32px;min-height:32px;padding:8px;margin:0;display:grid;place-items:center;background:transparent;border:0}
+#team #team-panel #team-slots+h2{margin-top:28px}
+#team #team-panel .current-team-head{flex-wrap:wrap}
+#team #team-panel .current-team-head button{min-height:44px;font-size:13px;padding:6px 8px}
+#team #team-panel #saved-teams{margin-top:12px;padding-top:8px;border-top:1px solid var(--mh-border)}
+#team #team-panel .saved-team-slots>.team-slot-button{grid-column:auto;grid-row:auto}
+#team .individual-editor-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+#team .individual-editor-head h2{margin:0;font-size:20px}
+#team .individual-editor-head .profile-editor-actions{display:flex;gap:4px;align-items:center;margin:0;padding:0;flex:0 0 auto}
+#team .individual-editor-head .profile-editor-actions button{width:auto;min-height:44px;height:44px;margin:0;padding:6px 8px;font-size:13px}
+#team .individual-top-grid .individual-stats-row{grid-column:1/-1;display:grid;grid-template-columns:84px minmax(0,1fr) auto;gap:8px;align-items:center;min-width:0}
+#team .individual-stats-row>label{min-width:0;margin:0}
+#team .individual-stats-row .check{display:flex;align-items:center;gap:4px;white-space:nowrap;font-size:13px}
+#team .individual-stats-row .check input{width:20px;min-height:20px;height:20px;margin:0}
+#team .individual-top-grid .individual-field:has(#profile-skill,#register-skill){max-width:110px}
+#team .individual-top-grid input,#team .individual-top-grid select,#team .individual-pick{margin:0;min-height:44px;max-width:100%;box-sizing:border-box}
+#team .individual-pick{text-align:left;width:100%;padding:8px;overflow-wrap:anywhere;font-size:14px}
+#team .individual-subskills label{min-width:0;font-size:13px}
+#team .individual-top-grid .individual-field:has([data-fixed=true]){pointer-events:none}
+#app-panel.individual-choice{width:760px;max-width:calc(100vw - 16px);padding:0;box-sizing:border-box}
+#app-panel.individual-choice .app-panel-head{display:flex;gap:6px;align-items:center;padding:8px}
+#app-panel.individual-choice .app-panel-head h2{margin-right:auto;font-size:18px;white-space:nowrap}
+#app-panel.individual-choice .app-panel-head button{min-height:44px;padding:6px 8px;font-size:13px;white-space:nowrap}
+#app-panel.individual-choice .app-panel-body{overflow:hidden;min-height:0;padding:8px}
+#app-panel.individual-choice .individual-choice-grid{display:grid;grid-template-columns:minmax(45px,.6fr) minmax(85px,1.1fr) minmax(85px,1.4fr);gap:6px;height:min(58dvh,460px);min-height:275px}
+#app-panel.individual-choice .individual-choice-grid>div:not(.individual-options){display:grid;grid-template-rows:repeat(5,minmax(0,1fr));gap:4px;min-width:0}
+#app-panel.individual-choice .individual-choice-grid.nature-choice>div:not(.individual-options){grid-template-rows:repeat(6,minmax(0,1fr))}
+#app-panel.individual-choice .individual-choice-grid button{margin:0;min-width:0;min-height:44px;width:100%;padding:6px 4px;font-size:13px;overflow-wrap:anywhere;line-height:1.5}
+#app-panel.individual-choice .individual-choice-grid button[aria-pressed=true],#app-panel.individual-choice .individual-choice-grid .nature-match{outline:2px solid var(--mh-accent);outline-offset:-2px}
+.individual-options{overflow-y:auto;overscroll-behavior:contain;min-height:0;min-width:0;display:flex;flex-direction:column;gap:4px;position:relative}
+.individual-options button{flex:none}
+#app-panel.individual-choice .individual-options h3{margin:8px 0;font-size:13px;overflow-wrap:anywhere}
+#app-panel.individual-choice .individual-choice-grid .subskill-gold{background:#f5e5a5;color:var(--mh-text)}
+#app-panel.individual-choice .individual-choice-grid .subskill-blue{background:#d7e8f5;color:var(--mh-text)}
+#app-panel.individual-choice .individual-choice-grid .subskill-white{background:var(--mh-surface);color:var(--mh-text)}
+#app-panel.individual-choice .subskill-choice-grid{grid-template-columns:minmax(0,1.7fr) minmax(0,1.4fr)}
+#app-panel.individual-choice .individual-choice-grid.subskill-choice-grid>.subskill-level-list{grid-template-rows:repeat(5,54px);align-content:start;gap:3px;padding-right:5px;border-right:1px solid var(--mh-border)}
+#app-panel.individual-choice .subskill-level-row{display:grid;grid-template-columns:42px minmax(0,1fr);gap:3px;min-width:0;min-height:54px;border-left:3px solid transparent}
+#app-panel.individual-choice .subskill-level-row[aria-current=true]{border-left-color:var(--mh-accent);background:var(--mh-selected)}
+#app-panel.individual-choice .subskill-level-row button{min-height:54px;padding:3px;font-size:12px;line-height:1.3}
+#app-panel.individual-choice .subskill-level-row button:first-child{border:0;background:transparent;text-align:center}
+#app-panel.individual-choice .subskill-level-row button:last-child{align-self:center;height:46px;min-height:46px;padding:2px 3px}
+#app-panel.individual-choice .subskill-level-row button[aria-pressed=true]{outline:0}
+#app-panel.individual-choice .subskill-options{gap:2px}
+#app-panel.individual-choice .subskill-options button{min-height:44px;padding:4px 3px;line-height:1.3}
+@media(max-width:350px){#app-panel.individual-choice .subskill-options button{font-size:12px}}
+
+#team .individual-stats-row .individual-number-field input{padding-left:28px;text-align:right}
+#team .individual-editor-head #profile-remove{margin:0;transform:none;align-self:center}
+
+#app-panel.individual-choice .nature-choice{grid-template-columns:minmax(60px,.8fr) minmax(60px,.8fr) minmax(85px,1.4fr)}
+
+#team .team-slot-edit .tab-icon{width:16px;height:16px;margin:0}
+#team .team-slot-edit .tab-label{display:none}
+#app-panel.individual-choice .individual-choice-captions{display:grid;grid-template-columns:60px 60px minmax(0,1fr);gap:6px;padding-bottom:6px;text-align:center;font-size:13px}
+#app-panel.individual-choice .individual-choice-shell .individual-choice-grid{height:min(calc(58dvh - 30px),430px);min-height:284px}
+#app-panel.individual-choice .individual-choice-shell .nature-choice{grid-template-columns:60px 60px minmax(85px,1fr)}
+#app-panel.individual-choice .nature-up{color:#b45353}
+#app-panel.individual-choice .nature-down{color:#2878b1}
+#app-panel.individual-choice .individual-nature-layout{display:grid;grid-template-columns:clamp(112px,29%,160px) minmax(0,1fr);gap:8px;height:min(58dvh,450px);min-height:min(280px,50dvh)}
+#app-panel.individual-choice .nature-index{align-self:start;min-width:0;border-right:1px solid var(--mh-border);padding-right:6px}
+#app-panel.individual-choice .nature-index-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-bottom:1px solid var(--mh-border)}
+#app-panel.individual-choice .nature-index-tabs button{position:relative;min-width:0;min-height:44px;padding:6px 0;border:0;border-radius:0;background:none;color:var(--mh-muted);font-size:12px;white-space:nowrap}
+#app-panel.individual-choice .nature-index-tabs button[aria-pressed=true]{color:var(--mh-accent);font-weight:600}
+#app-panel.individual-choice .nature-index-tabs button[aria-pressed=true]::after{content:'';position:absolute;bottom:-1px;left:3px;right:3px;height:2px;background:var(--mh-accent)}
+#app-panel.individual-choice .nature-index-list button{display:flex;align-items:center;width:100%;min-height:44px;margin:0;padding:5px 6px;border:0;border-left:3px solid transparent;border-bottom:1px solid var(--mh-border);border-radius:0!important;box-shadow:none;background:transparent;color:var(--mh-text);text-align:left;font-size:13px}
+#app-panel.individual-choice .nature-index-list button[aria-current=true]{border-left-color:var(--mh-accent);background:var(--mh-selected);font-weight:700}
+#app-panel.individual-choice .nature-options{gap:0;padding:0 2px}
+#app-panel.individual-choice .nature-group h3{margin:0;padding:7px 4px;background:var(--mh-surface);font-size:13px;font-weight:600;line-height:1.4}
+#app-panel.individual-choice .nature-radio-row{position:relative;display:flex;align-items:center;gap:7px;box-sizing:border-box;min-height:46px;margin:0;padding:5px 4px;border-bottom:1px solid var(--mh-border);font-size:13px;cursor:pointer}
+#app-panel.individual-choice .nature-radio-row.is-selected{background:var(--mh-selected)}
+#app-panel.individual-choice .nature-radio-row::before{content:'○';flex:none;width:17px;color:var(--mh-accent);font-size:20px;line-height:1;text-align:center}
+#app-panel.individual-choice .nature-radio-row.is-selected::before{content:'●';font-size:16px}
+#app-panel.individual-choice .nature-radio-row input{position:absolute;width:1px;height:1px;min-height:0;margin:0;opacity:0}
+#app-panel.individual-choice .nature-radio-row:has(input:focus-visible){outline:2px solid var(--mh-accent);outline-offset:-2px}
+#app-panel.individual-choice .nature-radio-copy{display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0;width:100%}
+#app-panel.individual-choice .nature-radio-copy .nature-radio-name{color:var(--mh-text);font-weight:500;white-space:nowrap}
+#app-panel.individual-choice .nature-radio-effect{display:inline-flex;gap:1px;white-space:nowrap;color:var(--mh-text);font-size:12px}
+body button.save-dirty:not(:disabled){background:#171717!important;color:#fff!important;border-color:#171717!important}
+body button.save-idle:not(:disabled){background:#f5f6f6!important;color:var(--mh-muted)!important;border-color:transparent!important}
+@media(prefers-color-scheme:dark){body button.save-dirty:not(:disabled){background:#111!important;color:#fff!important;border-color:#aaa!important}}
+
+#team .individual-subskills label{display:flex;align-items:center;gap:4px;min-width:0;margin:0}
+#team .individual-subskills .individual-pick{text-align:center;min-width:0;flex:1;padding:4px;font-size:12px}
+#team .individual-subskills .subskill-gold{background:#f5e5a5;color:var(--mh-text)}
+#team .individual-subskills .subskill-blue{background:#d7e8f5;color:var(--mh-text)}
+#team .individual-subskills .subskill-white{background:var(--mh-surface);color:var(--mh-text)}
+#team .individual-top-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+#team .individual-top-grid>.individual-field{grid-column:span 2}
+#team .individual-top-grid>.individual-field:has(#profile-main-skill,#register-main-skill){grid-column:span 3}
+#team .individual-top-grid>.individual-field:has(#profile-skill,#register-skill){grid-column:span 1}
+#team .individual-top-grid .individual-field:has(#profile-species-select,#pokemon-search,#profile-nickname,#nickname){font-size:16px}
+#team #team-panel #team-slots .team-slot-row>.team-slot-button{min-height:102px;padding-top:24px}
+#team #team-panel .team-slot-button{min-height:102px}
+#team #team-panel #team-slots .team-slot-row>.team-slot-button{height:102px;min-height:102px;padding:4px 3px}
+#team #team-panel #team-slots .pokemon-card-level{padding-right:18px;font-size:10px}
+#team .individual-subskills label{font-size:11px;gap:3px;white-space:nowrap}
+#team .individual-subskills .individual-pick{white-space:normal;overflow-wrap:normal;word-break:normal;line-height:1.2;font-size:12px}
+#team .individual-top-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) 62px}
+#team .individual-top-grid>.individual-field:has(#profile-main-skill,#register-main-skill){grid-column:1/4}
+#team .individual-top-grid>.individual-field:has(#profile-skill,#register-skill){grid-column:4}
+#team #team-panel #team-slots .team-slot-edit{width:20px;height:22px;min-height:22px;padding:2px;top:1px;right:1px}
+#team #team-panel #team-slots .team-slot-row>span{font-size:9px;top:5px;left:4px}
+#team #team-panel #team-slots .pokemon-card-level{padding:0 14px 0 12px;text-align:center;font-size:9px;white-space:nowrap;letter-spacing:-.5px}
+#team #team-panel #team-slots .team-slot-edit{min-width:20px!important;width:20px!important}
+@media(max-width:360px){#team #team-panel #team-slots{gap:1px!important}#team #team-panel #team-slots .pokemon-card-level{font-size:8px;padding-right:18px;padding-left:10px;letter-spacing:-.6px}}
+#team .individual-top-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) 62px!important}
+#team #team-panel #team-slots .team-slot-edit{width:16px!important;min-width:16px!important;height:20px;min-height:20px;padding:0}
+#team #team-panel #team-slots .team-slot-edit::before{content:'';position:absolute;inset:-7px 0}
+@media(max-width:360px){#team #team-panel #team-slots .pokemon-card-level{font-size:9px;padding-right:16px;padding-left:10px;letter-spacing:-.5px}}
+#team .individual-top-grid :is(#profile-main-skill,#register-main-skill){font-size:13px}
+@media(max-width:360px){#team #team-panel #team-slots .pokemon-card-level{font-size:10px;transform:scaleX(.85);transform-origin:center}}

@@ -1,0 +1,587 @@
+/* MOKU HIBI shared design tokens. See DESIGN_GUIDELINES.md.
+   This final layer defines shared UI and source colours; calculations and saved data are unchanged. */
+:root{
+ --mh-bg:#FAF9F6;--mh-surface:#FFFFFF;--mh-text:#333333;--mh-muted:#777777;
+ --resource-candy:#DC9EB5;--resource-shard:#E5C96C;
+ --resource-candy-bg:#FAEFF3;--resource-shard-bg:#FCF8E8;
+ --editorial-candy:var(--resource-candy);--editorial-shard:var(--resource-shard);
+ --source-research:#4f78a8;--source-social:#4f8666;--source-help:#ad625b;--source-skills:#9C7A31;--source-professor:#8870A5;--source-other:#82919B;
+ --shard-skill-color:var(--source-skills);--shard-research-color:var(--source-research);--shard-other-color:var(--source-other);
+ --shard-skill-tint:#F6F0E1;--shard-research-tint:#EDF2F8;--shard-other-tint:#F0F3F5;
+ --mh-accent:#80643B;--mh-border:#E5E5E5;--mh-selected:#F3EEE5;--mh-error:#B45353;
+ --mh-font:"M PLUS 1p",-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ --mh-number-font:Montserrat,"M PLUS 1p",-apple-system,BlinkMacSystemFont,sans-serif;
+ --mh-text-size:15px;--mh-input-size:16px;--mh-caption-size:13px;--mh-title-size:28px;--mh-section-title-size:17px;--mh-total-size:48px;--mh-total-weight:650;
+ --mh-radius:8px;--mh-shadow:none;--mh-gutter:16px;--mh-card-padding:16px;--mh-section-gap:24px;
+ --mh-control-height:44px;--mh-space-xs:4px;--mh-space-sm:8px;--mh-space-md:12px;--mh-content-width:840px;
+ /* Existing components migrate through aliases rather than parallel theme values. */
+ --editorial-ink:var(--mh-text);--editorial-muted:var(--mh-muted);--editorial-line:var(--mh-border);
+ --editorial-soft:var(--mh-selected);--editorial-radius:var(--mh-radius);--editorial-input-line:var(--mh-border);
+ --editorial-danger:var(--mh-error);--editorial-space:var(--mh-gutter);--editorial-section:var(--mh-section-gap);
+ --page-title-gap:var(--mh-gutter);--period-content-gap:var(--mh-gutter);--period-control-height:var(--mh-control-height);
+ background:var(--mh-bg);
+}
+body:has(:is(#record,#sleep,#summary,#shards,#history,#team,#settings):not([hidden])){
+ background:var(--mh-bg);color:var(--mh-text);font-family:var(--mh-font);font-size:var(--mh-text-size);line-height:1.6;
+}
+/* Shared category colours and numeric emphasis for both tabs. */
+#summary{--heat-1:#F9E9EF;--heat-2:#F3D4E0;--heat-3:#EAB8CA;--heat-4:#DC9EB5;--candy-help:var(--source-help);--candy-mew:var(--source-skills);--candy-delibird:var(--source-skills);--candy-other:var(--source-other)}
+#shards{--heat-1:#FCF5DC;--heat-2:#F7E9B6;--heat-3:#EFD98E;--heat-4:#E5C96C}
+#record{--record-candy:var(--resource-candy);--record-shard:var(--resource-shard);--record-pressed:var(--resource-candy-bg)}
+#record .help{--accent:var(--source-help);--tint:#F8EEED;--edge:var(--source-help)}
+#record :is(.mew,.delibird){--accent:var(--source-skills);--tint:var(--shard-skill-tint);--edge:var(--source-skills)}
+#record #action-skills>h2.record-subheading{color:var(--source-skills)}
+#record #action-skills>:is(.mew,.delibird){--skill-heading-color:var(--source-skills)}
+#summary .candy-values .help,#summary .legend .help{color:var(--source-help)}
+#history .card.help .history-head .history-method{color:var(--source-help)}
+#history .card:is(.mew,.delibird) .history-head .history-method{color:var(--source-skills)}
+body .tabs [data-tab=summary][aria-current=page]{color:color-mix(in srgb,var(--resource-candy) 65%,var(--mh-text))}
+body .tabs [data-tab=summary][aria-current=page]:before{background:var(--resource-candy)}
+body .tabs [data-tab=shards][aria-current=page]{color:color-mix(in srgb,var(--resource-shard) 65%,var(--mh-text))}
+body .tabs [data-tab=shards][aria-current=page]:before{background:var(--resource-shard)}
+:is(#record,#summary,#shards,#sleep,#history) :is(.total,.heading-total,.heading-count,.weekly-value,.capsule-total,.day-total) .quantity-number,
+:is(#record,#summary,#shards,#sleep,#history) :is(.total,.heading-total,.heading-count,.weekly-value,.capsule-total,.day-total),
+:is(#summary,#shards) :is(.summary-pie-percent,.summary-pie-amount),
+:is(#summary,#shards) .resource-calendar .month-value{font-family:var(--mh-number-font)}
+:is(#record,#summary,#shards,#sleep,#history) :is(.total,.heading-total,.heading-count,.weekly-value,.capsule-total,.day-total) .quantity-unit,
+:is(#summary,#shards) .summary-pie-unit{font-family:var(--mh-font)}
+[data-source="candy-help"]{color:var(--source-help)}
+[data-source="candy-mew"],[data-source="candy-delibird"],[data-source="candy-skill"]{color:var(--source-skills)}
+[data-source="candy-other"]{color:var(--source-other)}
+[data-source="candy-professor"]{color:var(--source-professor)}
+.sleep-get-dot{color:#d74d50;font-size:.65em;margin-right:.25em;vertical-align:middle}
+#record-professor-view,#history-professor-view{padding-bottom:calc(90px + env(safe-area-inset-bottom));}
+#record #record-view-switch{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-bottom:16px!important}
+body:has(#record:not([hidden])) #notice:empty{min-height:0}
+body:has(#record:not([hidden])) .app>header{margin-bottom:6px}
+#record #record-view-switch>button{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:3px;width:100%;min-width:0;min-height:62px;padding:4px 1px;white-space:normal}
+#record #record-view-switch>button .tab-label{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-width:0;font-size:11px;line-height:1.25;white-space:normal;text-align:left}
+#record #record-view-switch>button .tab-icon{width:13px;height:13px;flex:none}
+.professor-get-list,.professor-history-card{display:grid;gap:10px}
+.professor-history-card{padding:16px;border:1px solid var(--mh-edge,#ddd);border-radius:var(--mh-radius,12px);background:var(--mh-surface,#fff)}
+.professor-history-card label{display:grid;gap:4px;min-width:0}
+.professor-history-card input{min-width:0;max-width:100%;box-sizing:border-box}
+.professor-view-switch{display:flex;gap:5px;margin-bottom:8px}
+.professor-view-switch>button{width:auto;min-height:40px;margin:0;padding:4px 10px;font-size:12px}
+.professor-view-switch>button[aria-pressed=true]{background:var(--mh-selected);color:var(--mh-accent)}
+#record #record-professor-view>input[type=search]{width:100%;min-width:0;box-sizing:border-box;margin:0 0 8px}
+.professor-filters{display:grid;grid-template-columns:minmax(0,1fr) 94px minmax(0,1fr);gap:5px;align-items:center;margin:0 0 8px;min-width:0}
+.professor-filters>select{min-width:0;box-sizing:border-box;margin:0;height:44px;padding:4px;font-size:12px}
+.professor-filters>button{width:100%;min-width:0;min-height:44px;margin:0;padding:2px 1px;font-size:11px;white-space:nowrap}
+.professor-filters>button[aria-pressed=true]{background:var(--mh-selected);color:var(--mh-accent);border-color:var(--mh-accent)}
+.professor-species-list{display:grid}
+.professor-species-row{display:grid;grid-template-columns:27px 34px minmax(0,1fr) 41px 27px 27px 34px;gap:2px;align-items:center;padding:7px 0;border-bottom:1px solid var(--mh-border);min-width:0;white-space:nowrap}
+.professor-species-row>small{font-size:9px;color:var(--mh-muted)}
+.professor-species-row>strong{min-width:0;overflow:hidden;text-overflow:ellipsis;font-size:11px}
+.professor-fp{position:relative;display:block;min-width:0}
+.professor-fp>button{width:100%;padding:0 1px!important;min-height:32px!important;font-size:9px!important;white-space:nowrap}
+.professor-fp-editor{position:absolute;top:100%;left:0;z-index:5;display:flex;gap:3px;padding:4px;background:var(--mh-surface);border:1px solid var(--mh-border);border-radius:6px}
+.professor-fp-editor>input{width:60px;min-width:0;min-height:32px!important;padding:2px}
+.professor-species-row>button{margin:0;min-width:0;min-height:44px;padding:0 1px;font-size:10px;line-height:1;white-space:nowrap}
+.professor-species-row>button .tab-icon{width:14px;height:14px}
+.professor-species-row>.professor-get-amount{display:inline-flex;align-items:center;min-width:0;gap:1px;white-space:nowrap;font-size:10px}
+.professor-get-group{border-bottom:1px solid var(--mh-border)}
+.professor-get-group>h3{margin:12px 0 4px;font-size:14px}
+.professor-get-row{display:grid;grid-template-columns:minmax(0,1fr) 45px 45px 45px;gap:5px;align-items:center;padding:8px 0;border-top:1px solid var(--mh-border)}
+.professor-get-slot{display:flex;align-items:center;justify-content:center;min-width:0}
+.professor-get-slot>button{width:100%;min-width:0;min-height:44px;margin:0;padding:4px 2px;font-size:12px}
+.professor-get-detail{display:flex;align-items:center;gap:5px;min-width:0;flex-wrap:wrap;overflow-wrap:anywhere}
+.professor-get-name.processed{color:var(--mh-muted)}
+.professor-get-slot{white-space:nowrap;font-size:12px}
+.professor-get-slot .tab-icon{width:14px;height:14px}
+.professor-get-row>button{min-width:0;min-height:44px;margin:0;padding:4px 2px;font-size:12px}
+.professor-get-row>button[aria-pressed=true]{color:var(--mh-text);background:#eee;border-color:var(--mh-border)}
+.professor-profile-modal .app-panel-body{overflow-y:auto;max-height:calc(100dvh - 140px)}
+.professor-profile-modal #register-panel{display:block;padding:0}
+.professor-profile-modal #register-panel .individual-top-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) 62px;gap:8px}
+.professor-profile-modal #register-panel .individual-top-grid>.individual-field{grid-column:span 2;min-width:0}
+.professor-profile-modal #register-panel .individual-top-grid>.individual-field:has(#register-main-skill){grid-column:1/4}
+.professor-profile-modal #register-panel .individual-top-grid>.individual-field:has(#register-skill){grid-column:4}
+.professor-profile-modal #register-panel .individual-top-grid :is(input,select){min-width:0;width:100%;box-sizing:border-box}
+.professor-profile-modal #register-panel .individual-subskills label{display:flex;align-items:center;gap:4px;min-width:0}
+#team #register-top-grid:has(.individual-field:not([hidden]) #nickname) .individual-field:has(#pokemon-search),.professor-profile-modal #register-top-grid .individual-field:has(#pokemon-search){grid-column:span 2;position:relative}
+#team #register-top-grid .individual-field:has(#pokemon-search) #pokemon-search-results,.professor-profile-modal #register-top-grid .individual-field:has(#pokemon-search) #pokemon-search-results{position:absolute;z-index:30;top:100%;left:0;width:min(280px,calc(100vw - 32px));max-height:270px;background:var(--mh-surface);border:1px solid var(--mh-border);box-shadow:0 8px 18px #0002;grid-template-columns:1fr}
+#record #record-professor-view .individual-roster-grid{display:grid;grid-template-columns:repeat(var(--roster-columns,3),minmax(0,1fr));gap:8px}
+#record #record-professor-view .registered-row{position:relative;display:flex;flex-direction:column;min-width:0;min-height:102px;padding:5px 4px;border:1px solid var(--mh-border);border-radius:var(--mh-radius);background:var(--mh-surface)}
+#record #record-professor-view .pokemon-card-info{display:flex;flex-direction:column;min-width:0;width:100%}
+#record #record-professor-view .pokemon-card-info>*{display:block;margin:0;min-width:0;line-height:18px}
+#record #record-professor-view .pokemon-card-info .pokemon-card-species{font-size:11px;color:var(--mh-muted);overflow-wrap:anywhere}
+.professor-history-card{margin-block:10px}
+@media(max-width:390px){.professor-history-card{padding:10px}}
+@media(max-width:340px){#record #record-view-switch>button{gap:2px}#record #record-view-switch>button .tab-label{font-size:10px}#record #record-view-switch>button .tab-icon{width:12px;height:12px}}
+body:has(:is(#record,#sleep,#summary,#shards,#history,#team,#settings):not([hidden])) .app{
+ background:var(--mh-surface);max-width:var(--mh-content-width);min-height:100svh;padding-inline:var(--mh-gutter);box-shadow:var(--mh-shadow);
+}
+body .app>:is(#record,#sleep,#summary,#shards,#history,#team,#settings)>.editorial-page-title{font-size:var(--mh-title-size);color:var(--mh-text)}
+:is(#record,#sleep,#summary,#shards,#history,#team,#settings){--accent:var(--mh-accent);--edge:var(--mh-border);--tint:var(--mh-selected)}
+/* Text for acquisition methods and graph series keeps the existing category colours. */
+:is(#record,#sleep,#summary,#shards,#history,#team,#settings) :is(input:not([type=checkbox]):not([type=radio]),select,textarea),body :is(dialog,#history-editor,#shard-editor,#team-picker,#history-details-panel,#app-panel) :is(input:not([type=checkbox]):not([type=radio]),select,textarea){
+ font-family:var(--mh-font);font-size:var(--mh-input-size);color:var(--mh-text);background:var(--mh-surface);border-color:var(--mh-border);border-radius:var(--mh-radius);min-height:var(--mh-control-height);
+}
+:is(#record,#sleep,#summary,#shards,#history,#team,#settings) input::placeholder,body dialog input::placeholder{color:var(--mh-muted)}
+body .app :is(p,label){font-family:var(--mh-font)}
+:is(#team,#history,#settings) :is(p,label),#sleep label{font-size:var(--mh-text-size)}
+:is(#record,#sleep) :is(.record-slots button,.mew-actions button,.shard-skill-form button,.shard-amount-buttons button,.shard-lucky-actions button,.sleep-save),
+:is(#summary,#shards) .section-image-button,#settings .backup-actions button,#settings #research-rank-form button,#team .row-actions button,
+body :is(#app-panel,.record-picker,#period-range-dialog,#team-picker,#history-editor,#shard-editor) button:not(.team-picker-row):not([role=tab]){
+ border-radius:var(--mh-radius);font-family:var(--mh-font);min-height:var(--mh-control-height);box-shadow:var(--mh-shadow);
+}
+#record :is(.record-date-card,.record-datetime-field,.formatted-date-field),#sleep .sleep-date{border-color:var(--mh-border);background:var(--mh-surface)}
+#record .record-datetime-field{border-radius:var(--mh-radius)}
+:is(#record,#sleep,#team,#settings) :is(button[type=submit],.sleep-save){font-size:var(--mh-text-size)}
+/* Preserve flat list rows; do not introduce cards around every section. */
+:is(#record,#sleep,#summary,#shards,#team,#history,#settings) .card{box-shadow:var(--mh-shadow)}
+#team-picker .team-picker-row[aria-pressed=true]{background:var(--mh-selected);color:var(--mh-accent);box-shadow:var(--mh-shadow)}
+#team-picker .team-picker-row[aria-pressed=true] .team-picker-status{color:var(--mh-accent)}
+:is(#summary,#shards,#history) .period-picker .period-quick-buttons>button[aria-pressed=true],
+:is(#sleep,#sleep-editor) .sleep-switch>button[aria-pressed=true],#team .team-switch>button[aria-selected=true]{color:var(--mh-accent)}
+:is(#summary,#shards,#history) .period-picker .period-quick-buttons>button[aria-pressed=true]:after,
+:is(#sleep,#sleep-editor) .sleep-switch>button[aria-pressed=true]:after,#team .team-switch>button[aria-selected=true]:after{background:var(--mh-accent)}
+body .tabs,body:has(#record[hidden]) .tabs{background:var(--mh-surface);border-color:var(--mh-border);padding-inline:var(--mh-space-xs)}
+body .tabs [aria-current=page],body:has(#record[hidden]) .tabs [aria-current=page]{color:var(--mh-accent)}
+body .tabs [aria-current=page]:before{background:var(--mh-accent)}
+body :is(dialog,#history-editor,#shard-editor,#team-picker,#history-details-panel,#image-preview-dialog,#app-panel){
+ background:var(--mh-surface);color:var(--mh-text);border-color:var(--mh-border);border-radius:var(--mh-radius);box-shadow:var(--mh-shadow);font-family:var(--mh-font);
+}
+body #history-details-panel{border-radius:var(--mh-radius) var(--mh-radius) 0 0}
+body :is(dialog,#history-editor,#shard-editor,#team-picker,#history-details-panel) :is(.record-picker-grid,.period-picker-choices) button[aria-pressed=true],body .period-picker-dialog [aria-pressed=true]{background:var(--mh-selected);color:var(--mh-accent);border-color:var(--mh-accent)}
+:is(#summary,#shards) .candy-day-popover{background:var(--mh-surface);border-color:var(--mh-border);border-radius:var(--mh-radius);box-shadow:var(--mh-shadow);padding:var(--mh-space-md)}
+body .danger,body #history .history-actions .danger,body #sleep button.danger{color:var(--mh-error)}
+body :is(.import-error,#edit-error,#shard-edit-error){color:var(--mh-error)}
+body :is(button,input,select,textarea,a):focus-visible{outline:2px solid var(--mh-accent);outline-offset:2px}
+#record-methods>div,#record #shard-records>.card{margin-bottom:var(--mh-section-gap)}
+/* Calendar cells and pill stacks keep their purpose-specific shape and size. */
+@media(max-width:360px){
+ :is(#summary,#shards,#history) .period-picker .period-quick-buttons,
+ :is(#sleep,#sleep-editor) .sleep-switch{gap:0}
+ :is(#summary,#shards,#history) .period-picker .period-quick-buttons>button,
+ :is(#sleep,#sleep-editor) .sleep-switch>button{padding-inline:8px;font-size:13px}
+ :is(#summary,#shards,#history) .period-picker .period-quick-buttons>button[aria-pressed=true]:after,
+ :is(#sleep,#sleep-editor) .sleep-switch>button[aria-pressed=true]:after{left:8px;right:8px}
+ #record .record-row-content strong,#record .record-row-content{overflow-wrap:anywhere;min-width:0}
+ .tabs button{overflow-wrap:normal}
+}
+@media(prefers-reduced-motion:reduce){:is(#record,#sleep,#summary,#shards,#history,#team,#settings) button{transition:none}}
+/* Switches keep their familiar pill shape and ON/OFF text. */
+#settings .setting-control input:focus-visible{outline-color:var(--mh-accent)}
+
+/* Shared section typography and settings rows; dedicated dense lists keep their layout. */
+:is(#record,#sleep,#summary,#shards,#history,#team,#settings) :is(.summary-section-head h3,.section-head h2,.roster-purpose-heading),#team :is(#team-panel,#roster-panel,#register-panel)>h2,#settings .card>h3{font-size:var(--mh-section-title-size);font-weight:600;line-height:1.5}
+#team .team-individual-name>strong{font-size:16px;font-weight:600;line-height:1.5}
+#team .team-individual-name>small{font-size:var(--mh-caption-size);line-height:1.5;color:var(--mh-muted)}
+#settings .settings-intro{font-size:var(--mh-caption-size);line-height:1.6;margin:0 0 12px;color:var(--mh-muted)}
+#settings .setting-row{min-height:52px;padding:10px 0;gap:12px;border-color:var(--mh-border);font-size:var(--mh-text-size);line-height:1.5;color:var(--mh-text)}
+#settings .setting-control{display:grid;grid-template-columns:44px 32px;gap:8px;align-items:center}
+#settings .setting-control input{width:44px;height:26px;min-height:26px;border-radius:13px;background:var(--mh-border);border-color:var(--mh-border)}
+#settings .setting-control input:checked{background:var(--mh-accent);border-color:var(--mh-accent)}
+#settings .setting-control input::before{box-shadow:none}
+#settings .setting-state{width:32px;font-size:12px;font-weight:500;line-height:1.5;text-align:center;color:var(--mh-muted)}
+#settings input:checked+.setting-state::after{color:var(--mh-accent)}
+
+#team .team-switch{margin-bottom:var(--mh-gutter)}
+#sleep .sleep-fields label{font-size:var(--mh-caption-size);white-space:normal}
+
+#team :is(#team-panel,#roster-panel,#register-panel)>h2{color:var(--mh-text);margin:0 0 var(--mh-space-md)}
+
+/* Shard acquisition colours are shared by inputs, breakdowns, graphs and PNG capture.
+   Cluster remains a separate calculation/label and shares the Other colour only. */
+.shard-source-skill,#shards #shard-weekly-chart .shard-source-skill{background:var(--shard-skill-color)}
+.shard-source-research,#shards #shard-weekly-chart .shard-source-research{background:var(--shard-research-color)}
+.shard-source-other,.shard-source-cluster,#shards #shard-weekly-chart :is(.shard-source-other,.shard-source-cluster){background:var(--shard-other-color)}
+[data-source="shard-skill"],.shard-method-skill{--shard-method-color:var(--shard-skill-color);color:var(--shard-skill-color)}
+[data-source="shard-research"],.shard-method-research{--shard-method-color:var(--shard-research-color);color:var(--shard-research-color)}
+[data-source="shard-other"],[data-source="shard-cluster"],.shard-method-other,.shard-method-cluster{--shard-method-color:var(--shard-other-color);color:var(--shard-other-color)}
+:is(#shards #shard-total,#record #today-total) .total-breakdown tr[class^="shard-method-"]>th{color:var(--shard-method-color)}
+#record #shard-skill-inputs{--shard-method-color:var(--shard-skill-color);--record-pressed:var(--shard-skill-tint)}
+#record #research-panel{--shard-method-color:var(--shard-research-color);--record-pressed:var(--shard-research-tint)}
+#record :is(#cluster-panel,details:has(>#shard-other-form)){--shard-method-color:var(--shard-other-color);--record-pressed:var(--shard-other-tint)}
+#record #shard-skill-inputs>h2,#record #shard-records>details>summary{color:var(--shard-method-color)}
+#record #shard-records>details[open]>summary:after{color:var(--shard-method-color)}
+#record #shard-records :is(input,select,button):focus-visible{outline-color:var(--shard-method-color)}
+
+/* Existing history method labels follow the same palette; resource badges keep their category colour. */
+[data-shard-source="skill"],[data-shard-source="lucky"]{--shard-method-color:var(--shard-skill-color)}
+[data-shard-source="research"]{--shard-method-color:var(--shard-research-color)}
+[data-shard-source="other"],[data-shard-source="cluster"]{--shard-method-color:var(--shard-other-color)}
+#history #history-list .card.shards .history-method{color:var(--shard-method-color,var(--editorial-shard))}
+
+/* Only labels that directly describe input controls, never switches or navigation. */
+body :is(#record,#sleep,#summary,#shards,#history,#team,#settings,dialog) label.input-has-caption:has(>:is(input:not([type=checkbox]):not([type=radio]):not([type=hidden]),select,textarea,.text-clear-field,.date-field)){font-size:var(--mh-text-size)!important;font-weight:400!important;color:var(--mh-muted)!important;text-align:center!important}
+body :is(#record,#sleep,#summary,#shards,#history,#team,#settings,dialog) label.input-has-caption>:is(input:not([type=checkbox]):not([type=radio]):not([type=hidden]),select,textarea,.text-clear-field,.date-field){margin-top:6px}
+body :is(#record,#sleep,#summary,#shards,#history,#team,#settings,dialog) label:not(.input-has-caption)>:is(input:not([type=checkbox]):not([type=radio]):not([type=hidden]),select,textarea,.text-clear-field,.date-field){margin-top:0}
+#record #nap-island-section{border:0;border-bottom:1px solid var(--mh-border);background:none;border-radius:0;padding:16px 0;margin:0 0 24px}
+#record #nap-island-section>h2{font-size:17px;color:#686b63;margin:0 0 12px}
+#record #nap-island-form{display:grid;grid-template-columns:minmax(0,1fr) 100px;gap:12px;align-items:end}#record #nap-island-form>label{margin:0;min-width:0}
+#record #nap-island-form :is(input,button){font-size:16px;min-height:44px}#record #nap-island-results{grid-column:1/-1;max-height:180px;padding:0}
+#record #nap-island-results>button{min-height:44px;text-align:left;white-space:normal}
+#record #nap-island-form>button{grid-column:2;justify-self:end;min-width:64px;background:var(--record-action);border-color:transparent;color:var(--mh-text)}
+#nap-island-editor{width:min(440px,calc(100% - 32px));max-height:calc(100dvh - 32px);overflow:auto;background:var(--mh-surface);color:var(--mh-text);border:1px solid var(--mh-border);border-radius:var(--mh-radius)}#nap-island-editor input,#nap-island-editor select{font-size:16px;min-height:44px}#nap-island-editor button{min-height:44px;margin:8px}
+body :is(#record,#sleep,#summary,#shards,#history,#team,#settings,dialog) label[for]:not(.check){font-size:var(--mh-text-size);font-weight:400;color:var(--mh-muted);text-align:center;margin-bottom:6px}
+#record #nap-island-form input{height:44px}
+
+/* 記録の小分類：通常見出し・折り畳みで位置、点、文字、間隔を共用。 */
+#record{--record-section-gap:24px;--record-heading-gap:12px}
+#record :is(#record-methods>div,#nap-island-section,#shard-skill-inputs){margin:0 0 var(--record-section-gap);padding-top:0}
+#record #shard-records>details.card{padding:0;margin:0 0 var(--record-section-gap)}
+#record :is(#record-methods>div,#shard-skill-inputs,#nap-island-section)>h2.record-subheading,
+#record #shard-records>details.card>summary.record-subheading{position:relative;box-sizing:border-box;min-height:44px;padding:8px 0 8px 13px;margin:0 0 var(--record-heading-gap);font-size:18px;font-weight:600;line-height:28px;letter-spacing:-.3px;border-bottom:1px solid var(--record-line)}
+#record :is(#record-methods,#shard-records,#nap-island-section) .record-subheading::before{content:'';display:block;position:absolute;left:0;top:20px;width:5px;height:5px;margin:0;border-radius:50%;background:currentColor}
+#record #shard-records>details.card:not([open])>summary.record-subheading{margin-bottom:0}
+#record #shard-records>details.card>summary.record-subheading{justify-content:flex-start;gap:10px}
+#record #shard-records>details.card>summary.record-subheading::after{margin-left:auto}
+#record .record-heading-note{font-size:13px;font-weight:400;color:var(--mh-muted)}
+#record #record-methods .record-slots{margin-top:0;border-top:0}
+#record #other-section>h2{color:var(--record-muted)}
+#record #shard-records>details.card,#record #nap-island-section{border-bottom:0!important}
+#record .record-resource-heading{font-size:18px;font-weight:600;line-height:1.5;margin:0 0 12px;color:var(--mh-text)}
+#record #record-methods #help-slots{padding-top:0}
+#record .mew-record-heading.record-subheading{align-items:center}
+
+/* 一時通知は全画面で同じ一個の要素を更新し、操作を遮らない。 */
+body #notice{position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);bottom:auto;left:50%;width:max-content;max-width:calc(100vw - 32px);min-height:0;margin:0;padding:0;background:none;color:#fff;border:0;border-radius:0;box-shadow:none;z-index:60;pointer-events:none;opacity:1;transform:translateX(-50%);transition:none;display:flex;flex-direction:column;align-items:center;gap:8px}
+body #notice .toast{max-width:100%;padding:12px 18px;background:#343638;color:#fff;border:0;border-radius:12px;box-shadow:0 2px 8px #20212412;font-size:15px;font-weight:400;line-height:1.5;opacity:0;transform:translateY(-8px);transition:opacity .18s,transform .18s;overflow-wrap:anywhere}
+body #notice .toast.shown{opacity:1;transform:translateY(0)}
+body #notice .toast.record-error{background:var(--mh-error);color:#fff}
+#notice :is(.quantity-number,.quantity-unit){font:inherit;color:inherit}
+@media(prefers-reduced-motion:reduce){body #notice .toast{transition:none}}
+
+/* 行動別の設定階層。既存スイッチの形・寸法には触れない。 */
+#settings .setting-child{padding-left:16px}
+#settings #sleep-mode-description{margin-left:16px}
+#record #nap-island-form{display:grid;grid-template-columns:minmax(0,1fr) 72px auto;gap:8px;align-items:center}
+#record #nap-island-form>label{min-width:0;margin:0}
+#record #nap-island-form>button{margin:0;min-width:52px;height:44px;grid-column:3;grid-row:1}
+#record #nap-island-results{grid-column:1/-1;grid-row:2}
+#record #nap-island-section :is(input,select){margin-block:0}
+#record #nap-island-section{border:0}
+#record #shard-other-form{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+#record #shard-other-form>label.shard-other-memo-field{grid-column:1;grid-row:2}
+#record #shard-other-form>button{grid-column:2;grid-row:2;margin:0;align-self:end;height:44px}
+#record #shard-other-form :is(input,select){margin:0}
+#record #shard-other-kind:has(option[value=""]:checked){color:var(--mh-muted)}
+/* 長い記録操作領域の高さで、左側の2行を離さない。 */
+#record #action-skills>.shard-skill-row{grid-template-columns:minmax(0,1fr) minmax(130px,32%);grid-template-rows:auto auto;align-content:start;align-items:start;gap:4px 10px}
+#record #action-skills>.shard-skill-row .skill-record-heading{grid-column:1;align-self:end}
+#record #action-skills>.shard-skill-row .skill-record-detail{grid-column:1;grid-row:2;align-self:start}
+#record #action-skills>.shard-skill-row :is(.shard-skill-form,.shard-amount-buttons,.shard-lucky-actions){grid-column:2;grid-row:1/3;align-self:end}
+#record #action-skills>.shard-lucky-row .shard-lucky-actions{grid-column:1/-1;grid-row:3}
+@media(max-width:360px){#record #action-skills>.shard-skill-row{grid-template-columns:minmax(0,1fr) 120px}#record #nap-island-form{grid-template-columns:minmax(0,1fr) 62px auto;gap:6px}}
+
+/* All-period arrows keep their grid positions; date text never takes their column. */
+:is(#summary,#shards,#history,#sleep) .period-picker-top{height:52px;min-height:52px}
+:is(#summary,#shards,#history,#sleep) .period-picker-top>.period-picker-date{grid-column:2;min-height:52px;height:52px;padding-block:4px;line-height:20px;display:flex;align-items:center;justify-content:center}
+:is(#summary,#shards,#history,#sleep) .period-picker-top>button:disabled{opacity:.25}
+:is(#summary,#shards) .candy-source-choice button{border-color:var(--source-color);color:var(--source-color)}
+:is(#summary,#shards) .candy-source-choice button[aria-pressed=true]{background:var(--source-color);border-color:var(--source-color);color:#fff}
+:is(#summary,#shards) .candy-source-choice button[aria-pressed=false]{background:var(--mh-surface);opacity:.65}
+#summary .slot-horizontal{table-layout:fixed;width:100%}
+#summary .slot-horizontal :is(th,td){width:auto;white-space:nowrap;padding-inline:2px}
+#summary .slot-horizontal :is(th,td):first-child{width:42px}
+#summary .heading-count{font-size:13px;font-weight:400;color:var(--mh-muted);white-space:nowrap;margin-left:auto}
+#summary .heading-count+.heading-total{margin-left:8px}
+.text-clear-field{position:relative;display:block;min-width:0;max-width:100%}
+.text-clear-field>.has-text-clear{padding-right:32px!important;width:100%;box-sizing:border-box}
+.text-clear-button{position:absolute;right:0;top:50%;transform:translateY(-50%);width:32px;min-width:32px;height:40px;min-height:40px;padding:0;margin:0;border:0;background:transparent;color:var(--mh-muted);font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
+.text-clear-button[hidden]{display:none!important}
+#release-history-button{border:0;background:none;color:var(--mh-muted);padding:4px 6px;font-size:12px;white-space:nowrap}
+.release-banner{max-width:840px;margin:0 auto 16px;padding:12px 16px;background:var(--mh-surface);border-bottom:1px solid var(--mh-border);font-size:13px;box-sizing:border-box}
+.release-banner ul{margin:6px 0;padding-left:20px}
+#app-panel{background:var(--mh-surface);max-height:calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+#app-panel .app-panel-body{overflow:auto;min-height:0}
+
+body .text-clear-field>.text-clear-button{background:transparent!important;border:0!important;font-weight:400;color:var(--mh-muted)}
+
+.app>header .release-controls{position:absolute;right:0;top:0;display:flex;align-items:center;gap:2px;height:44px}
+.app>header .release-controls #app-version{position:static;min-width:46px;padding-inline:0}
+.app>header .release-controls #release-history-button{min-height:44px;padding:4px 2px}
+.app>header h1{max-width:calc(100% - 120px)}
+
+
+/* 空欄の案内と入力済み数値の配置を分離。画面ごとの重複指定を増やさない。 */
+body :is(input[placeholder],textarea[placeholder]){padding-inline:var(--mh-space-sm);box-sizing:border-box}
+body :is(input[placeholder],textarea[placeholder])::placeholder{color:var(--mh-muted)!important;opacity:1;font-weight:400}
+body :is(input[placeholder],textarea[placeholder]):placeholder-shown{text-align:left!important;padding-left:var(--mh-space-sm)!important}
+body :is(input[type=text],input[type=search],input[type=email],input[type=url],input:not([type]),textarea):not(.comma-input):not([inputmode=numeric]):not([readonly]){text-align:left}
+
+body .text-clear-field>.has-text-clear{margin-block:0}
+
+body :is(input[placeholder],textarea[placeholder]):placeholder-shown:not(.has-text-clear):not(.sleep-search input){padding-right:var(--mh-space-sm)!important}
+
+textarea[placeholder]:placeholder-shown{align-content:center}
+
+.backup-reminder{margin:0 0 20px;padding:12px;background:var(--mh-selected);border-radius:var(--mh-radius);color:var(--mh-text)}
+.backup-reminder p{margin:0 0 8px;font-size:13px;line-height:1.6}
+.backup-reminder .backup-actions{display:flex;gap:8px;flex-wrap:wrap}
+.backup-reminder button{min-height:44px;padding:8px 12px}
+#backup-data-settings .setting-row select{width:auto;min-width:100px;max-width:50%;height:44px}
+#backup-last-at{font-size:13px;text-align:right;overflow-wrap:anywhere}
+
+/* Screen tabs, period controls, and graph filters have different roles. */
+:is(#record,#sleep,#history,#team,#settings) :is(.app-subtabs,.team-switch,.sleep-switch:not(.sleep-history-periods):not(.sleep-rounds)){display:flex;align-items:center;gap:4px;border:0;border-bottom:1px solid var(--mh-border);border-radius:0;background:none;padding:0;margin:0 0 16px;box-shadow:none}
+:is(#record,#sleep,#history,#team,#settings) :is(.app-subtabs,.team-switch,.sleep-switch:not(.sleep-history-periods):not(.sleep-rounds))>button{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:0 1 auto;min-width:0;min-height:44px;margin:0;padding:8px 9px;border:0;border-radius:0;background:none;color:var(--mh-muted);font-size:13px;line-height:1.5;white-space:nowrap;box-shadow:none}
+:is(#record,#sleep,#history,#team,#settings) :is(.app-subtabs,.team-switch,.sleep-switch:not(.sleep-history-periods):not(.sleep-rounds))>button:is([aria-selected=true],[aria-pressed=true]){font-weight:600;color:var(--mh-accent);background:none}
+:is(#record,#sleep,#history,#team,#settings) :is(.app-subtabs,.team-switch,.sleep-switch:not(.sleep-history-periods):not(.sleep-rounds))>button::after{content:none}
+:is(#record,#sleep,#history,#team,#settings) :is(.app-subtabs,.team-switch,.sleep-switch:not(.sleep-history-periods):not(.sleep-rounds))>button:is([aria-selected=true],[aria-pressed=true])::after{content:'';position:absolute;bottom:-1px;left:9px;right:9px;height:2px;background:var(--mh-accent)}
+:is(#record,#sleep,#history,#team,#settings) :is(.app-subtabs,.team-switch,.sleep-switch) .tab-icon{position:static;width:16px;height:16px;opacity:1;flex:none}
+:is(#summary,#shards,#history,#sleep,#sleep-editor) :is(.period-picker .period-quick-buttons:not(.sleep-switch),.sleep-history-periods){display:flex;align-items:center;gap:0;border:0;background:none;border-radius:var(--mh-radius);padding:0;margin:8px 0;box-shadow:none}
+:is(#summary,#shards,#history,#sleep,#sleep-editor) :is(.period-picker .period-quick-buttons:not(.sleep-switch),.sleep-history-periods)>button{min-height:44px;margin:0;padding:8px 10px;border:1px solid var(--mh-border);border-radius:0;background:var(--mh-surface);color:var(--mh-muted);font-size:13px}
+:is(#summary,#shards,#history,#sleep,#sleep-editor) :is(.period-picker .period-quick-buttons:not(.sleep-switch),.sleep-history-periods)>button+button{border-left:0}
+:is(#summary,#shards,#history,#sleep,#sleep-editor) :is(.period-picker .period-quick-buttons:not(.sleep-switch),.sleep-history-periods)>button:first-child{border-radius:var(--mh-radius) 0 0 var(--mh-radius)}
+:is(#summary,#shards,#history,#sleep,#sleep-editor) :is(.period-picker .period-quick-buttons:not(.sleep-switch),.sleep-history-periods)>button[aria-pressed=true]{background:var(--mh-selected);color:var(--mh-accent);font-weight:600}
+:is(#summary,#shards,#history,#sleep,#sleep-editor) :is(.period-picker .period-quick-buttons:not(.sleep-switch),.sleep-history-periods)>button::after{content:none!important}
+:is(#summary,#shards,#history,#sleep,#sleep-editor) :is(.period-picker .period-quick-buttons:not(.sleep-switch),.sleep-history-periods)>button:last-child{margin-left:auto;border:0;border-radius:var(--mh-radius);background:none}
+#team #team-slots .team-slot-button{grid-column:1;grid-row:2;min-width:0}
+#team #team-slots .team-slot-edit{grid-column:2;grid-row:2;align-self:center}
+.profile-editor-actions{display:flex;gap:8px;align-items:center;margin-bottom:16px}
+.profile-editor-actions>button{min-height:44px;margin:0;padding-inline:10px;white-space:nowrap}
+.profile-editor-actions .primary{margin-left:auto;background:var(--mh-accent);color:#fff}
+#events-settings-panel .event-calendar-head{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+#events-settings-panel .event-calendar-head strong{flex:1;text-align:center}
+#events-settings-panel .event-calendar-head button{min-width:40px;min-height:44px;padding:6px}
+#events-settings-panel .event-calendar-weekdays,#events-settings-panel .event-calendar-dates,#events-settings-panel .event-calendar-bands{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0;text-align:center}
+#events-settings-panel .event-calendar-week{padding-bottom:6px;border-top:1px solid var(--mh-border)}
+#events-settings-panel .event-calendar-dates>button{min-width:0;width:100%;height:40px;min-height:40px;padding:4px;border:0;background:none;border-radius:4px;font-size:13px;margin:0}
+#events-settings-panel .event-calendar-dates>button[aria-pressed=true]{background:var(--mh-selected);color:var(--mh-accent);font-weight:700}
+#events-settings-panel .event-calendar-dates>button[aria-current=date]{text-decoration:underline;text-underline-offset:4px}
+#events-settings-panel .event-calendar-dates .event-outside-month{color:var(--mh-muted);opacity:.6}
+#events-settings-panel .event-calendar-bands{row-gap:4px;min-height:4px}
+#events-settings-panel .event-calendar-bands .event-band{min-width:0;min-height:28px;height:28px;line-height:20px;padding:4px 5px;margin:0;border:0;border-radius:3px;background:var(--mh-selected);background:color-mix(in srgb,var(--event-color) 18%,var(--mh-surface));border-left:3px solid var(--event-color);color:var(--mh-text);text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}
+#events-settings-panel .event-selected-date{margin-block:16px}
+#events-settings-panel .pickup-heading{flex-wrap:wrap}
+#events-settings-panel .pickup-form{max-width:100%}
+
+.event-bonus-fields{display:grid;grid-template-columns:minmax(0,1fr) 76px;gap:8px;align-items:center}.event-bonus-fields input{width:100%;min-width:0}.event-bonus-editor fieldset{min-width:0}.record-event-field{width:auto;max-width:100%;margin:0 0 12px}
+
+/* The existing datetime controls retain their handlers; field history is the second row. */
+#record .record-date-card{display:block}
+#record .record-date-row{display:flex;align-items:center;gap:8px;min-width:0}
+#record .record-date-row>.date-field{flex:1;min-width:0;width:0;margin:0}
+#record .record-date-row>.record-datetime-field{position:relative;display:flex;align-items:center;min-width:0;height:48px}
+#record .record-date-row #datetime{position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0}
+#record .record-field-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+#record #record-field{flex:1;width:auto;min-width:0;height:44px;margin:0;font-size:16px}
+#record #field-history-open{flex:none;min-height:44px;margin:0;font-size:13px;padding:6px 12px}
+#record .record-field-hint{display:flex;align-items:center;gap:8px;margin:4px 0 0;color:var(--mh-muted)}
+#record .record-field-hint .check{min-width:0;min-height:32px;margin:0}
+#record .record-field-hint button{min-height:36px;padding:4px 12px}
+#app-panel:has(.field-history-weeks){width:720px;max-width:calc(100vw - 20px)}
+.field-history-nav{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.field-history-weeks section{margin-top:16px}
+:is(#app-panel,#history-field-view) .field-history-weeks h3{font-size:14px;margin-bottom:8px}
+.field-history-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0}
+body :is(#app-panel,#history-field-view) .field-history-days>button:not([role=tab]){min-width:0;min-height:64px;border:0;border-radius:0;padding:5px 1px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;color:var(--mh-text);margin:0}
+:is(#app-panel,#history-field-view) .field-history-days button[aria-pressed=true]{outline:2px solid var(--mh-accent);outline-offset:-2px}
+.field-history-days small{font-size:11px;line-height:1.3}
+.field-history-days strong{font-size:15px}
+.field-history-detail{margin-top:20px;border-top:1px solid var(--mh-border);padding-top:16px}
+.field-history-detail h3{margin-bottom:8px}
+.field-history-change{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 0;font-size:13px;overflow-wrap:anywhere}
+.field-history-change button{flex:none;min-height:40px}
+.field-history-inputs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:center}
+.field-history-inputs input,.field-history-inputs select{width:100%;min-width:0;margin:0;height:44px}
+.field-history-detail .check{display:flex;align-items:center;gap:6px;margin:8px 0}
+.field-history-detail .check input{width:18px;height:18px;margin:0}
+.field-history-detail input[type=time]{width:130px;margin:8px 0}
+.field-reference{font-size:12px;color:var(--mh-muted)}
+
+#events-settings-panel .event-calendar-dates>.event-full-moon{display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2}
+#events-settings-panel .event-full-moon small{font-size:10px;color:var(--mh-accent);line-height:1.2}
+
+/* Record setup guides and relocated field / Nap panels. */
+.record-setup-guide{padding:8px 0 16px}.record-setup-guide p{margin:0 0 8px;color:var(--mh-muted)}
+.record-setup-guide button{min-height:44px;margin:0}
+#record #record-field{width:100%;flex:1}
+#nap-island-details{margin-top:16px}#nap-island-details>summary{min-height:44px;padding:10px 0;font-size:15px;font-weight:600}
+#history-field-view{min-width:0}.field-history-change{flex-wrap:wrap}.field-history-change>span{flex:1;min-width:0}
+
+/* Month overflow dates keep field bands while de-emphasizing the date text. */
+body :is(#app-panel,#history-field-view) .field-history-days>button.field-history-outside-month{color:var(--mh-muted)}
+
+/* Five-slot current/saved lineups, confined to the existing Team panel. */
+#team #team-panel #team-slots,#team-panel .saved-team-slots{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;align-items:stretch}
+#team #team-panel #team-slots>.team-slot-row{padding:0;gap:2px}
+#team-panel .current-team-head{align-items:center;gap:8px;margin-bottom:12px}
+#team-panel .current-team-head h2{margin:0;font-size:var(--mh-section-title-size)}
+#team-panel #save-current-team{flex:none;font-size:13px;padding:8px}
+#team-panel .team-slot-button{width:100%;min-height:90px;padding:6px 3px;border:1px solid var(--mh-border);border-radius:var(--mh-radius);background:var(--mh-surface);overflow-wrap:anywhere}
+#team-panel .team-individual-name>strong{font-size:13px;line-height:1.4;height:2.8em}
+#team-panel .team-individual-name>small{font-size:11px;line-height:1.4}
+#team-panel .team-slot-edit{margin:0;padding:6px 2px;min-height:44px;font-size:12px}
+#team-panel .saved-team{padding:12px 0;border-bottom:1px solid var(--mh-border)}
+#team-panel .saved-team-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+#team-panel .saved-team-head input{flex:1;min-width:0;width:auto;margin:0}
+#team-panel .saved-team-head button{flex:none;min-height:44px;margin:0}
+#team-panel .saved-team-slot-row{display:flex;flex-direction:column;min-width:0;gap:2px}
+#team-panel .saved-slot-number{display:block;font-size:11px;color:var(--mh-muted);text-align:left}
+.team-save-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.team-save-choices button{min-width:0;overflow-wrap:anywhere}
+#team #team-panel #team-slots .team-slot-button{grid-column:1;grid-row:2;padding:6px 3px}
+#team #team-panel #team-slots .team-slot-edit{grid-column:1;grid-row:3;align-self:start}
+
+/* Acquisition source controls shared with dream shards. */
+:is(#summary,#shards) .candy-source-switches{display:grid;grid-template-columns:repeat(var(--source-count,6),minmax(0,1fr));gap:2px;flex-wrap:nowrap}
+:is(#summary,#shards) .candy-source-choice{width:auto;min-width:0;flex:none}
+:is(#summary,#shards) .candy-source-choice button{width:100%;min-width:0;min-height:44px;padding:6px 0;font-size:clamp(8px,2.7vw,12px);line-height:1.3;white-space:nowrap;writing-mode:horizontal-tb;border-radius:var(--mh-radius)}
+#summary .candy-source-choice[data-source=skills] button[data-source=skills]{min-height:30px;height:30px;border-radius:var(--mh-radius) var(--mh-radius) 0 0}
+#summary .candy-source-choice .candy-skill-expand{display:block;min-height:14px;height:14px;padding:0;border-top:0;border-radius:0 0 var(--mh-radius) var(--mh-radius);font-size:11px;line-height:14px;background:var(--mh-surface);color:var(--source-color)}
+#summary .candy-source-choice .candy-skill-expand[aria-expanded=true]{background:color-mix(in srgb,var(--source-color) 22%,var(--mh-surface))}
+#summary .candy-skill-children{grid-column:1/-1;display:grid;grid-template-columns:repeat(var(--visible-skills,4),minmax(0,1fr));gap:2px}
+#summary .candy-skill-children .candy-source-choice button{min-height:44px}
+/* Shared compact individual cards for the roster and team picker. */
+#team #registered-pokemon-list .registered-row,#team-picker .team-picker-grid .team-picker-row{position:relative;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;min-width:0;height:102px;min-height:102px;padding:5px 4px;gap:0;border:1px solid var(--mh-border);border-radius:var(--mh-radius);background:var(--mh-surface);color:var(--mh-text);text-align:left}
+ :is(#team #registered-pokemon-list,#team #team-panel,#team-picker) .pokemon-card-info{display:flex;flex-direction:column;min-width:0;width:100%;gap:0;text-align:left}
+:is(#team #registered-pokemon-list,#team #team-panel,#team-picker) .pokemon-card-info>*{display:block;margin:0;min-width:0;line-height:18px}
+:is(#team #registered-pokemon-list,#team #team-panel,#team-picker) .pokemon-card-info .pokemon-card-level{height:18px;text-align:right;font-size:13px;font-weight:400;color:var(--mh-text)}
+:is(#team #registered-pokemon-list,#team #team-panel,#team-picker) .pokemon-card-info .pokemon-card-level strong{font-weight:700}
+:is(#team #registered-pokemon-list,#team #team-panel,#team-picker) .pokemon-card-info .pokemon-card-nickname{height:18px;font-size:13px;font-weight:700;color:var(--mh-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;overflow-wrap:normal}
+:is(#team #registered-pokemon-list,#team #team-panel,#team-picker) .pokemon-card-info .individual-number{white-space:nowrap;font-size:10px;color:var(--mh-muted);font-weight:400}
+:is(#team #registered-pokemon-list,#team #team-panel,#team-picker) .pokemon-card-info .pokemon-card-species{font-size:13px;line-height:16px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;max-height:32px;color:#555;font-weight:600;overflow-wrap:anywhere}
+#team .pokemon-card-info .provisional-badge,#team-picker .provisional-badge{position:absolute;bottom:2px;left:4px;font-size:9px;line-height:12px;color:var(--mh-accent)}
+#team-picker .team-picker-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;align-items:stretch}
+#team-picker .team-picker-grid .team-picker-status{font-size:9px;line-height:14px;min-height:14px;color:var(--mh-muted)}
+#team-picker .team-picker-grid .team-picker-row{height:116px;min-height:116px}
+#team-picker .team-picker-grid .team-picker-row[aria-pressed=true]{outline:2px solid var(--mh-accent);outline-offset:-5px;background:var(--mh-selected)}
+#team-picker .team-picker-grid .team-picker-row:disabled{opacity:1}
+#team-picker .team-picker-grid .team-picker-row:disabled .team-individual-name>strong{color:var(--mh-muted)}
+#team-picker .team-picker-grid>p{grid-column:1/-1}
+#team #roster-sort{width:auto;min-width:0;max-width:55%;margin:0;font-size:13px;padding-inline:6px}
+#team #registered-pokemon-list .registered-row[data-pokemon-type],#team #team-panel .team-slot-button[data-pokemon-type],#team-picker .team-picker-row[data-pokemon-type]{border:2px solid var(--pokemon-type-color)}
+/* Registered and current team cards share the existing type border and information styles. */
+#team #registered-pokemon-list .registered-row[data-pokemon-type-label],#team #team-panel .team-slot-button[data-pokemon-type-label]{position:relative}
+#team #registered-pokemon-list .registered-row[data-pokemon-type-label]::before,#team #team-panel .team-slot-button[data-pokemon-type-label]::before{content:attr(data-pokemon-type-label);position:absolute;top:0;left:0;z-index:1;max-width:100%;box-sizing:border-box;padding:1px 2px;border-radius:3px;background:var(--pokemon-type-color);color:#fff;font-size:clamp(8px,2.4vw,10px);line-height:13px;white-space:nowrap;overflow:hidden}
+#team #registered-pokemon-list .registered-row{padding-top:18px}
+#team #registered-pokemon-list .pokemon-card-info .pokemon-card-species{font-size:12px}
+#team .pokemon-card-species.has-form{display:block}
+#team .pokemon-card-species :is(.pokemon-card-species-base,.pokemon-card-species-form){display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#team .pokemon-card-species .pokemon-card-species-form{font-size:.82em}
+#team #team-panel #team-slots>.team-slot-row{display:flex;flex-direction:column;gap:2px;padding-top:0;min-width:0}
+#team #team-panel #team-slots .team-slot-row>span{position:static;display:block;font-size:11px;line-height:14px;min-height:14px}
+#team #team-panel #team-slots .team-slot-row>.team-slot-button{height:136px;min-height:136px;padding:18px 3px 24px}
+#team #team-panel .saved-team-slot-row>.team-slot-button{height:116px;min-height:116px;padding:18px 3px 4px}
+#team #team-panel .pokemon-card-info .pokemon-card-nickname{height:auto;max-height:32px;font-size:12px;line-height:16px;white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow-wrap:anywhere}
+#team #team-panel .pokemon-card-info .pokemon-card-species{font-size:11px;line-height:14px;max-height:28px}
+#team #team-panel #team-slots .pokemon-card-level{padding:0;text-align:right;font-size:11px;letter-spacing:0;transform:none}
+#team #team-panel #team-slots .team-slot-actions{position:absolute;bottom:1px;left:2px;right:2px;display:flex;justify-content:space-between;align-items:center}
+#team #team-panel #team-slots .team-slot-actions button{position:static!important;display:grid;place-items:center;width:22px!important;min-width:22px!important;height:22px;min-height:22px;margin:0;padding:2px;border:0;background:transparent;color:var(--mh-text)}
+#team #team-panel #team-slots .team-slot-actions .tab-icon{width:15px;height:15px;margin:0}
+#team #team-panel #team-slots .team-slot-actions .tab-label{position:absolute;clip-path:inset(50%);width:1px;height:1px;overflow:hidden}
+#team #register-panel .individual-editor-head .profile-editor-actions[hidden]{display:none}
+#team #register-panel :is(.register-entry-form,.register-entry-import)[hidden]{display:none}
+#team #roster-sort{min-height:40px}
+/* Touch Safari can retain :hover after a dialog closes. Only the open slot stays highlighted. */
+#team #team-panel .team-slot-button:not([aria-expanded=true]):hover{background:var(--mh-surface)}
+#team #team-panel .team-slot-button[aria-expanded=true]{background:var(--mh-selected)}
+
+/* History cards keep the existing two-column grid and align actions within each row. */
+#history #history-list{align-items:stretch;gap:12px}
+#history #history-list .card{display:flex;flex-direction:column;min-width:0;margin:0;padding:12px;background:#fff;border:1px solid #dadada;border-radius:10px;box-shadow:none}
+#history #history-list .card.shards{background:#fff;border:1px solid #dadada}
+#history #history-list .history-topline{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:4px 6px}
+#history #history-list .history-topline .history-method{min-width:0;font-size:13px;line-height:1.35;overflow-wrap:anywhere}
+#history #history-list .history-topline .history-time{white-space:nowrap;font-size:11px;line-height:1.5;text-align:right}
+#history #history-list .history-meta .history-category{align-self:center;white-space:nowrap;font-size:10px;color:var(--mh-muted)}
+#history #history-list .history-footer{margin-top:auto;border-top:0}
+#history .history-actions .history-icon-action,#history #history-list .history-footer .history-actions .history-icon-action{display:inline-flex;align-items:center;justify-content:center;min-width:36px;width:36px;min-height:40px;padding:4px;border:0;background:transparent;color:var(--mh-text)}
+#history .history-actions .history-icon-action.danger,#history #history-list .history-footer .history-actions .history-icon-action.danger{color:var(--mh-error)}
+#history .history-icon-action .tab-icon{width:17px;height:17px}
+#history .history-icon-action .tab-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+#sleep .sleep-history-entry{margin:10px 0;padding:12px;background:#fff;border:1px solid #dadada;border-radius:10px}
+#sleep .sleep-history-entry .history-actions .history-icon-action{min-width:40px}
+#history-field-view .field-history-current{padding:10px 0 14px}
+#history-field-view .field-history-current-head{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;color:var(--mh-muted)}
+#history-field-view .field-history-current-head time{white-space:nowrap}
+#history-field-view .field-history-current>strong{display:block;font-size:17px;line-height:1.5}
+#history-field-view .field-history-detail{padding-top:12px}
+#history-field-view .field-history-change{flex-wrap:nowrap}
+#history-field-view .field-history-change>span{overflow-wrap:anywhere}
+#history-professor-view .professor-history-card{display:block;margin:8px 0;padding:8px;background:#fff;border:1px solid #dadada;border-radius:10px}
+#history-professor-view .professor-history-line{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:4px;white-space:nowrap;font-size:11px}
+#history-professor-view .professor-history-line>span:nth-child(2){overflow:hidden;text-overflow:ellipsis}
+#history-professor-view .professor-history-line>strong{font-size:12px}
+#history-professor-view .history-actions{display:flex;gap:0}
+#history-professor-view .history-actions .history-icon-action{display:inline-flex;align-items:center;justify-content:center;min-width:28px;min-height:36px;margin:0;padding:4px;border:0;background:transparent;color:var(--mh-text)}
+#history-professor-view .history-actions .history-icon-action.danger{color:var(--mh-error)}
+#history-professor-view .history-icon-action .tab-icon{width:16px;height:16px}
+#history-professor-view .history-icon-action .tab-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+#history-professor-view .professor-history-edit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--mh-border)}
+#history-professor-view .professor-history-edit>label{min-width:0}
+#history-professor-view .professor-history-edit>label:nth-child(3){grid-column:1/-1}
+@media(max-width:390px){#history #history-list .card{padding:9px}#history #history-list .history-topline .history-method{font-size:12px}#history #history-list .history-topline .history-time{font-size:10px}}
+#history #history-list .history-meta{flex-wrap:wrap}
+#history .period-picker[hidden]{display:none!important}
+#history #history-list .history-meta .history-amount{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 5px;min-width:0}
+#history #history-list .history-meta .history-primary{font-size:11px;font-weight:400;line-height:1.3;overflow-wrap:anywhere;min-width:0}
+#history #history-list .card :is(.history-meta,.history-target){margin-block:3px}
+#history #history-list .card[data-history-source=help] .history-method{color:var(--source-help)}
+#history #history-list .card[data-history-source=skills] .history-method{color:var(--source-skills)}
+#history #history-list .card[data-history-source=research] .history-method{color:var(--source-research)}
+#history #history-list .card[data-history-source=other] .history-method{color:var(--source-other)}
+#history-details-panel #edit-team{display:grid;gap:7px;min-width:0}
+#history-details-panel #edit-team>label{display:grid;grid-template-columns:36px minmax(0,1fr);align-items:center;justify-items:center;gap:8px;min-width:0;margin:0}
+#history-details-panel #edit-team>label select{width:100%;min-width:0;min-height:42px;margin:0;border-radius:var(--mh-radius)}
+#history-professor-view .professor-history-line>span:nth-child(2){overflow:visible;text-overflow:clip}
+
+#sleep .sleep-history-entry .history-icon-action{display:inline-flex;align-items:center;justify-content:center;min-width:40px;min-height:40px;padding:4px;border:0;background:transparent;color:var(--mh-text)}
+#sleep .sleep-history-entry .history-icon-action.danger{color:var(--mh-error)}
+#sleep .sleep-history-entry .history-icon-action .tab-icon{width:17px;height:17px}
+#sleep .sleep-history-entry .history-icon-action .tab-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+
+#history-field-view .field-history-change .history-icon-action{display:inline-flex;align-items:center;justify-content:center;flex:none;min-width:40px;min-height:40px;margin:0;padding:4px;border:0;background:transparent;color:var(--mh-text)}
+#history-field-view .field-history-change .history-icon-action.danger{color:var(--mh-error)}
+#history-field-view .field-history-change .history-icon-action .tab-icon{width:17px;height:17px}
+#history-field-view .field-history-change .history-icon-action .tab-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+
+/* Five history views share the existing tab treatment without horizontal scrolling. */
+#history #history-view-switch{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;width:100%;margin-bottom:12px}
+#history #history-view-switch>button{width:100%;min-width:0;min-height:58px;padding:5px 1px;gap:2px;white-space:normal}
+#history #history-view-switch .tab-label{display:flex;flex-direction:column;min-width:0;font-size:10px;line-height:1.25;text-align:left}
+#history #history-view-switch .tab-icon{width:13px;height:13px}
+#history #history-view-switch>button::after{left:2px;right:2px}
+@media(max-width:340px){#history #history-view-switch .tab-label{font-size:9px}#history #history-view-switch .tab-icon{width:12px;height:12px}}
+#history :is(#history-list,#history-social-view){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:12px}
+#history #history-social-view[hidden],#history .filters[hidden]{display:none}
+#history :is(#history-list,#history-social-view) .card{display:flex;flex-direction:column;min-width:0;max-width:100%;margin:0;padding:10px;background:#fff;border:1px solid #dadada;border-radius:10px;box-shadow:none}
+#history :is(#history-list,#history-social-view) .history-topline{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:4px}
+#history :is(#history-list,#history-social-view) .history-topline .history-category{font-size:11px;font-weight:700;color:var(--resource-candy);min-width:0;overflow-wrap:anywhere}
+#history :is(#history-list,#history-social-view) .card.shards .history-topline .history-category{color:var(--resource-shard)}
+#history :is(#history-list,#history-social-view) .history-topline .history-time{display:flex;flex-direction:column;align-items:flex-end;font-size:10px;line-height:1.3;white-space:nowrap}
+#history :is(#history-list,#history-social-view) .history-meta{display:flex;flex-direction:column;gap:3px;margin:6px 0}
+#history :is(#history-list,#history-social-view) .history-meta .history-method{font-size:12px;line-height:1.4;overflow-wrap:anywhere}
+#history :is(#history-list,#history-social-view) .history-meta .history-amount{font-size:20px;line-height:1.2}
+#history :is(#history-list,#history-social-view) .history-footer{position:relative;margin-top:auto;border:0;display:flex;align-items:center;justify-content:space-between;min-width:0}
+#history :is(#history-list,#history-social-view) .history-footer .history-actions{position:static;width:auto;display:flex;margin-left:auto}
+#history :is(#history-list,#history-social-view) .history-footer>.history-detail-button{width:auto;min-width:44px}
+#history :is(#history-list,#history-social-view) .history-footer .history-actions button{flex:none;min-width:36px;width:36px}
+#history #history-list .history-date-divider{grid-column:1/-1}
+@media(max-width:390px){#history :is(#history-list,#history-social-view) .card{padding:8px}#history :is(#history-list,#history-social-view) .history-meta .history-method{font-size:11px}}
+#history-field-view .field-history-current{display:flex;flex-direction:column;gap:4px;padding:8px 0 12px}
+#history-field-view .field-history-current time{color:var(--mh-muted);font-size:13px}
+#history-field-view .field-history-current strong{font-size:18px}
+#history #history-professor-view{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:12px}
+#history #history-professor-view[hidden]{display:none}
+#history #history-professor-view .professor-history-card{display:flex;flex-direction:column;gap:0;min-width:0;margin:0;padding:10px;background:#fff;border:1px solid #dadada;border-radius:10px}
+#history #history-professor-view .professor-history-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:4px;min-width:0}
+#history #history-professor-view .professor-history-head .history-category{font-size:11px;font-weight:700;color:var(--resource-candy)}
+#history #history-professor-view .professor-history-time{display:flex;flex-direction:column;align-items:flex-end;flex:none;white-space:nowrap;font-size:10px;line-height:1.3}
+#history #history-professor-view .professor-history-summary{display:flex;flex-direction:column;align-items:flex-start;gap:3px;margin:6px 0;font-size:12px}
+#history #history-professor-view .professor-history-summary .history-method{font-size:12px;line-height:1.4;color:var(--source-professor)}
+#history #history-professor-view .professor-history-summary .history-amount{font-size:20px;line-height:1.2;white-space:nowrap}
+#history #history-professor-view .professor-history-summary .history-amount .quantity-number{font-size:20px}
+#history #history-professor-view .professor-history-summary small{overflow-wrap:anywhere}
+#history #history-professor-view .history-footer{display:flex;align-items:center;justify-content:space-between;min-width:0;margin-top:auto;border:0}
+#history #history-professor-view .history-footer>.history-detail-button{width:auto;min-width:44px;min-height:40px;margin:0;padding:4px;background:none;border:0;box-shadow:none;font-size:12px}
+#history #history-professor-view .history-footer .history-actions{position:static;display:flex;align-items:center;gap:0;width:auto;margin:0 0 0 auto}
+#history #history-professor-view .history-footer .history-actions .history-icon-action{min-width:36px;width:36px;min-height:40px}
+#history #history-professor-view .professor-history-details{margin-top:8px;padding-top:8px;border-top:1px solid var(--mh-border);font-size:11px}
+#history #history-professor-view .professor-history-edit{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;border:0}
+#history #history-professor-view .professor-history-item{display:flex;flex-wrap:wrap;align-items:center;gap:4px;min-width:0;overflow-wrap:anywhere}
+#history #history-professor-view .professor-history-item input{width:54px;min-width:0;margin:0;padding:4px}
+#history #history-professor-view .professor-history-item button{min-width:32px;min-height:32px;margin-left:auto;padding:4px}
+#history-details-panel .history-inline-editor{overflow-y:auto;min-height:0;padding:12px 16px 20px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#history-details-panel .history-inline-editor form{min-width:0;margin:0}
+#history-details-panel .history-inline-editor .section-head[hidden]{display:none!important}
+#history-details-panel .history-inline-editor form>label,#history-details-panel .history-inline-editor form>.filters>label{display:grid;grid-template-columns:minmax(90px,34%) minmax(0,1fr);align-items:center;gap:8px;min-width:0;margin:8px 0}
+#history-details-panel .history-inline-editor :is(input,select){min-width:0;max-width:100%}
+#history-details-panel .history-inline-editor form>.filters{display:block}
+@media(max-width:390px){#history-details-panel .history-inline-editor{padding:10px 12px 18px}#history-details-panel .history-inline-editor form>label,#history-details-panel .history-inline-editor form>.filters>label{grid-template-columns:minmax(76px,32%) minmax(0,1fr);gap:6px}}
+@media(max-width:390px){#history #history-professor-view .professor-history-card{padding:8px}#history #history-professor-view .professor-history-head{font-size:10px}}

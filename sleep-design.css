@@ -1,0 +1,219 @@
+/* 睡眠入力も既存の白・グレーの部品を共用する。 */
+body .tabs,body:has(#record[hidden]) .tabs{grid-template-columns:repeat(var(--main-tab-count,6),minmax(0,1fr))}.tabs button{min-width:0;padding-inline:2px}
+#sleep-root{max-width:680px}
+.sleep-toolbar,.sleep-session-head,.sleep-total,.sleep-actions{display:flex;align-items:center;justify-content:space-between;gap:8px}
+:is(#sleep,#sleep-editor) button,:is(#sleep,#sleep-editor) input,:is(#sleep,#sleep-editor) select{min-height:44px;font-size:16px}:is(#sleep,#sleep-editor) input,:is(#sleep,#sleep-editor) select{min-width:0;box-sizing:border-box;width:100%}
+.sleep-fields{display:grid;align-items:end;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}.sleep-fields label{min-width:0;font-size:13px;color:#6f7377}.sleep-fields input,.sleep-fields select{margin-top:5px}
+.sleep-search{display:block;margin:20px 0 12px}.sleep-search input{margin-top:6px}.sleep-candidates{display:grid;grid-template-columns:minmax(0,1fr);gap:0;max-height:260px;overflow:auto;margin-bottom:12px}
+.sleep-candidate{display:grid;grid-template-columns:minmax(0,1fr) 188px;align-items:center;gap:8px;border-bottom:1px solid var(--mh-border);padding:6px 0}.sleep-candidate>strong{font-size:14px;font-weight:500;overflow-wrap:anywhere;min-width:0}.sleep-candidate-stars{display:grid;grid-template-columns:repeat(4,44px);gap:4px}:is(#sleep,#sleep-editor) .sleep-candidate-stars button{padding:0;font-size:14px;min-width:44px;text-align:center}:is(#sleep,#sleep-editor) .sleep-candidate-stars button:disabled{opacity:.35;cursor:not-allowed}
+.sleep-entry{display:grid;grid-template-columns:minmax(0,1fr) 44px 60px 44px;align-items:center;gap:6px;min-height:44px;border-top:1px solid var(--mh-border);padding:0}.sleep-entry>strong{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600}.sleep-entry-amount{display:flex;align-items:center;min-width:0;min-height:47px;margin:0}body :is(#sleep,#sleep-editor,.sleep-ocr-panel) .sleep-entry .sleep-entry-amount input{min-height:36px;height:36px;margin:0;text-align:right;font-weight:600;padding:4px 6px;font-size:16px}:is(#sleep,#sleep-editor,.sleep-ocr-panel) .sleep-entry>button{padding:0;font-size:14px;background:none;border:0;border-radius:var(--mh-radius)}:is(#sleep,#sleep-editor,.sleep-ocr-panel) .sleep-entry-remove{color:var(--mh-error);font-size:20px}
+.sleep-total{border-top:1px solid #eceef0;padding:16px 0}.sleep-total strong{font-size:26px}.sleep-actions{margin:12px 0 24px}.sleep-actions button{flex:1}.sleep-sessions{border-bottom:1px solid #eceef0;margin-bottom:16px}.sleep-session{padding:12px 0;border-top:1px solid #eceef0}.sleep-session p{font-size:14px;color:#777}.sleep-note{font-size:13px;color:#777;line-height:1.6}.sleep-session-head h3{margin:0;font-size:16px}
+:is(#sleep,#sleep-editor) .sleep-save{background:#f2f3f4;color:#202124;border:1px solid #e8eaed;border-radius:6px;padding:8px 16px}:is(#sleep,#sleep-editor) .sleep-error{color:#a04444}.history-sleep-amounts{font-size:13px;color:#777}.sleep-proportions{color:#777;font-weight:400;font-size:12px}
+@media(max-width:400px){.tabs button{font-size:11px!important}}
+
+:is(#sleep,#sleep-editor){color:var(--editorial-ink);--accent:#555;--edge:var(--editorial-line);--tint:var(--editorial-soft)}
+:is(#sleep,#sleep-editor) button{margin:0;background:#f5f6f6;color:var(--editorial-ink);border:1px solid #eceeef;border-radius:6px;padding:8px 12px;font-weight:500;line-height:1.4}:is(#sleep,#sleep-editor) button:active:not(:disabled){background:#e8eaec}:is(#sleep,#sleep-editor) button.danger{color:#985e52;background:white}:is(#sleep,#sleep-editor) :is(input,select){color:var(--editorial-ink);background:white;border:1px solid #dcdddf;border-radius:6px;padding:8px 10px}:is(#sleep,#sleep-editor) label{color:var(--editorial-muted)}:is(#sleep,#sleep-editor) .sleep-session p{margin:6px 0;font-size:13px;line-height:1.5}:is(#sleep,#sleep-editor) .sleep-toolbar [aria-pressed=true]{background:#e9ebed;border-color:#d9dcdf;font-weight:600}
+
+.research-daily-total{padding:12px 0;border-bottom:1px solid var(--mh-border);font-size:16px;font-weight:600;margin:0 0 12px}#shard-research-form>#research-daily-total{color:var(--mh-text)}
+body #sleep-editor{padding:0;width:min(640px,calc(100% - 24px));max-height:calc(100dvh - 32px);overflow:auto}.sleep-editor-head{position:sticky;top:0;z-index:20;background:var(--mh-surface);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid var(--mh-border)}.sleep-editor-head h2{font-size:18px;margin:0}.sleep-editor-head button{min-height:44px}#sleep-editor #sleep-root{padding:0 16px 16px}
+
+.sleep-selected-title{font-size:16px;font-weight:600;margin:16px 0 8px}.sleep-candidates{overscroll-behavior:contain}.sleep-candidates button{min-width:0;overflow-wrap:anywhere}
+
+.sleep-sticky-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0 0}.sleep-sticky-total{display:flex;align-items:baseline;gap:8px;min-width:0;font-size:13px;color:var(--mh-muted)}.sleep-sticky-total strong{font-size:20px;color:var(--mh-text);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.sleep-sticky-actions .sleep-save{flex:0 0 auto;min-width:64px}.sleep-switch{margin-bottom:8px!important}.sleep-fields>select{margin:0;max-width:100%}.sleep-filter-info{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px;color:var(--mh-muted)}.sleep-filter-info small{font-size:12px}.sleep-filter-info button{font-size:12px!important;padding:4px 8px!important}.sleep-candidate strong small{display:block;font-size:11px;color:var(--mh-muted);font-weight:400}.sleep-candidate[data-appearance=unknown]{border-left:2px dotted var(--mh-border);padding-left:6px}.sleep-sessions{margin-top:24px;border:0}.sleep-sessions>summary{min-height:44px;padding:10px 0;color:var(--mh-muted);font-size:14px}.sleep-sessions .sleep-session{padding:8px 0}.sleep-sessions .sleep-session-head{display:flex;align-items:center;gap:8px}.sleep-session-head>strong{margin-right:auto}#sleep-shard-form .research-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}#sleep-shard-form .research-fields label{margin:0}#sleep-shard-form .research-fields label:nth-child(2){grid-row:2;grid-column:1}#sleep-shard-form .research-fields label:last-child{grid-row:2;grid-column:2}#sleep-shard-form{padding-top:16px}#sleep-shard-form input{margin-top:6px}#sleep-shard-level{text-align:center;font-weight:600}#sleep-form[hidden],#sleep-shard-form[hidden]{display:none!important}
+
+/* Field/type and daily candy bonus share the existing selector row. */
+.sleep-fields{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(72px,.7fr);gap:6px}.sleep-fields>select{padding-inline:6px}
+.sleep-fields .sleep-bonus{margin:0;font-size:12px;white-space:nowrap}.sleep-fields .sleep-bonus select{margin-top:4px;padding-inline:6px}
+
+/* Compact research heading, shared round tabs and read-only saved history. */
+.sleep-selected-title{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px}.sleep-selected-title small{font-size:12px;font-weight:400;color:var(--mh-muted);overflow-wrap:anywhere}
+.sleep-entry{grid-template-columns:minmax(0,1fr) 44px 52px 44px;min-height:48px}.sleep-entry>strong{font-weight:400}
+.sleep-fields{border-top:1px solid var(--mh-border);padding-top:16px}
+.sleep-sticky-actions{gap:4px}.sleep-sticky-total{flex-wrap:wrap;gap:0 4px}.sleep-sticky-total strong{font-size:18px}
+:is(#sleep,#sleep-editor) .sleep-rounds{flex:0 0 auto;margin:0!important;border:0;gap:0}
+:is(#sleep,#sleep-editor) .sleep-rounds>button{font-size:12px;padding:10px 4px;min-width:44px}
+:is(#sleep,#sleep-editor) .sleep-rounds>button[aria-pressed=true]:after{left:4px;right:4px}
+:is(#sleep,#sleep-editor) .sleep-sticky-actions .sleep-save{min-width:52px;padding-inline:10px}
+.sleep-filter-info button[aria-pressed=true]{background:var(--mh-selected)!important;color:var(--mh-accent)!important}
+.sleep-history-entry{padding:16px 0;border-bottom:1px solid var(--mh-border)}.sleep-history-entry h3{font-size:15px;font-weight:600}.sleep-history-entry p{margin:6px 0}.sleep-history-pokemon{margin:8px 0;padding-left:18px;font-size:14px}.sleep-history-pokemon li{overflow-wrap:anywhere}
+#settings #sleep-mode{width:auto;min-width:128px;margin:0}
+
+/* Keep round tabs anchored to Save, independently of total digits or resource. */
+.sleep-sticky-actions{display:grid;grid-template-columns:minmax(0,1fr) max-content 52px;gap:8px;min-height:52px}
+.sleep-sticky-total{flex-direction:column;align-items:flex-start;gap:0;line-height:1.3}.sleep-sticky-total strong{line-height:1.3;max-width:100%}
+body :is(#sleep,#sleep-editor) .sleep-fields select[data-empty=true]{color:var(--mh-muted)}.sleep-fields .sleep-bonus select{margin:0}
+.sleep-history-pokemon{padding:0;list-style:none;max-width:480px}.sleep-history-pokemon li{display:grid;grid-template-columns:minmax(0,1fr) 44px minmax(64px,auto);align-items:baseline;gap:8px;padding:3px 0}.sleep-history-pokemon li>span:last-child{text-align:right;font-variant-numeric:tabular-nums}
+:is(#sleep,#sleep-editor) .sleep-history-today{margin-left:auto}
+#settings #data-sources>summary{font-size:17px;font-weight:600;min-height:44px;line-height:1.5;padding:10px 0;cursor:pointer}#settings #data-sources[open]>summary{margin-bottom:12px}#settings #data-sources>summary::marker{color:var(--mh-muted)}
+
+/* Retain the center column when all-period navigation arrows are hidden. */
+:is(#sleep,#sleep-editor) .period-picker-top>.period-picker-day{grid-column:2}
+
+/* Sleep modes share one header height and one separator below the mode tabs. */
+:is(#sleep,#sleep-editor) #sleep-root>.period-picker{border-bottom:0!important;padding-bottom:0!important;margin-bottom:0}
+:is(#sleep,#sleep-editor) .period-picker-top{height:48px}
+:is(#sleep,#sleep-editor) .period-picker-top>.period-picker-day{height:48px;max-height:48px;padding-block:4px;line-height:20px}
+:is(#sleep,#sleep-editor) .period-picker-top>.period-picker-day>span{max-height:40px;overflow:hidden}
+:is(#sleep,#sleep-editor) .period-picker>.sleep-history-periods{height:52px;margin:0!important;padding-top:4px;border-bottom:0}
+:is(#sleep,#sleep-editor) .sleep-history-periods>button:last-child{margin-left:auto}
+/* Shared labelled research fields: rank on its own row, EXP and shards together. */
+:is(#record,#sleep,#sleep-editor) .research-fields>label{text-align:center;font-size:var(--mh-text-size);font-weight:400;color:var(--mh-muted)}
+:is(#record,#sleep,#sleep-editor) .research-fields input{font-size:var(--mh-input-size);text-align:center;height:44px;min-height:44px;margin-top:6px}
+#record #shard-research-form .research-fields{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#record #shard-research-form .research-fields>label{margin:0}
+#record #shard-research-form .research-fields>label[data-research-field=researchRank]{grid-row:2;grid-column:1}
+#record #shard-research-form .research-fields>label[data-research-field=researchExp]{grid-row:3;grid-column:1}
+#record #shard-research-form .research-fields>label[data-research-field=baseAmount]{grid-row:3;grid-column:2}
+#record #shard-research-form .research-session-field{align-self:end}
+#record #shard-research-session{margin-top:0;height:44px;font-size:var(--mh-input-size)}
+
+body:has(#sleep:not([hidden])) .app{padding-bottom:calc(76px + env(safe-area-inset-bottom))}.sleep-candidates{margin-bottom:0}
+#record #shard-research-form .research-session-field{grid-row:1;grid-column:1;margin:0}
+#record #research-save{display:block;min-height:44px;margin:16px 0 8px auto;padding:10px 16px}
+#record #shard-other-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:end}
+#record #shard-other-form>label{margin:0;min-width:0}#record #shard-other-form>label.shard-other-memo-field{grid-column:1/-1}
+#record #shard-other-form :is(input,select){margin-top:6px;font-size:16px;width:100%;min-width:0;padding-inline:6px}
+#record #shard-other-form>button{grid-column:2;justify-self:end;margin:4px 0 8px;min-width:64px}
+@media(max-width:360px){#record #shard-other-kind{padding-inline:2px}}
+#record #shard-other-form :is(input,select){height:44px}
+
+/* Record/history share the existing flat switch. Sleep remains a sibling to avoid inherited form styles. */
+:is(#record,#history)>[id$="-view-switch"]{display:flex;gap:8px;margin:0 0 8px!important;padding:0;border-bottom:1px solid var(--mh-border)}
+:is(#record,#history)>[id$="-view-switch"]>button{position:relative;border:0;border-radius:0;background:none;min-height:44px;padding:10px 12px;font-size:15px;font-weight:500;color:var(--mh-muted)}
+:is(#record,#history)>[id$="-view-switch"]>button[aria-selected=true]{color:var(--mh-accent)}
+:is(#record,#history)>[id$="-view-switch"]>button[aria-selected=true]:after{content:'';position:absolute;bottom:-1px;height:2px;left:12px;right:12px;background:var(--mh-accent)}
+#history-main-view>.period-picker{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:#fffffff5;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:8px 0 0;margin:0 0 var(--period-content-gap);border:0;border-radius:0;box-shadow:none;width:100%;min-width:0}
+body:has(#sleep:not([hidden])) :is(#record,#history){margin-bottom:0}
+:is(#record,#history)>[id$="-view-switch"]>button[aria-selected=true]{background:none;border-color:transparent;font-weight:500}
+/* Compact research selectors keep native full-name options and 44px touch areas. */
+#sleep .sleep-research-heading{display:flex;align-items:center;gap:6px;margin:12px 0 8px;min-width:0}#sleep .sleep-selected-title{display:block;flex:0 0 auto;margin:0;font-size:13px;white-space:nowrap}#sleep .sleep-research-heading .sleep-fields{flex:1;display:grid;grid-template-columns:minmax(64px,1fr) 78px 60px;gap:4px;min-width:0;margin:0;padding:0;border:0}
+#sleep .sleep-compact-select{position:relative;display:flex;align-items:center;min-width:0;height:44px;margin:0;border:1px solid var(--mh-border);border-radius:var(--mh-radius);background:white;padding:0 15px 0 5px;font-size:13px;color:var(--mh-text)}#sleep .sleep-compact-select:after{content:'⌄';position:absolute;right:4px;font-size:12px}#sleep .sleep-compact-select>span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}#sleep .sleep-compact-select>select{position:absolute;inset:0;width:100%;height:44px;margin:0;opacity:0;font-size:16px;cursor:pointer}#sleep .sleep-compact-select:focus-within{outline:2px solid var(--mh-accent)}#sleep .sleep-research-heading .sleep-bonus{min-width:0}#sleep .sleep-research-heading .sleep-bonus select{height:44px;margin:0;padding-inline:2px;font-size:16px}
+#sleep #sleep-entries{max-height:50vh;max-height:50dvh;overflow-y:auto;overscroll-behavior:contain}#sleep .sleep-candidates{max-height:260px}#sleep .sleep-search{border-top:1px solid var(--mh-border);padding-top:12px;margin:12px 0 8px}#sleep .sleep-filter-info{justify-content:flex-start}
+#sleep .sleep-sticky-actions>.sleep-save{width:64px;min-width:64px;height:44px;padding-inline:4px;white-space:nowrap}#sleep .sleep-sticky-actions{grid-template-columns:minmax(0,1fr) max-content 64px}#sleep .sleep-sticky-total strong[data-saved=false]{font-weight:400}#sleep .sleep-sticky-total strong[data-saved=true]{font-weight:700}#sleep .sleep-sticky-actions[hidden]{display:none}
+@media(max-width:360px){#sleep .sleep-research-heading{flex-wrap:wrap}#sleep .sleep-selected-title{width:100%;font-size:14px}#sleep .sleep-research-heading .sleep-fields{flex-basis:100%;grid-template-columns:minmax(90px,1fr) 100px 72px}}
+#sleep .sleep-history-calendar{margin:8px 0 16px;max-width:400px}#sleep .sleep-history-calendar>summary{min-height:44px;cursor:pointer;font-size:14px;color:var(--mh-muted);padding:10px 0}#sleep .sleep-calendar-head{display:flex;align-items:center;justify-content:space-between}#sleep .sleep-calendar-head strong{font-size:14px}#sleep .sleep-calendar-head button{background:none;border:0;min-height:44px}#sleep .sleep-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}#sleep .sleep-calendar-grid>small{text-align:center;font-size:12px;color:var(--mh-muted)}#sleep .sleep-calendar-grid>button{position:relative;min-height:40px;height:40px;min-width:0;padding:2px 0 8px;font-size:14px;background:white;border:0}#sleep .sleep-calendar-grid>button[aria-pressed=true]{background:var(--mh-selected);color:var(--mh-accent)}#sleep .sleep-calendar-dot{position:absolute;bottom:1px;left:0;right:0;font-size:7px;text-align:center;color:var(--mh-accent)}
+#sleep .pickup-heading{display:flex;align-items:center;gap:8px;flex-wrap:wrap}#sleep .pickup-heading>:first-child{margin-right:auto}#sleep .pickup-heading h3{font-size:17px}#sleep .pickup-heading small{font-size:12px;color:var(--mh-muted)}#sleep .pickup-event{padding:12px 0;border-bottom:1px solid var(--mh-border)}#sleep .pickup-event p{overflow-wrap:anywhere}#sleep .pickup-form{padding:12px 0;border-bottom:1px solid var(--mh-border)}#sleep .pickup-dates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#sleep .pickup-form fieldset{border:0;padding:0;margin:12px 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 8px}#sleep .pickup-form fieldset>label{display:flex;gap:8px;align-items:center;min-height:44px;margin:0;font-size:13px}#sleep .pickup-form input[type=checkbox]{appearance:auto;width:18px;min-height:18px;height:18px;margin:0}#sleep .pickup-selected{display:flex;gap:4px;flex-wrap:wrap}#sleep .pickup-results{max-height:180px;overflow:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}#sleep .pickup-results:empty{display:none}#sleep .pickup-results button,#sleep .pickup-selected button{font-size:13px;overflow-wrap:anywhere}#sleep .pickup-form>button{margin:8px 8px 0 0}
+#sleep .sleep-research-heading .sleep-compact-select{font-size:14px}
+@media(min-width:361px){#sleep .sleep-research-heading .sleep-fields{grid-template-columns:minmax(64px,1fr) 84px 60px}}
+
+#sleep .sleep-calendar-grid>button{text-align:center}
+
+/* 日付・回数・情報を一つの追従領域にまとめる。 */
+#sleep #sleep-root>.period-picker{background:var(--mh-surface);margin-bottom:8px}
+#sleep #sleep-root>.period-picker>.sleep-switch{margin:0!important}
+#sleep .sleep-research-heading{margin:4px 0 0}
+/* 選択数に応じた高さとし、多い場合だけ一覧内をスクロールする。 */
+#sleep #sleep-entries{height:auto;max-height:50vh;max-height:50dvh;overflow-anchor:none}
+#sleep .sleep-search-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center;margin:12px 0 6px;padding-top:12px;border-top:1px solid var(--mh-border)}
+#sleep .sleep-search-row .sleep-search{min-width:0;margin:0;padding:0;border:0}
+body #sleep .sleep-search-row input{margin:0;font-size:16px;min-height:44px;padding-inline:8px}
+#sleep .sleep-search-row .sleep-filter-info{margin:0;gap:4px;flex-wrap:nowrap}
+#sleep .sleep-search-row :is(.sleep-filter-info button,.sleep-screenshot){min-height:44px;white-space:nowrap;font-size:12px!important;padding-inline:6px!important}
+@media(max-width:360px){#sleep .sleep-search-row input{padding-inline:5px}#sleep .sleep-search-row :is(.sleep-filter-info button,.sleep-screenshot){padding-inline:4px!important}}
+#sleep #sleep-form .sleep-search>input{margin:0;height:44px}
+
+/* 検索文字の消去は同じ入力枠内。標準の検索消去と二重に表示しない。 */
+#sleep .sleep-search{position:relative}
+#sleep #sleep-form .sleep-search>input{padding-right:44px}
+#sleep .sleep-search input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
+#sleep .sleep-search .sleep-search-clear{position:absolute;right:0;top:0;width:44px;height:44px;min-height:44px;padding:0;border:0;background:transparent;color:var(--mh-muted);font-size:20px;line-height:1}
+#sleep #sleep-form .sleep-candidates{height:260px;max-height:260px;overflow-anchor:none}
+/* 実際のキーボード縮小を検出した間だけ検索操作を優先。強制スクロールはしない。 */
+#sleep.sleep-keyboard-open #sleep-root>.period-picker{top:var(--sleep-visible-top,0px);padding-top:0;--period-control-height:44px}
+#sleep.sleep-keyboard-open #sleep-root>.period-picker>.sleep-switch{display:none}
+#sleep.sleep-keyboard-open .sleep-sticky-actions{min-height:44px;padding:0}
+#sleep.sleep-keyboard-open .sleep-research-heading{margin-top:0}
+#sleep.sleep-keyboard-open #sleep-entries{height:var(--sleep-entry-height,0px);min-height:0;max-height:44px}
+#sleep.sleep-keyboard-open .sleep-search-row{margin:4px 0;padding-top:4px}
+body:has(#sleep.sleep-keyboard-open:not([hidden])) .tabs{visibility:hidden;pointer-events:none}
+/* キーボード中は見えている領域内へCSSだけで配置。元の高さを残してページを跳ねさせない。 */
+#sleep.sleep-keyboard-open{min-height:var(--sleep-workspace-height)}
+#sleep.sleep-keyboard-open #sleep-root{position:fixed;top:var(--sleep-visible-top,0px);left:50%;transform:translateX(-50%);width:100%;max-width:712px;height:var(--sleep-visible-height);padding:0 16px 8px;background:var(--mh-surface);z-index:32;display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box}
+#sleep.sleep-keyboard-open #sleep-root>.period-picker{position:relative;top:0;flex:none;margin-bottom:0;padding-bottom:4px!important}
+#sleep.sleep-keyboard-open #sleep-form{display:flex;flex:1;min-height:0;flex-direction:column}
+#sleep.sleep-keyboard-open #sleep-entries,#sleep.sleep-keyboard-open .sleep-search-row{flex:none}
+#sleep.sleep-keyboard-open #sleep-form .sleep-candidates{flex:1;min-height:0;height:0;max-height:260px}
+
+#sleep #sleep-form .sleep-candidates{align-content:start;grid-auto-rows:max-content}
+
+/* 個数・匹数を上段にまとめ、条件欄は横幅を再配分する。 */
+#sleep .sleep-sticky-total:has(.sleep-entry-count){flex-direction:row;align-items:baseline;flex-wrap:wrap;gap:2px 8px}
+#sleep .sleep-entry-count{font-size:13px;white-space:nowrap}
+#sleep .sleep-research-heading .sleep-fields{width:100%;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) 64px;flex-basis:100%}
+#sleep .sleep-research-heading .sleep-fields{align-items:center}
+#sleep .sleep-research-heading .sleep-fields>label{height:44px;margin:0;padding-top:0;padding-bottom:0;box-sizing:border-box}
+#sleep .sleep-research-heading .sleep-bonus{display:flex;align-items:center}
+#sleep .sleep-research-heading .sleep-fields select{margin:0!important}
+
+/* 図鑑番号と姿の補助表記。検索・保存の名称は変更しない。 */
+:is(#sleep,.sleep-ocr-panel) .sleep-pokemon-name{min-width:0;overflow-wrap:anywhere;font-weight:400;line-height:1.35}
+:is(#sleep,.sleep-ocr-panel) .sleep-pokemon-name .sleep-dex{display:inline;font-size:10px;color:var(--mh-muted);margin-right:4px;font-variant-numeric:tabular-nums}
+:is(#sleep,.sleep-ocr-panel) .sleep-pokemon-name .sleep-form-name{display:inline;font-size:11px;color:var(--mh-muted);font-weight:400}
+:is(#sleep,.sleep-ocr-panel) :is(.sleep-entry,.sleep-candidate-stars) .sleep-star-button{min-height:44px;height:44px;min-width:40px;padding:6px 4px;border:1px solid var(--mh-border);background:#f5f6f6;border-radius:var(--mh-radius);font-size:14px;font-weight:500;line-height:1.4}
+:is(#sleep,.sleep-ocr-panel) .sleep-entry .sleep-star-button[aria-pressed=true]{border-color:var(--mh-accent);background:var(--mh-selected);color:var(--mh-text)}
+#sleep .sleep-candidate-stars{flex-wrap:wrap}
+
+/* 選択済み行は入力枠と同寸法。操作領域は行の高さを維持する。 */
+:is(#sleep,.sleep-ocr-panel) .sleep-entry{grid-template-columns:minmax(0,1fr) 28px 40px 48px 28px;gap:4px}
+:is(#sleep,.sleep-ocr-panel) .sleep-entry .sleep-star-button{width:40px;min-width:40px;height:36px;min-height:36px;padding:4px 2px}
+#sleep .sleep-sticky-total :is(#sleep-candy-total,.sleep-entry-count){font-size:20px;color:var(--mh-text);font-weight:400;line-height:1.3}
+#sleep .sleep-sticky-total [data-saved=true]{font-weight:700}
+#sleep .sleep-sticky-total .quantity-number{font-size:inherit;font-weight:inherit}
+#sleep .sleep-sticky-total .quantity-unit{font-size:12px;font-weight:400;color:var(--mh-muted)}
+#sleep .period-picker-top{height:var(--period-control-height)}
+#sleep .period-picker-top>.period-picker-date{height:var(--period-control-height);min-height:var(--period-control-height);padding:8px 4px;line-height:1.5;font-size:16px;font-weight:600;color:var(--mh-text)}
+#sleep #sleep-entries .sleep-entry-amount input{margin-top:0}
+#sleep .sleep-sticky-total :is(#sleep-candy-total,.sleep-entry-count)[data-saved=true]{font-weight:700}
+#sleep #sleep-root .period-picker-date{font-size:16px;font-weight:600;color:var(--editorial-ink);height:var(--period-control-height);padding:8px 4px;line-height:1.5}
+
+/* 保存状態・寸法・背景はそのまま、見える枠線だけをなくす。 */
+:is(#sleep,#sleep-editor) .sleep-save:not(:disabled){border-color:transparent}
+
+#sleep .sleep-entry-name{min-width:0;text-align:left;overflow-wrap:anywhere}#sleep .sleep-entry-name>strong{font-weight:400}
+#sleep .sleep-entry .sleep-get-button{width:28px;min-width:28px;min-height:28px;height:28px;padding:0;border:1px solid var(--mh-border);border-radius:50%;font-size:9px;font-weight:700;background:var(--mh-surface);color:var(--mh-muted)}
+#sleep .sleep-entry .sleep-get-button[aria-pressed=true]{background:var(--mh-error);border-color:var(--mh-error);color:white}
+
+/* Confirmed research is read-only until its own Edit action is chosen. */
+#sleep .sleep-readonly .sleep-search-row,#sleep .sleep-readonly .sleep-candidates{display:none}
+#sleep .sleep-readonly .sleep-entry button:disabled,#sleep .sleep-readonly .sleep-fields select:disabled,#sleep .sleep-readonly .sleep-entry input:disabled{opacity:1;color:var(--mh-text)}
+#sleep .sleep-sticky-actions{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+#sleep .sleep-sticky-total{flex:0 0 auto;min-width:86px;font-variant-numeric:tabular-nums}
+#sleep .sleep-sticky-total #sleep-candy-total{min-width:3.8ch}
+#sleep .sleep-sticky-total #sleep-entry-count{min-width:3ch}
+#sleep .sleep-sticky-actions .sleep-rounds{flex:1 0 auto}
+#sleep .sleep-sticky-actions .sleep-rounds button{padding-inline:6px;min-width:48px}
+#sleep #sleep-save,#sleep #sleep-cancel{flex:0 0 auto;min-height:44px;padding:6px 8px;font-size:13px;margin:0}
+#sleep .sleep-sticky-actions.sleep-shard-actions{display:grid;grid-template-columns:minmax(0,1fr) 36px 64px;gap:6px}
+#sleep .sleep-shard-actions .sleep-rounds{grid-column:2/4;justify-self:end}
+#sleep .sleep-shard-actions .sleep-screenshot{grid-column:2;grid-row:2}
+#sleep .sleep-shard-actions .sleep-save{grid-column:3;grid-row:2}
+#sleep .sleep-shard-actions #sleep-cancel{grid-column:1;grid-row:2;justify-self:start}
+
+#sleep-entries .sleep-entry-selected{outline:2px solid var(--mh-accent);outline-offset:-2px;border-radius:8px}
+#sleep-entries .sleep-entry-review{box-shadow:inset 3px 0 #b07b2d;border-radius:8px}
+#sleep #sleep-entries .sleep-entry-sortable{grid-template-columns:30px minmax(0,1fr) 28px 40px 48px 28px;gap:4px}
+#sleep #sleep-entries .sleep-entry-drag{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;min-width:30px;min-height:44px;color:var(--mh-muted);touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+#sleep #sleep-entries .sleep-entry-drag>span{height:19px;font-size:20px;line-height:19px}
+#sleep #sleep-entries .sleep-entry-drag>small{font-size:10px;font-variant-numeric:tabular-nums;line-height:14px}
+#sleep #sleep-entries .sleep-entry-dragging{background:var(--mh-selected)}
+
+
+/* Keep all three research selectors identical in edit and saved views. */
+#sleep .sleep-research-heading .sleep-bonus .sleep-compact-select{flex:1;font-weight:400}
+#sleep .sleep-research-heading .sleep-fields{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) 80px}
+#sleep .sleep-research-heading .sleep-bonus .sleep-compact-select>select{position:absolute;inset:0;width:100%;height:44px;padding:0;opacity:0;cursor:pointer}
+#sleep .sleep-readonly .sleep-compact-select>select:disabled{opacity:0!important}
+
+/* Shiny and GET are independent states for each research entry. */
+#sleep .sleep-entry{grid-template-columns:minmax(0,1fr) 26px 26px 38px 44px 24px;gap:2px}
+#sleep #sleep-entries .sleep-entry-sortable{grid-template-columns:26px minmax(0,1fr) 26px 26px 38px 44px 24px;gap:2px}
+#sleep #sleep-entries .sleep-entry-drag{min-width:26px}
+#sleep .sleep-entry .sleep-shiny-button,#sleep .sleep-entry .sleep-get-button{display:flex;align-items:center;justify-content:center;width:26px;min-width:26px;height:26px;min-height:26px;padding:0;border:1px solid var(--mh-border);border-radius:50%;background:var(--mh-surface)}
+#sleep .sleep-entry .sleep-shiny-button,#sleep .sleep-readonly .sleep-entry .sleep-shiny-button:disabled{color:#5f5f5f}
+#sleep .sleep-entry .sleep-shiny-button[aria-pressed=true],#sleep .sleep-readonly .sleep-entry .sleep-shiny-button[aria-pressed=true]:disabled{color:#B8860B;background:color-mix(in srgb,#B8860B 12%,var(--mh-surface))}
+#sleep .sleep-entry .sleep-shiny-button .tab-icon{width:19px;height:19px;flex:none}
+#sleep .sleep-entry .sleep-shiny-button .tab-label{display:none}
+#sleep .sleep-entry .sleep-star-button{width:38px;min-width:38px}
+#sleep .sleep-entry .sleep-entry-amount{width:44px}
+#sleep .sleep-entry .sleep-entry-remove{min-width:24px;color:var(--mh-text);font-size:20px;font-weight:400}
+#sleep .sleep-entry .sleep-entry-remove:active:not(:disabled){background:var(--mh-border)}

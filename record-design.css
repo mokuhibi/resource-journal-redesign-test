@@ -1,0 +1,255 @@
+/* 記録タブ：承認済み editorial preview の一覧型UI。保存・操作処理とは独立。 */
+#record{--record-text:#202124;--record-muted:#777C80;--record-line:#ECEDEE;--record-input-line:#DCDDDF;--record-action:#F5F6F6;--record-candy:#A66B83;--record-shard:#B58A37;--record-pressed:#F4DCE5;--record-control-radius:6px;--accent:#555;--edge:var(--record-line);--tint:#F5F6F6;color:var(--record-text)}
+#record :is(.help,.mew,.delibird,.shards){--accent:#555;--edge:var(--record-line);--tint:#F5F6F6;color:var(--record-text)}
+#record :is(.card,.hero){background:transparent;border:0;border-radius:0;box-shadow:none;padding:0;margin:0 0 28px;min-width:0}
+#record :is(h2,h3){font-size:18px;font-weight:600;line-height:1.5;color:var(--record-text);margin:0 0 12px;letter-spacing:-.3px}
+#record :is(p,label){font-size:14px;line-height:1.6}
+#record :is(small,.muted){font-size:12px;line-height:1.6;color:var(--record-muted)}
+#record label{color:var(--record-muted)}
+#record #today-total{padding:24px 0 0;margin-bottom:32px}
+#record #today-total>small{display:block;font-size:12px;margin-bottom:12px}
+#record #today-total .daily-metrics{display:grid;grid-template-columns:1fr 1.3fr;gap:14px}
+#record #today-total .daily-resource{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0;margin:0;min-width:0}
+#record #today-total .daily-resource>small{display:block;font-size:13px;color:var(--record-candy);font-weight:500;margin-bottom:8px}
+#record #today-total .daily-resource:nth-child(2)>small{color:var(--record-shard)}
+#record #today-total .total{margin:0;font-size:clamp(30px,9.5vw,38px);line-height:1.2;font-weight:650;letter-spacing:-1px;color:var(--record-text);white-space:nowrap}
+#record #today-total .daily-resource:nth-child(2) .total{font-size:clamp(24px,7.9vw,31px)}
+#record #today-total .quantity-number{font-size:inherit;font-weight:inherit;color:inherit}
+#record #today-total .total .quantity-unit{font-size:12px;font-weight:400;color:var(--record-muted);letter-spacing:0;margin-left:4px}
+#record #today-total .daily-details{margin-top:16px;padding:0;border-top:1px solid var(--record-line)}
+#record #today-total .daily-details>summary{display:flex;align-items:center;justify-content:space-between;list-style:none;min-height:48px;font-size:12px;font-weight:400;color:var(--record-muted)}
+#record #today-total .daily-details>summary::after{content:'⌄';font-size:16px}
+#record #today-total .daily-details[open]>summary::after{content:'⌃'}
+#record #today-total .daily-details>h3{font-size:13px;color:var(--record-text);margin:12px 0}
+#record #today-total .total-breakdown{table-layout:fixed;min-width:0;width:100%;font-size:13px;margin:0 0 18px}
+#record #today-total .total-breakdown :is(th,td){border:0;border-bottom:1px solid var(--record-line);padding:8px 4px;background:none;color:var(--record-text);text-align:right}
+#record #today-total .total-breakdown th:first-child{text-align:left;padding-left:0;overflow-wrap:anywhere}
+#record #today-total .total-breakdown thead th{font-size:11px;font-weight:400;color:var(--record-muted)}
+#record #today-total .total-breakdown .quantity-number{font-size:14px;font-weight:600}
+#record #today-total .total-breakdown .shard-member :is(th,.quantity-number){font-size:12px;font-weight:400;color:var(--record-muted)}
+#record #today-total .total-breakdown .quantity-unit{font-size:11px;color:var(--record-muted)}
+#record .record-date-card{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;gap:8px;padding:8px 0;background:#fffffff5;backdrop-filter:blur(12px);border-bottom:1px solid var(--record-line);margin-bottom:0}
+#record .record-datetime-field{height:48px;border:0;border-radius:0;background:transparent;box-shadow:none}
+#record .record-picker-trigger{font-size:16px;font-weight:600;letter-spacing:-.3px;color:var(--record-text);text-align:left;min-height:48px;padding:0}
+#record .record-date-card .check{font-size:12px;min-height:48px;min-width:96px;justify-content:center;gap:6px;margin:0;color:var(--record-muted)}
+#record .record-date-card .check input{width:16px;height:16px;accent-color:#343638}
+#record #record-methods>div{margin:0 0 28px;scroll-margin-top:76px}
+#record #record-methods .record-slots{display:flex;flex-direction:column;gap:0;margin:12px 0 0;border-top:1px solid var(--record-line)}
+#record #record-methods .help-card,#record #record-methods .help-card.leader-slot{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:8px;width:100%;background:transparent;border:0!important;border-bottom:1px solid var(--record-line)!important;border-radius:0;box-shadow:none;padding:12px 0;min-height:70px;color:var(--record-text);text-align:left}
+#record .record-row-content{min-width:0;display:block}
+#record .record-row-content>strong{display:block;font-size:15px;font-weight:600;line-height:1.5;overflow-wrap:anywhere}
+#record .record-candy-name{display:block;font-size:12px;font-weight:400;color:var(--record-muted);line-height:1.6}
+#record .help-card>small{font-size:12px;font-weight:500;color:var(--record-muted);overflow-wrap:anywhere}
+#record .pokemon-nickname{font-size:12px;font-weight:400;color:var(--record-muted)}
+#record .record-row-action{font-size:14px;white-space:nowrap;background:var(--record-action);border-radius:6px;padding:12px 10px}
+#record .record-row-action .quantity-number{font-size:15px;font-weight:600}
+#record .mew-actions{width:auto;display:flex;gap:6px;margin:0}
+#record .mew-actions button{flex:none;min-width:44px;min-height:44px;padding:10px 8px;font-size:14px}
+#record #help-section>h2{color:#276242}#record #mew-section>h2{color:#963b68}#record #delibird-section>h2{color:#ad3d39}
+#record #record-methods>div>h2::before{content:'';display:inline-block;width:5px;height:5px;background:currentColor;border-radius:50%;vertical-align:middle;margin-right:8px}
+#record #mew-section>.mew-record-skill{margin:0 0 4px;font-size:13px;font-weight:500;overflow-wrap:anywhere}
+#record #mew-section>.mew-record-meta{margin:0 0 12px;font-size:12px;color:var(--record-muted)}
+#record :is(button,input,select){border-radius:var(--record-control-radius)}
+#record button{min-height:44px;font-weight:500}
+#record :is(input:not([type=checkbox]),select){font-size:16px;min-height:46px;background:#fff;border:1px solid var(--record-input-line);padding:10px 12px;color:var(--record-text)}
+#record :is(input[type=number],.comma-input){text-align:right;font-variant-numeric:tabular-nums}
+#record .formatted-date-field{height:46px;background:white;border-color:var(--record-input-line);border-radius:6px}
+#record :is(button,input,select):focus-visible{outline:2px solid #555;outline-offset:3px}
+#record .filters{gap:0 16px}
+#record #record-methods .card,#record #shard-records .card,#record #shard-records .card.leader-slot{border:0!important;border-radius:0;background:transparent;box-shadow:none;padding:16px 0;margin:0;border-bottom:1px solid var(--record-line)!important}
+#record #shard-records{--record-pressed:#F5E7C5}
+#record #shard-records :is(h2,h3,summary)::before,#record .copy-skill-card>h3::before{display:none}
+#record :is(.card>h3,.record-card-title){font-size:15px;font-weight:600;line-height:1.5;margin:0 0 6px;color:var(--record-text)}
+#record .record-slot-number{font-size:12px;font-weight:500;color:var(--record-muted)}
+#record .card>p{font-size:12px;color:var(--record-muted);margin:0 0 12px}
+#record :is(#record-methods,#shard-records) button:not(.help-card):not(:disabled){background:var(--record-action);border-color:transparent;color:var(--record-text)}
+#record button:disabled{color:#888;background:#F7F7F7;opacity:.5}
+#record details.card>summary{font-size:16px;font-weight:600;min-height:48px;line-height:24px;padding:12px 0;list-style:none;display:flex;align-items:center;justify-content:space-between}
+#record details.card>summary:after{content:'⌄';color:var(--record-muted)}#record details.card[open]>summary:after{content:'⌃'}
+#record summary::-webkit-details-marker{display:none}
+#record .research-fields>label:nth-child(-n+2){text-align:center;font-size:12px;font-weight:400}
+#record .research-fields>label:nth-child(-n+2) :is(input,.formatted-date-field){font-size:16px;font-weight:500;text-align:center}
+#record .research-fields>label:first-child .date-weekday{font-size:15px;font-weight:500;color:var(--record-text)}
+#record .cluster-result-row{gap:16px}#record #cluster-amount{font-size:23px;font-weight:600;letter-spacing:-.6px}
+@media(min-width:800px){#record #record-methods .record-slots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}#record .daily-metrics{max-width:480px}}
+#record #today-total .daily-metrics .daily-resource+.daily-resource{margin:0;padding:0;border:0;background:none;box-shadow:none}
+#record #record-methods .help-card,#record #record-methods .help-card.leader-slot{grid-template-columns:52px minmax(0,1fr) auto}
+#record .help-card>small{font-size:11px;white-space:nowrap;letter-spacing:-.3px}
+/* アメ名と枠番号を同じ見出し行へ。直接記録と2列は維持する。 */
+#record #record-methods :is(#help-slots,#mew-slots){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+#record #record-methods :is(#help-slots,#mew-slots) .help-card{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:'name slot' 'action action';gap:8px 6px;align-items:start;padding:10px 0;min-height:98px}
+#record #record-methods #help-slots{row-gap:8px;padding-top:12px;padding-bottom:16px}
+#record #record-methods #help-slots .help-card{grid-template-areas:'name slot';min-height:64px;align-content:center;cursor:pointer;background:var(--record-action);border-bottom:0!important;border-radius:var(--record-control-radius);padding:10px 12px;transition:background .15s,transform .15s}
+#record :is(#help-slots,#mew-slots) .record-row-content{display:contents}
+#record :is(#help-slots,#mew-slots) .record-row-content>strong{grid-area:name;display:block;min-width:0;font-size:14px;font-weight:650;line-height:22px;white-space:normal;overflow-wrap:anywhere;color:var(--record-text)}
+#record :is(#help-slots,#mew-slots) .help-card>small{grid-area:slot;font-size:10.5px;font-weight:500;line-height:22px;white-space:nowrap;letter-spacing:-.3px;text-align:right}
+#record #mew-slots .mew-actions{grid-area:action;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-self:end;min-height:44px;margin:0;width:100%}
+#record #mew-slots .mew-actions button{width:100%;min-width:44px;min-height:44px;padding:10px 4px;font-size:14px}
+#record #mew-slots .mew-actions button:only-child{grid-column:1/-1}
+#record #record-methods #help-slots .help-card:hover:not(:disabled){background:#ECEEEE}
+#record #record-methods #help-slots .help-card:active:not(:disabled){background:var(--record-pressed);transform:translateY(1px)}
+#record #record-methods #delibird-slots .candy-target-row{grid-template-columns:minmax(0,1fr) auto auto}
+#record #delibird-slots .candy-target-row .record-row-content{grid-column:1;grid-row:1}
+#record #delibird-slots .candy-target-row>small{grid-column:2;grid-row:1;text-align:right}
+#record .mew-record-heading{display:flex;align-items:baseline;gap:10px;min-width:0}
+#record .mew-record-heading::before{flex:none;align-self:center}
+#record .mew-record-heading>span:first-child{flex:none;white-space:nowrap}
+#record .mew-record-heading .mew-heading-level{flex:none;font-size:12px;font-weight:500;color:var(--record-muted);white-space:nowrap}
+#record .mew-record-heading .mew-heading-nickname{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:400;color:var(--record-muted)}
+@media(prefers-reduced-motion:reduce){#record #record-methods #help-slots .help-card:active{transform:none}}
+
+/* かけらスキルだけ横1行。研究・かたまり・その他の配置には適用しない。 */
+#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(154px,1.05fr);gap:8px 12px;align-items:center;padding:10px 0!important}
+#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-record-name{grid-column:1;grid-row:1;display:flex;align-items:center;gap:6px;min-width:0;margin:0;font-size:14px;line-height:1.5}
+#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-record-name small{flex:none;font-size:10.5px;font-weight:500;white-space:nowrap;letter-spacing:-.3px}
+#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-record-name strong{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:650;color:var(--record-text)}
+#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-skill-form{grid-column:2;grid-row:1;display:grid;grid-template-columns:minmax(0,1fr) 52px;gap:8px;align-items:center;min-width:0;margin:0}
+#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-skill-form label{min-width:0;margin:0}
+#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-skill-form input{margin:0;min-height:44px;height:44px;padding:8px;font-size:16px}
+#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-skill-form button{margin:0;min-width:44px;min-height:44px;padding:8px 4px}
+#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-amount-buttons{grid-column:2;grid-row:1;display:flex;flex-direction:column;gap:8px;min-width:0}
+#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-amount-option{display:grid;grid-template-columns:minmax(0,1fr) 52px;gap:8px;align-items:center;min-width:0}
+#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-amount-option>span{text-align:right;font-size:12px;white-space:nowrap;color:var(--record-text)}
+#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-amount-option .quantity-number{font-size:16px;font-weight:600}
+#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-amount-option button{min-width:44px;min-height:44px;padding:8px 4px}
+#record #shard-skill-inputs .copy-source-field{grid-column:1/-1;grid-row:2;margin:0;font-size:12px}
+#record #shard-skill-inputs .copy-source-field select{margin-top:4px}
+
+/* きょううんは名前1行＋直接記録3ボタン。既存の他スキル行は維持する。 */
+#record :is(#shard-skill-inputs,#action-skills) .shard-lucky-row{grid-template-columns:minmax(0,1fr);gap:8px}
+#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-lucky-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;grid-row:2;min-width:0}
+#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-lucky-actions button{min-width:0;min-height:44px;height:44px;margin:0;padding:8px 6px;font-size:14px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+@media(max-width:320px){#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-lucky-actions{grid-template-columns:repeat(2,minmax(0,1fr))}#record :is(#shard-skill-inputs,#action-skills) .shard-skill-row .shard-lucky-actions button:first-child{grid-column:1/-1}}
+/* 行動別の入力。既存のミュウ用取得先2列と、かけら個体行を再利用。 */
+#record-view-switch{display:flex;flex-wrap:wrap;gap:0 12px;margin-bottom:16px!important}
+#record-view-switch>button{flex:none;min-height:44px;white-space:nowrap;padding-inline:2px}
+#record .activation-card{margin-bottom:24px;min-width:0}
+#record .activation-card>input{width:180px;max-width:100%;margin-bottom:12px}
+#record #action-skills .activation-targets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+#record #action-skills .activation-targets .help-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 6px;min-width:0;min-height:98px;padding:10px 0;background:transparent;border:0;border-bottom:1px solid var(--mh-border);border-radius:0}
+#record .activation-targets .help-card>small{grid-column:2;grid-row:1;font-size:10.5px;white-space:nowrap}
+#record .activation-targets .record-row-content{grid-column:1;grid-row:1;min-width:0}
+#record .activation-targets .mew-actions{grid-column:1/-1;display:flex;width:100%;gap:8px}
+#record .activation-targets .mew-actions button{flex:1;min-width:0;min-height:44px}
+#record .activation-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-width:500px}
+#record .activation-form :is(input,select,button){margin:0;min-width:0;max-width:100%;min-height:44px}
+#action-skills>.shard-skill-row>.muted{grid-column:1/-1}
+#action-skills .history-meta{flex-wrap:wrap}
+
+/* 個体を選ぶ操作は取得先と同じ2列。ミュウの既存レイアウトは変更しない。 */
+#record .skill-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;min-width:0;margin-bottom:12px}
+#record .skill-choice-grid button{min-width:0;min-height:44px;margin:0;padding:8px;overflow-wrap:anywhere}
+#record .skill-choice-grid button[aria-pressed="true"]{background:var(--mh-selected);border-color:var(--mh-accent);color:var(--mh-accent)}
+#record .metronome-form>.skill-choice-grid{grid-column:1/-1;margin-bottom:0}
+#record .metronome-form>button[type="submit"]{grid-column:1/-1;justify-self:end;min-width:80px}
+#record .metronome-form input:disabled{background:var(--mh-bg);color:var(--mh-muted)}
+#record .activation-targets .skill-only-target{align-content:end}
+#record .copied-shard-form{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+#record .copied-shard-form input{width:160px;min-width:0;max-width:100%;margin:0}
+#record .copied-shard-form button{min-height:44px;margin:0}
+
+/* Lucideはラベルの左に配置し、既存の選択色・タップ領域を保つ。 */
+button.has-tab-icon{display:inline-flex;align-items:center;justify-content:center;gap:5px}
+.has-tab-icon>.tab-icon{display:block;position:static;flex:none;width:15px;height:15px;color:currentColor;pointer-events:none}
+.has-tab-icon>.tab-label{display:block;min-width:0;white-space:nowrap;line-height:inherit}
+body .tabs button.has-tab-icon{display:flex;align-items:center;justify-content:center;gap:3px}
+body .tabs .tab-icon{width:12px;height:12px}
+
+/* 記録内はひと続きの3セクション。その他は移動前の白基調・2列フォームを保つ。 */
+#record :is(#action-skills,#action-other){margin:0 0 var(--record-section-gap);min-width:0}
+#record :is(#action-skills,#action-other)>h2.record-subheading{min-height:44px;box-sizing:border-box;padding:8px 0 8px 13px;margin:0 0 var(--record-heading-gap);font-size:18px;font-weight:600;line-height:28px;border-bottom:1px solid var(--record-line)}
+#record #action-other>.card{border:0!important;border-radius:0;background:transparent;box-shadow:none;padding:0;margin:0 0 var(--record-section-gap)}
+#record #action-other{--record-pressed:var(--shard-other-tint);--shard-method-color:var(--shard-other-color)}
+#record #action-other .record-subheading{color:var(--shard-other-color)}
+#record #action-other button:not(:disabled){background:var(--record-action);border-color:transparent;color:var(--record-text)}
+#record #action-other :is(input,select,button):focus-visible{outline-color:var(--shard-other-color)}
+#record .record-cluster-panel>h3{margin:0 0 12px;font-size:16px;font-weight:600}
+
+/* 移動前のフラットな個体行と専用ボタンを再利用。きょううんの説明行は操作の上。 */
+#record #action-skills>.shard-skill-row{border:0!important;border-radius:0;background:transparent;box-shadow:none;margin:0 0 24px;--record-pressed:var(--shard-skill-tint);--shard-method-color:var(--shard-skill-color)}
+#record #action-skills .shard-lucky-row>.muted{grid-row:2}
+#record #action-skills .shard-lucky-row>.shard-lucky-actions{grid-row:3}
+
+#record #action-skills>.shard-skill-row button:not(:disabled){background:var(--record-action);border-color:transparent;color:var(--record-text)}
+#record #action-skills>.shard-skill-row :is(input,button):focus-visible{outline-color:var(--shard-method-color)}
+
+/* 個体の見出しは2行、記録UIはその下。専用ボタンの方式・寸法は維持。 */
+#record #action-skills .skill-record-heading{display:flex;flex-wrap:wrap;gap:0 10px;margin:0 0 4px;font-size:15px;font-weight:600;line-height:1.5;overflow-wrap:anywhere}
+#record #action-skills .skill-nickname{font-weight:400}
+#record #action-skills .skill-record-detail{margin:0 0 12px;font-size:13px;color:var(--record-muted);line-height:1.5;overflow-wrap:anywhere}
+#record #action-skills>.shard-skill-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(154px,32%);align-items:end;gap:6px 12px}
+#record #action-skills>.shard-skill-row .skill-record-heading{grid-column:1/-1;grid-row:1}
+#record #action-skills>.shard-skill-row .skill-record-detail{grid-column:1;grid-row:2;margin:0}
+#record #action-skills>.shard-skill-row :is(.shard-skill-form,.shard-amount-buttons,.shard-lucky-actions){grid-column:2;grid-row:2;margin:0;min-width:0;max-width:100%;align-self:end}
+#record #action-skills>.shard-skill-row .shard-lucky-actions{margin:0;max-width:100%}
+#record #action-other>summary.record-subheading{display:list-item;list-style-position:inside;cursor:pointer;min-height:44px;box-sizing:border-box;padding:8px 0;margin:0 0 var(--record-heading-gap);font-size:18px;font-weight:600;line-height:28px;border-bottom:1px solid var(--record-line)}
+#record #action-other>summary.record-subheading::before{display:none}
+
+/* 記録操作の面だけをアメ拾いに合わせる。寸法と選択操作には触れない。 */
+#record #action-skills :is(.activation-targets .mew-actions button,.activation-form>button[type="submit"],.copied-shard-form button):not(:disabled),
+#record #nap-island-shard-form>button:not(:disabled){background:var(--record-action);border-color:transparent}
+
+/* 記録内の3見出しは同じ点・文字・間隔。その他の開閉矢印は右側へ。 */
+#record #record-main-view :is(#help-section>h2,#action-skills>h2,#action-other>summary).record-subheading{position:relative;display:block;min-height:44px;box-sizing:border-box;margin:0 0 var(--record-heading-gap);padding:8px 22px 8px 13px;font-size:18px;font-weight:600;line-height:28px;border-bottom:1px solid var(--record-line);list-style:none}
+#record #record-main-view :is(#help-section>h2,#action-skills>h2,#action-other>summary).record-subheading::before{content:'';display:block;position:absolute;left:0;top:20px;width:5px;height:5px;border-radius:50%;background:currentColor}
+#record #help-section>h2.record-subheading{color:var(--shard-skill-color)}
+#record #action-skills>h2.record-subheading{color:var(--record-candy)}
+#record #action-other>summary.record-subheading{color:var(--shard-other-color)}
+#record #action-other>summary::-webkit-details-marker{display:none}
+#record #action-other>summary::after{content:'⌄';position:absolute;right:2px;top:8px}
+#record #action-other[open]>summary::after{content:'⌃'}
+
+/* 個体名だけを色分け。ニックネームは通常色、縦線はCSSで描画。 */
+#record #action-skills .skill-record-heading{border-left:3px solid var(--skill-heading-color,var(--mh-accent));padding-left:8px;min-height:22px}
+#record #action-skills .skill-species{color:var(--skill-heading-color,var(--mh-accent))}
+#record #action-skills .skill-nickname{color:var(--record-text);font-weight:400}
+#record #action-skills>:is(.mew,.delibird){--skill-heading-color:var(--record-candy)}
+#record #action-skills>.shard-skill-row{--skill-heading-color:var(--shard-skill-color)}
+#record #action-skills>:is(.mew,.delibird,.copied-mew) .activation-targets .record-row-content>strong{font-weight:400}
+#record #action-skills>.delibird .activation-targets .skill-only-target{align-content:stretch;grid-template-rows:minmax(0,1fr);padding-block:6px}
+#record #action-skills>.delibird .skill-only-target .mew-actions{grid-row:1/-1;margin:0;height:100%}
+#record #action-skills>.delibird .skill-only-target button{height:100%;display:flex;align-items:center;justify-content:center;text-align:center}
+@media(max-width:599px){#record #action-skills>.shard-lucky-row .shard-lucky-actions{grid-column:1/-1;grid-row:3}}
+
+#record #action-skills>.shard-skill-row .shard-amount-option{display:flex;justify-content:flex-end}
+
+#action-other .other-method-row{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:12px;margin:12px 0}
+#action-other .other-method-row label{margin:0;min-width:0}
+#action-other .other-method-row :is(input,select){width:100%;min-width:0;box-sizing:border-box}
+#action-other #shard-other-form{display:flex;justify-content:flex-end;gap:12px;align-items:end}
+#action-other #shard-other-form>label{flex:1;min-width:0}
+#action-other #shard-other-form[hidden],#action-other #cluster-panel[hidden]{display:none}
+#action-other #cluster-panel>h3{display:none}
+#action-other .other-cluster-row{display:grid;grid-template-columns:minmax(0,1fr) 72px auto;gap:8px;align-items:end}
+#action-other .other-cluster-row label{min-width:0;margin:0}
+#action-other .other-cluster-row select{width:100%;min-width:0}
+#action-other .other-cluster-row :is(input,button){box-sizing:border-box;max-width:100%;margin:0}
+#sleep-root .pickup-field{max-width:100%;min-height:44px}
+
+#action-other .other-cluster-row{align-items:center}
+#action-other .other-cluster-row :is(input,select,button){box-sizing:border-box;height:44px;min-height:44px;margin-block:0}
+#action-other .other-cluster-row label{display:flex;align-items:center}
+#action-other .other-cluster-row label :is(input,select){width:100%}
+
+/* The two Other forms keep separate inputs and share aligned rows. */
+#record #action-other .other-cluster-row{grid-template-columns:50px 75px minmax(0,1fr) 44px;gap:4px}
+#record #action-other .cluster-result-row{margin-top:8px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+#record #action-other .cluster-result-row :is(input,button),#record #action-other .other-method-row :is(input,select,button){height:44px;min-height:44px;margin:0;box-sizing:border-box}
+#record #action-other #cluster-amount{width:100%;min-width:0;font-size:16px}
+#record #action-other .other-cluster-row :is(input,select,button){padding-inline:6px}
+#record #action-other .other-cluster-row #cluster-count{font-size:12px;padding-inline:2px;appearance:textfield}
+#record #action-other .other-cluster-row #cluster-count::-webkit-inner-spin-button{appearance:none}
+#record #action-other .other-cluster-row #cluster-amount{font-size:16px;padding-inline:4px}
+#record #action-other .other-cluster-row #cluster-amount[data-compact=true]{font-size:clamp(10px,2.7vw,14px)}
+#record #action-other .other-cluster-row button{font-size:13px;white-space:nowrap}
+#record #action-other #cluster-panel>h3{display:block}
+#record #action-other .shard-other-record>h3{font-size:16px;font-weight:600;margin:0 0 12px}
+#record #action-other .other-method-row{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);align-items:center}
+#record #action-other .other-method-row:last-child{grid-template-columns:minmax(0,1fr) auto}
+#record #action-other #shard-other-form{display:block}
+#record #action-other #shard-other-form[hidden]{display:none}
+#record #action-other .other-method-row .text-clear-field{width:100%;min-width:0}
+#team #team-slots>.team-slot-row,#team #team-slots>.team-slot-row.leader-slot{grid-template-columns:minmax(0,1fr) auto}
+#team .team-slot-button{grid-column:1 / -1;grid-row:2}
+#team .team-slot-edit{grid-column:2;grid-row:1}
+#team .team-slot-edit{min-height:44px;padding:8px 10px}

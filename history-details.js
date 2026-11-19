@@ -1,0 +1,59 @@
+'use strict';
+// 履歴のスナップショットを読む表示専用パネル。記録・保存処理は行わない。
+const HistoryDetails=(()=>{
+ let panel,trigger,scrollY,bodyStyle,closing=false,activeInfo,activeEdit,editing=false,editorCleanup=null;
+ function content(info){
+  const {r,method,primary,target}=info,root=el('div',undefined,'history-detail-content');root.tabIndex=0;
+  const group=title=>{const s=el('section');s.append(el('h3',title));root.append(s);return s;};
+  const item=(s,name,value)=>{if(value===undefined||value===null||value==='')return;const row=el('div',undefined,'history-detail-row');row.append(el('span',name),el('strong',String(value)));s.append(row);};
+  const record=group('記録内容');if(!r.sleepSession)item(record,'日時',DateUI.datetime(r.datetime));item(record,'獲得方法',method);if(info.detailMethod&&info.detailMethod!==method)item(record,'記録の内訳',info.detailMethod);item(record,info.shards?'種類':'アメの種類',primary);item(record,r.activationVersion===1?'アメの獲得個数':'獲得個数',(r.activationVersion!==1&&info.shards&&r.method==='mew'&&SK.id(r.firedSkill)==='dream_shard_s'?r.shardAmount:r.amount).toLocaleString('ja-JP')+'個');if(r.activationVersion===1&&r.amount){const recipient=r.pokemonSnapshot||r.context.team[r.slot-1];item(record,'アメの獲得先',(r.slot?r.slot+'番 ':'')+label(recipient));}if(!r.sleepSession&&!r.targetDate&&r.method!=='cluster')item(record,C.isNapRecord(r)?'ポケモン':'対象・編成位置',target);
+  if(r.shardAmount!==undefined)item(record,'ゆめのかけら',r.shardAmount.toLocaleString('ja-JP')+'個');
+  if(r.targetDate)item(record,'リサーチ日',C.displayDate(r.targetDate));
+  if(r.recordedAt)item(record,'入力日時',DateUI.datetime(r.recordedAt));
+  if(r.baseAmount!==undefined)item(record,'リサーチの獲得数',r.baseAmount.toLocaleString('ja-JP')+'個');
+  if(r.researchExp!==undefined)item(record,'リサーチEXP',r.researchExp.toLocaleString('ja-JP'));
+  if(r.researchRank!==undefined||r.researchLevel!==undefined)item(record,'記録時のリサーチランク',r.researchRank??r.researchLevel);
+  if(r.clusterSize)item(record,'ゆめのかたまりのサイズ',r.clusterSize);
+  if(r.usedCount!==undefined)item(record,'使用個数',r.usedCount.toLocaleString('ja-JP')+'個');
+  if(r.method==='other')item(record,'その他の入手方法',DreamClusters.otherKinds[DreamClusters.otherKind(r)]);
+  if(r.memo)item(record,'メモ',r.memo);
+  if(r.sleepSession){const s=r.sleepSession;item(record,'リサーチ日',C.displayDate(s.date));item(record,'回数',s.number+'回目');item(record,'フィールド',s.field);item(record,'睡眠タイプ',s.sleepType);if(s.shardsRecorded!==false)item(record,'ゆめのかけら',s.amount.toLocaleString('ja-JP')+'個');item(record,'記録時ランク',s.researchRank);item(record,'リサーチEXP',s.researchExp);const candy=group('見つけたポケモン');for(const e of s.entries)item(candy,e.species+' ★'+e.stars,e.candy+' '+e.amount.toLocaleString('ja-JP')+'個'+(e.calculatedAmount!==null&&e.amount!==e.calculatedAmount?'（手動修正）':''));}
+  const fieldAt=!r.sleepSession&&typeof FieldHistory!=='undefined'&&typeof state!=='undefined'?FieldHistory.resolve(state,r.datetime):null;if(fieldAt?.field)item(record,'フィールド（現在の履歴）',FieldHistory.info(fieldAt.field).name);else if(fieldAt?.status==='ambiguous')item(record,'フィールド（現在の履歴）','移動時刻未確定');const savedField=r.fieldContext||r.context?.fieldContext;if(savedField?.field)item(record,'記録時のフィールド',savedField.field);
+  const c=r.context,actor=actorOf(c)||r.pokemonSnapshot||(info.shards&&['skill','lucky'].includes(r.method)&&r.species?historicalPokemon(r):null);
+  if(!C.isNapRecord(r)&&!['help','research','cluster','other'].includes(r.method)){
+   const skill=group('スキル情報');if(actor)item(skill,'発動したポケモン',label(actor));
+   const main=r.mainSkillId||r.registeredMainSkill||actor?.mainSkillId||actor?.mainSkill||r.skillId||r.skillName;
+   if(main||actor)item(skill,'メインスキル',mainSkillText(actor||{species:r.species},main));
+   const level=r.recordedSkillLevel??r.skillLevel??actor?.profile?.skillLevel;item(skill,'スキルLv',level);
+   if(c?.effectiveLevel!==undefined&&c.effectiveLevel!==level)item(skill,'補正後のスキルLv',c.effectiveLevel);
+   if(c?.actorSlot)item(skill,'発動した場所',c.actorSlot===1?'1リーダー':c.actorSlot+'番');
+   if(r.firedSkill||r.outcomeSkillId)item(skill,'発動したスキル',SK.name(r.firedSkill||r.outcomeSkillId));
+   if(r.sourcePokemon){item(skill,'参照するポケモン',label(r.sourcePokemon));item(skill,'参照するスキル',mainSkillText(r.sourcePokemon,r.sourceSkillId));}
+   else if(r.sourceSkillId)item(skill,'参照するスキル',SK.name(r.sourceSkillId));
+   if(r.eventEffects?.bonuses.length){item(skill,'登録時スキルLv',r.eventEffects.baseLevel);item(skill,'補正後のスキルLv',r.eventEffects.effectiveLevel);item(skill,'イベント',r.eventEffects.bonuses.map(b=>b.name).join('・'));item(skill,'開催フィールド',r.eventEffects.field);item(skill,'レベル補正','+'+r.eventEffects.boost);}
+   const shardBonus=r.shardBonus||c?.shardBonus;if(shardBonus?.bonuses.length){item(skill,'かけらのイベント',shardBonus.bonuses.map(b=>b.name).join('・'));item(skill,'開催フィールド',shardBonus.field);item(skill,'かけら倍率',shardBonus.multiplier+'倍');item(skill,'補正前のかけら',shardBonus.baseAmount);}
+   if(c?.event){item(skill,'イベント',c.event.name);item(skill,'開催フィールド',c.event.field);item(skill,'確率倍率',c.event.multiplier===undefined?undefined:c.event.multiplier+'倍');item(skill,'レベル補正',c.event.boost===undefined?undefined:'+'+c.event.boost);}
+   if(skill.children.length===1)skill.remove();
+  }
+  if(c?.team?.some(Boolean)){
+   const team=group('記録時の編成');c.team.forEach((p,i)=>{if(!p)return;const row=el('div',undefined,'history-detail-pokemon');row.append(el('strong',(i===0?'1リーダー':i+1+'番')+'　'+(p.nickname?.trim()||C.speciesName(p.species))));if(p.nickname?.trim())row.append(el('small',C.speciesName(p.species)));team.append(row);});
+  }
+  return root;
+ }
+ function finish(){
+  if(!trigger)return;panel.close();if(trigger.classList.contains('history-detail-button')){trigger.textContent='詳細 ▼';trigger.setAttribute('aria-expanded','false');}
+  Object.assign(document.body.style,bodyStyle);window.scrollTo({top:scrollY});if(trigger.isConnected)trigger.focus({preventScroll:true});trigger=null;activeInfo=activeEdit=null;editing=closing=false;panel.classList.remove('closing');
+ }
+ function close(){if(!trigger||closing)return;if(editing&&editorCleanup)editorCleanup();editing=false;editorCleanup=null;closing=true;panel.classList.add('closing');if(matchMedia('(prefers-reduced-motion: reduce)').matches)finish();else setTimeout(finish,160);}
+ function showContent(){const head=el('div',undefined,'history-detail-heading'),title=el('h2','記録の詳細');title.id='history-details-title';const exit=button('閉じる',close);head.append(title,exit);if(activeEdit){const edit=button('編集',showEdit);TabIcons.add(edit,'pencil');edit.setAttribute('aria-label','この記録を編集');head.append(edit);}panel.replaceChildren(head,content(activeInfo));editing=false;editorCleanup=null;}
+ function showEdit(){if(!activeEdit)return;const head=el('div',undefined,'history-detail-heading'),title=el('h2','履歴の訂正');title.id='history-details-title';head.append(title,button('閉じる',close));const host=el('div',undefined,'history-inline-editor');panel.replaceChildren(head,host);editing=true;editorCleanup=activeEdit(host,finishEdit,showContent)||null;DateUI.update();}
+ function finishEdit(){const id=activeInfo.r.id,latest=state.records.find(r=>r.id===id)||state.shardRecords.find(r=>r.id===id);if(latest){activeInfo={...activeInfo,r:latest};if(!activeInfo.shards&&latest.activationVersion!==1){activeInfo.primary=latest.candy||'アメ';activeInfo.target=latest.amount===0?'スキルのみ':C.isNapRecord(latest)?C.speciesName(latest.species):historyPlace(latest.slot)+'　'+label(historicalPokemon(latest));activeInfo.method=methods[latest.method]||activeInfo.method;}}showContent();}
+ function open(info,b,editAction,editNow=false){
+  if(!panel){panel=el('dialog');panel.id='history-details-panel';panel.setAttribute('aria-labelledby','history-details-title');document.body.append(panel);panel.addEventListener('cancel',e=>{e.preventDefault();close();});}
+  activeInfo=info;activeEdit=editAction;showContent();
+  panel.dataset.category=info.shards?'shards':'candy';panel.style.setProperty('--history-nav-height',Math.ceil(document.querySelector('.tabs').getBoundingClientRect().height)+'px');
+  trigger=b;if(b.classList.contains('history-detail-button')){b.textContent='詳細 ▲';b.setAttribute('aria-expanded','true');}scrollY=window.scrollY;bodyStyle={position:document.body.style.position,top:document.body.style.top,width:document.body.style.width,overflow:document.body.style.overflow};Object.assign(document.body.style,{position:'fixed',top:-scrollY+'px',width:'100%',overflow:'hidden'});panel.showModal();if(editNow)showEdit();else panel.querySelector('.history-detail-heading button').focus();
+ }
+ function detailButton(info,editAction){const b=button('詳細 ▼',()=>open(info,b,editAction),'history-detail-button');b.openEdit=trigger=>open(info,trigger||b,editAction,true);b.setAttribute('aria-haspopup','dialog');b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','history-details-panel');return b;}
+ return {button:detailButton};
+})();

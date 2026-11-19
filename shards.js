@@ -1,0 +1,133 @@
+'use strict';
+// ゆめのかけら専用の履歴を追加し、アメ履歴には手を加えません。
+const ShardUI=(()=>{
+ const methodNames={skill:'スキル',lucky:'きょううん',research:'睡眠リサーチ',cluster:'ゆめのかたまり',other:'その他'};
+ const methodName=r=>r.method==='other'?'その他・'+DreamClusters.otherKinds[DreamClusters.otherKind(r)]:methodNames[r.method];
+ const rankHint=root=>{root.append(document.createTextNode(' '),button('設定する',()=>showTab('settings')));};
+ const sharedRank=()=>DreamClusters.validRank(state.settings.researchRank)?state.settings.researchRank:null;
+ function updateCluster(){
+  const rank=sharedRank();$('cluster-rank').textContent=rank?'リサーチランク '+rank:'設定でリサーチランクを設定してください。';
+  if(!rank)rankHint($('cluster-rank'));
+  try{const output=$('cluster-amount');output.value=DreamClusters.amount($('cluster-size').value,number('cluster-count',1,100000),rank).toLocaleString('ja-JP')+'個';output.dataset.compact=String(output.value.length>8);}
+  catch(e){$('cluster-amount').value='';if(rank)$('cluster-rank').textContent=e.message;}
+ }
+ const drafts=new Map();let researchDateTouched=false,researchSourceKey=null,researchEditingId=null;
+ const isTarget=p=>!CopySkills.handlesShards(p)&&(p.species==='ミュウ'?['metronome','dream_shard_s'].includes(SK.id(SK.forPokemon(p))):!!SK.shardMode(p));
+ const typeOf=p=>SK.shardMode(p);
+ const skillName=type=>SK.name(type==='lucky'?'super_luck':'dream_shard_s');
+ const records=()=>state.shardRecords||[];
+ const summaryRecords=()=>[...records(),...C.activationShardRecords(state.records),...(typeof SleepResearch!=='undefined'?SleepResearch.shardRecords(state):[])].filter(r=>SummaryExtras.allowedRecord(r,'shard'));
+ const individual=p=>label(p);
+ const amountInput=(id,min=0)=>{const input=el('input');Object.assign(input,{id,type:'number',inputMode:'numeric',min:String(min),max:'1000000000',step:'1',required:true});return input;};
+ function number(id,min=0,max=1000000000){const raw=$(id).value.trim(),n=Number(raw);if(raw===''||!Number.isSafeInteger(n)||n<min||n>max)throw Error('入力値を確認してください。');return n;}
+ function save(data){const date=data.targetDate?C.fromInput(data.targetDate+'T04:00'):recordDate();if(!Number.isFinite(date.getTime())){notice('記録日時を入力してください。',true);return false;}
+  const r={id:uid(),datetime:date.toISOString(),...data,...(['skill','lucky'].includes(data.method)&&typeof FieldHistoryUI!=='undefined'?{fieldContext:FieldHistoryUI.context(date)}:{})};if(data.targetDate)r.recordedAt=new Date().toISOString();if(!data.targetDate&&$('auto-now').checked)$('datetime').value=C.localInput(date);
+  return commit({...state,shardRecords:[...records(),r]},resourceNotice(r,'shards'));
+ }
+ // 同日の複数記録は最後に保存されたものを表示。合計ではなく入力値を使います。
+ function loadResearch(force=false){
+  if(typeof SleepShards!=='undefined'){SleepShards.render(force);return;}
+  const day=$('shard-research-date').value;
+  const matches=records().filter(r=>r.method==='research'&&(r.targetDate||C.gameDay(r.datetime))===day);
+  const r=[...matches].sort((a,b)=>Date.parse(a.updatedAt||a.recordedAt||a.datetime)-Date.parse(b.updatedAt||b.recordedAt||b.datetime)).at(-1),key=JSON.stringify([day,r||null,sharedRank()]);
+  if(!force&&key===researchSourceKey)return;researchSourceKey=key;
+  researchEditingId=r?.id||null;$('research-panel').open=!r;$('research-save').textContent=r?'訂正を保存':'リサーチを記録';
+  $('shard-research-level').value=r?.researchLevel??sharedRank()??'';
+  $('research-rank-hint').textContent=r?'記録時のランクを表示しています。':sharedRank()?'設定のリサーチランクを使用します。':'設定でリサーチランクを設定してください。';
+  if(!r&&!sharedRank())rankHint($('research-rank-hint'));
+  $('shard-research-exp').value=r?.researchExp??'';
+  $('shard-research-base').value=r?.baseAmount??'';
+ }
+ // 名前の表示だけを整え、保存用ラベルや個体IDは従来どおり使用する。
+ function recordName(p,slot){
+  const head=el('h3',undefined,'shard-record-name'),name=el('strong');name.textContent=p.nickname?.trim()||C.speciesName(p.species);head.title=label(p);head.append(el('small',recordPosition(slot)),name);return head;
+ }
+ function renderInputs(){
+  if(!researchDateTouched)$('shard-research-date').value=C.addDays(C.gameDay(new Date()),-1);
+  loadResearch();updateCluster();$('research-rank-setting').value=sharedRank()??'';
+  const root=$('shard-skill-inputs');for(const input of [...root.querySelectorAll('input'),...($('action-skills')?.querySelectorAll('input[data-pokemon]')||[])])drafts.set(input.dataset.pokemon,input.value);
+  root.replaceChildren();const members=currentTeam().map((p,i)=>p&&speciesEnabled(p.species)&&isTarget(p)?{p,slot:i+1}:null).filter(Boolean);root.hidden=!members.length;
+  if(members.length||currentTeam().some(p=>p&&CopySkills.handlesShards(p)))root.append(el('h2','スキル','record-subheading'));
+  for(const {p,slot} of members){
+   const type=typeOf(p),eventEffects=typeof EventEffects==='undefined'?null:EventEffects.skill(p,EventEffects.recordDay()),level=eventEffects?.effectiveLevel??C.recordProfile(p).skillLevel,card=el('div',undefined,'card shard-skill-row'+(slot===1?' leader-slot':''));card.append(recordName(p,slot));
+   const amounts=(['fixed','lucky'].includes(type)?C.shardAmounts(type,level):[]).map(n=>typeof EventEffects==='undefined'?n:EventEffects.shards(n,p,EventEffects.recordDay()).amount);
+   const saveSkill=amount=>p.species==='ミュウ'?MewUI.saveShard(p,amount):save({method:type==='lucky'?'lucky':'skill',skillType:type,skillId:SK.id(SK.forPokemon(p)),skillName:SK.value(SK.forPokemon(p)),...(level?{skillLevel:level}:{}),...(eventEffects?.bonuses.length?{eventEffects}:{}),...(['fixed','lucky'].includes(type)&&typeof EventEffects!=='undefined'?{shardBonus:EventEffects.shards(C.shardAmounts(type,level)[amounts.indexOf(amount)],p,EventEffects.recordDay())}:{}),amount,pokemonId:p.id,pokemon:storedLabel(p),species:p.species,slot,pokemonSnapshot:clone(p)});
+   if(p.species==='ミュウ'||type==='random'){
+    const form=el('form',undefined,'shard-skill-form'),l=el('label'),input=amountInput('shard-amount-'+slot,1);input.setAttribute('aria-label',individual(p)+'のゆめのかけら');input.dataset.pokemon=p.id;input.value=drafts.get(p.id)||'';l.append(input);const b=el('button','記録');b.type='submit';form.append(l,b);
+    form.onsubmit=async e=>{e.preventDefault();try{if(await saveSkill(number(input.id,1))){drafts.delete(p.id);const fresh=$('shard-amount-'+slot);if(fresh)fresh.value='';}}catch(err){notice(err.message,true);}};card.append(form);
+   }else if(!level){card.append(button('スキルレベルを設定',()=>{openIndividualEditor(p);}));}
+   else if(type==='lucky'){
+    card.classList.add('shard-lucky-row');const actions=el('div',undefined,'shard-lucky-actions');
+    for(const amount of amounts){const b=button(amount===0?'スキルのみ':amount.toLocaleString('ja-JP'),()=>saveSkill(amount));b.setAttribute('aria-label',individual(p)+'・'+(amount===0?'スキルのみ':amount.toLocaleString('ja-JP')+'個')+'を記録');actions.append(b);}card.append(actions);
+   }
+   else{const actions=el('div',undefined,'shard-amount-buttons');for(const amount of amounts){const option=el('div',undefined,'shard-amount-option'),b=button(amount===0?'スキルのみ':amount.toLocaleString('ja-JP'),()=>saveSkill(amount));b.setAttribute('aria-label',individual(p)+'・'+(amount===0?'スキルのみ':amount.toLocaleString('ja-JP')+'個')+'を記録');option.classList.add('shard-fixed-option');option.append(b);actions.append(option);}card.append(actions);}
+   root.append(card);
+  }
+  CopySkills.render(root,'shards');
+  root.hidden=!SummaryExtras.shardVisible('skill')||!root.children.length;
+  $('cluster-panel').hidden=!SummaryExtras.shardVisible('cluster');
+  $('research-panel').hidden=!SummaryExtras.shardVisible('research');
+  $('shard-other-form').closest('.shard-other-record,details').hidden=!SummaryExtras.shardVisible('other');
+  $('record-shard-heading').hidden=root.hidden&&['research','cluster','other'].every(key=>!SummaryExtras.shardVisible(key));
+ }
+ function addSkillSetting(card,p){card.append(el('small',mainSkillText(p)+(p.profile?` · Lv.${p.profile.skillLevel}`:''),'shard-setting'));}
+ // 記録日サマリーと期間合計で同じ個体別内訳を表示します。
+ function appendBreakdown(body,rs,hideZero=false){
+  for(const [key,name] of SummaryExtras.shardSources){
+   const xs=rs.filter(r=>key==='skill'?['skill','lucky'].includes(r.method):r.method===key);
+   if(!xs.length||(hideZero&&key!=='skill'&&!C.sum(xs)))continue;
+   totalBreakdownRow(body,name,xs.length,C.sum(xs),'shard-method-'+key);
+   if(key==='other'){for(const [kind,label] of Object.entries(DreamClusters.otherKinds)){const items=xs.filter(r=>DreamClusters.otherKind(r)===kind);if(items.length)totalBreakdownRow(body,label,items.length,C.sum(items),'shard-member');}}
+   if(key!=='skill')continue;
+   // 同種でも内部IDごとにまとめ、0個のスキル記録も回数に含めます。
+   const groups=new Map();for(const r of xs){if(!groups.has(r.pokemonId))groups.set(r.pokemonId,[]);groups.get(r.pokemonId).push(r);}
+   for(const [id,items] of groups){
+    const latest=[...items].sort((a,b)=>Date.parse(b.datetime)-Date.parse(a.datetime))[0],current=state.pokemon.find(p=>p.id===id),p=current||latest.pokemonSnapshot;
+    const name=(p?individual(p):label(historicalPokemon(latest)))+(current?'':'（登録解除済み）');
+    totalBreakdownRow(body,name,items.length,C.sum(items),'shard-member');
+   }
+  }
+ }
+ const recordSources=new Set(['skill','research','other']);
+ const recordSourceOn=method=>recordSources.has(method==='cluster'?'other':method==='lucky'?'skill':method);
+ const toggleRecordSource=key=>{if(recordSources.has(key))recordSources.delete(key);else recordSources.add(key);renderSummary();};
+ function renderSummary(){
+  PeriodPicker.sync();
+  const day=$('shard-date').value||C.gameDay(new Date()),period=RangePicker.get('shard-period'),rs=summaryRecords().filter(r=>C.inRange(r,period)&&recordSourceOn(r.method));
+  $('shard-range').textContent=period?`${C.displayDate(period[0])} 04:00 〜 ${C.displayDate(period[1])} 04:00`:'全期間';
+  const title=SummaryExtras.periodCaption(period),root=$('shard-total');root.replaceChildren(el('small',title),qel('div',C.sum(rs)+'個','total'));
+  const body=totalBreakdown(root,'ゆめのかけら');
+  appendBreakdown(body,rs);
+  if(typeof SummaryPie!=='undefined')SummaryPie.attach('shard-sources',root,root.querySelector('.total-breakdown'),[['research','睡眠'],['skill','メインスキル'],['other','その他']].filter(([key])=>SummaryExtras.shardSourceVisible(key)).map(([key,name])=>({name,value:C.sum(rs.filter(r=>SummaryExtras.shardSummaryKey(r.method)===key)),color:SummaryExtras.sourceColor(key)})));
+  const controls=el('div',undefined,'candy-source-switches shard-record-filters');controls.setAttribute('aria-label','ゆめのかけらの記録の表示項目');
+  for(const [key,name] of [['research','睡眠'],['skill','メインスキル'],['other','その他']]){if(!(key==='other'?['other','cluster'].some(k=>SummaryExtras.aggregateVisible('shard',k)):SummaryExtras.aggregateVisible('shard',key)))continue;const choice=el('div',undefined,'candy-source-choice'),b=button(name,()=>toggleRecordSource(key));b.dataset.source=key;b.setAttribute('aria-pressed',String(recordSources.has(key)));b.style.setProperty('--source-color',SummaryExtras.sourceColor(key==='skill'?'skills':key));const amount=C.sum(rs.filter(r=>(r.method==='cluster'?'other':r.method==='lucky'?'skill':r.method)===key)),total=C.sum(rs);choice.append(b,el('small',recordSources.has(key)&&total?((amount/total)*100).toFixed(1)+'%':'—','candy-source-percent'));controls.append(choice);}
+  controls.style?.setProperty?.('--source-count',String(controls.children.length||1));controls.id='shard-record-filters';const previous=$('shard-record-filters');if(previous)previous.replaceWith(controls);else root.insertBefore(controls,root.querySelector('.total-breakdown'));
+  let source='';for(const row of body.children){const cls=[...row.classList].find(x=>x.startsWith('shard-method-'));if(cls)source=cls.replace('shard-method-','');row.hidden=!recordSources.has(source==='cluster'?'other':source);}
+  const all=summaryRecords();for(const scope of ['week','month']){const chart=$(scope==='week'?'shard-weekly-chart':'shard-calendar');let controls=$('shard-'+scope+'-filters');if(!controls){controls=el('div');controls.id='shard-'+scope+'-filters';(scope==='month'?$('shard-month'):chart).before(controls);}SummaryExtras.filterControls(controls,scope,all.filter(r=>C.inRange(r,C.range(scope,day))),'shard');}
+  WeeklyChart.render($('shard-weekly-chart'),all,day);
+  SummaryExtras.monthly('shard',summaryRecords(),day);
+ }
+ function appendHistory(root,period){
+  for(const r of records().filter(r=>C.inRange(r,period))){
+   const card=el('div',undefined,'card shards'),actions=el('div',undefined,'history-actions');card.dataset.datetime=r.datetime;card.dataset.shardSource=r.method;
+   actions.append(button('訂正',(host,done,cancel)=>ShardEditor.open(r,host,done,cancel)),button('削除',()=>{if(confirm('このゆめのかけら記録を削除しますか？'))commit(SleepResearch.replaceLegacy(state,r.id,null),'ゆめのかけら記録を削除しました。');},'danger'));
+   const skill=['skill','lucky'].includes(r.method),pokemon=r.pokemonSnapshot?individual(r.pokemonSnapshot):label(historicalPokemon(r));
+   historyCard(card,r,methodName(r),'ゆめのかけら',skill?historyPlace(r.slot)+'　'+pokemon:r.targetDate?'リサーチ日 '+C.displayDate(r.targetDate):r.method==='cluster'?r.clusterSize+'・'+r.usedCount.toLocaleString('ja-JP')+'個使用':'',actions);
+   finishHistoryCard(card);root.append(card);
+  }
+  // アメ・ゆめのかけらを日時順に混在させ、既存の訂正・削除ボタンは保持。
+  [...root.children].sort((a,b)=>Date.parse(b.dataset.datetime)-Date.parse(a.dataset.datetime)).forEach(card=>root.append(card));
+ }
+ function init(){
+  $('research-rank-form').onsubmit=async e=>{e.preventDefault();try{const raw=$('research-rank-setting').value.trim(),rank=raw===''?null:Number(raw);if(rank!==null&&!DreamClusters.validRank(rank))throw Error('リサーチランクは1〜70で入力してください。');await commit({...state,settings:{...state.settings,researchRank:rank}},'リサーチランクを保存しました。');}catch(err){notice(err.message,true);}};
+  for(const id of ['cluster-size','cluster-count'])$(id).oninput=updateCluster;
+  $('shard-cluster-form').onsubmit=async e=>{e.preventDefault();try{const clusterSize=$('cluster-size').value,usedCount=number('cluster-count',1,100000),researchRank=sharedRank(),amount=DreamClusters.amount(clusterSize,usedCount,researchRank);await save({method:'cluster',clusterSize,usedCount,researchRank,amount,memo:''});}catch(err){notice(err.message,true);}};
+  $('shard-research-date').value=C.addDays(C.gameDay(new Date()),-1);$('shard-research-date').oninput=()=>{researchDateTouched=true;loadResearch(true);};
+  $('shard-date').value=C.gameDay(new Date());for(const id of ['shard-period','shard-date'])$(id).onchange=renderSummary;
+  $('shard-today').onclick=()=>{$('shard-date').value=C.gameDay(new Date());renderSummary();};
+  $('shard-research-form').onsubmit=async e=>{e.preventDefault();try{const targetDate=$('shard-research-date').value;if(!C.dateOnly(targetDate))throw Error('対象日を入力してください。');if(!researchEditingId&&!sharedRank())throw Error('設定でリサーチランクを設定してください。');const r={method:'research',targetDate,baseAmount:number('shard-research-base'),researchExp:number('shard-research-exp'),researchLevel:number('shard-research-level',1,70)};r.researchRank=r.researchLevel;r.amount=C.shardTotal(r);const existing=records().find(x=>x.id===researchEditingId);const ok=existing?await commit({...state,shardRecords:records().map(x=>x.id===existing.id?{...x,...r,updatedAt:new Date().toISOString()}:x)},'睡眠リサーチを訂正しました。'):await save(r);if(ok)loadResearch(true);}catch(err){notice(err.message,true);}};
+  if(typeof SleepShards!=='undefined')SleepShards.init();
+  $('shard-other-form').onsubmit=async e=>{e.preventDefault();try{if(!['mission','achievement','gift'].includes($('shard-other-kind').value)||!SummaryExtras.otherVisible($('shard-other-kind').value))throw Error('入手方法を選択してください。');if(await save({method:'other',otherKind:$('shard-other-kind').value,amount:number('shard-other-amount'),memo:$('shard-other-memo').value.trim()})){$('shard-other-form').reset();$('shard-other-memo').value='';}}catch(err){notice(err.message,true);}};
+ }
+ return {saveRecord:save,recordName,methodName,summaryRecords,recordSourceOn,toggleRecordSource,isTarget,init,renderInputs,addSkillSetting,renderSummary,appendBreakdown,appendHistory};
+})();
