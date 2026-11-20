@@ -160,7 +160,7 @@ const SkillActions=(()=>{
   if(/食材セレクト/.test(name))return ['apple','#ffbd00'];
   if(/食材/.test(name))return ['ingredient','#ffbd00'];
   if(/料理|おてつだい/.test(name))return ['cooking','#ffbd00'];
-  if(/げんき/.test(name))return ['metronome','#00ed60'];
+  if(/げんき/.test(name))return ['recovery','#00ed60'];
   return ['flame','#ffa600'];
  }
  function pokemonHeading(p,slot){

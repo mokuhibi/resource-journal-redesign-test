@@ -277,6 +277,7 @@ body .tabs .tab-icon{width:12px;height:12px}
 #record #action-skills [data-icon=stone]>.pokemon-figma-icon{mask-image:url('assets/record-pokemon/stone.svg')}
 #record #action-skills [data-icon=apple]>.pokemon-figma-icon{mask-image:url('assets/record-pokemon/apple.svg')}
 #record #action-skills [data-icon=ingredient]>.pokemon-figma-icon{mask-image:url('assets/record-pokemon/ingredient.svg')}
+#record #action-skills [data-icon=recovery]>.pokemon-figma-icon{mask-image:url('assets/record-pokemon/recovery.svg')}
 #record #action-skills [data-icon=cooking]>.pokemon-figma-icon{mask-image:url('assets/record-pokemon/cooking.svg')}
 #record #action-skills [data-icon=copy]>.pokemon-figma-icon{mask-image:url('assets/record-pokemon/copy.svg')}
 #record #action-skills [data-icon=back]>.pokemon-figma-icon{mask-image:url('assets/record-pokemon/back.svg')}
