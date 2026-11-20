@@ -271,7 +271,7 @@ body .tabs .tab-icon{width:12px;height:12px}
 #record #action-skills .pokemon-figma-candy,#record #action-skills .pokemon-figma-action{display:grid;place-items:center;flex:none;width:40px;height:40px;min-width:40px;min-height:40px;padding:0;border:1px solid #bfbfbf;border-radius:50%;box-shadow:0 1px 0 #888;background:#fefefe;color:#555;cursor:pointer}
 #record #action-skills .pokemon-figma-candy{grid-column:2;grid-row:1/-1;margin:0}
 #record #action-skills .pokemon-figma-candy>.pokemon-figma-icon,#record #action-skills .pokemon-figma-action>.pokemon-figma-icon{display:block;width:27px;height:27px;background:currentColor;mask-size:contain;mask-position:center;mask-repeat:no-repeat}
-#record #action-skills .pokemon-figma-candy>.pokemon-figma-icon{mask-image:url('assets/record-pokemon/candy.svg')}
+#record #action-skills .pokemon-figma-candy>.pokemon-figma-icon{background:var(--pokemon-type-color,#555);mask-image:url('assets/record-pokemon/candy.svg')}
 #record #action-skills .pokemon-figma-controls{display:flex;align-items:center;justify-content:flex-start;min-width:0;min-height:40px}
 #record #action-skills .pokemon-figma-row .pokemon-figma-action:not(:disabled){background:#fefefe;color:#555;border-color:#bfbfbf}
 #record #action-skills .pokemon-figma-row .pokemon-figma-candy:not(:disabled){background:#fefefe;color:#555;border-color:#bfbfbf}
@@ -296,12 +296,12 @@ body .tabs .tab-icon{width:12px;height:12px}
 #record #action-skills .pokemon-figma-body{grid-column:1/-1;min-width:0}
 #record #action-skills .pokemon-figma-body:empty{display:none}
 #record #action-skills .pokemon-figma-body>.skill-record-heading,#record #action-skills .pokemon-figma-body>.skill-record-detail{display:none}
-#record #action-skills .pokemon-figma-body .activation-targets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;margin:8px 0 0;padding:0 5px;border:0}
+#record #action-skills .pokemon-figma-body .activation-targets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 10px;margin:4px 0 0;padding:0 5px;border:0}
 #record #action-skills .pokemon-figma-body .activation-targets .candy-target-row{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:3px;min-width:0;min-height:40px;padding:0;background:transparent;border:0!important;border-radius:0}
 #record #action-skills .pokemon-figma-body .activation-targets .candy-target-row>small{display:none}
 #record #action-skills .pokemon-figma-body .activation-targets .record-row-content{display:block;flex:1;min-width:0}
-#record #action-skills .pokemon-figma-body .activation-targets .record-row-content>strong{display:block;font-size:11px;line-height:1.2;letter-spacing:-.2px;font-weight:500;overflow-wrap:anywhere}
-#record #action-skills .pokemon-figma-body .activation-targets .split-candy-name>span:last-child{display:block}
+#record #action-skills .pokemon-figma-body .activation-targets .record-row-content>strong{display:block;font-size:11px;line-height:1.2;letter-spacing:-.2px;font-weight:500;overflow-wrap:normal}
+#record #action-skills .pokemon-figma-body .activation-targets .split-candy-name>span{display:block;white-space:nowrap}
 #record #action-skills .pokemon-figma-body .activation-targets .mew-actions{display:flex;flex:none;width:auto;gap:2px}
 #record #action-skills .pokemon-figma-body .activation-targets .mew-actions button{flex:none;width:40px;min-width:40px;min-height:40px;height:40px;margin:0;padding:0;border:1px solid #bfbfbf;border-radius:50%;box-shadow:0 1px 0 #888;background:#fefefe;color:#555;font-size:20px;font-weight:700;white-space:nowrap}
 #record #action-skills .pokemon-figma-body .activation-targets .mew-actions button:not(:disabled){background:#fefefe;border-color:#bfbfbf;color:#555}

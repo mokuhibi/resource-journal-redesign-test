@@ -104,7 +104,7 @@ const SkillActions=(()=>{
  function targets(card,p,recordTarget,zero,amounts=null){
   const grid=el('div',undefined,'record-slots activation-targets'),values=amounts||(zero?[4]:C.mewAmounts(eventSkill(p).effectiveLevel));grid.dataset.optionCount=String(values.length);
   currentTeam().forEach((q,i)=>{const box=el('div',undefined,'help-card candy-target-row'),content=el('span',undefined,'record-row-content'),name=q?candyMap[q.species]:'未設定',label=el('strong');
-   if(q&&name.endsWith('のアメ')){const base=name.slice(0,-3);label.append(el('span',base),el('span','のアメ'));if([...base].length>=5)label.classList.add('split-candy-name');}else label.textContent=name;
+   if(q&&name.endsWith('のアメ')){const base=name.slice(0,-3);label.append(el('span',base),el('span','のアメ'));label.classList.add('split-candy-name');}else label.textContent=name;
    content.append(label);box.append(el('small',i===0?'1R':String(i+1)),content);const actions=el('div',undefined,'mew-actions');for(const amount of values){const b=button(String(amount),()=>recordTarget(i+1,amount));b.disabled=!q;b.setAttribute('aria-label',(i===0?'1R':String(i+1))+' '+name+'を'+amount+'個記録');actions.append(b);}box.append(actions);grid.append(box);});
   if(zero){const box=el('div',undefined,'help-card candy-target-row skill-only-target'),actions=el('div',undefined,'mew-actions');actions.append(button('スキルのみ',()=>recordTarget(6,0)));box.append(actions);grid.append(box);}card.append(grid);return grid;
  }
