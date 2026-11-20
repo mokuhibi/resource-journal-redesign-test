@@ -61,12 +61,12 @@ const SkillActions=(()=>{
  function rewards(card,p,slot){
   const draft=drafts.get(p.id)||{candy:'',shards:'',target:'',outcome:''};drafts.set(p.id,draft);
   if(p.species==='ミュウ'){
-   title(card,p,slot);
+   if(!card.closest('.pokemon-figma-row'))title(card,p,slot);
    const canShard=SummaryExtras.shardVisible('skill')&&['metronome','dream_shard_s'].includes(SK.id(SK.forPokemon(p)));
-   if(canShard)card.append(field('ゆめのかけら',draft.shards,v=>draft.shards=v));
-   targets(card,p,(target,amount)=>save(p,{candy:amount,shards:canShard?draft.shards:'',target}),false);return;
+   const grid=targets(card,p,(target,amount)=>save(p,{candy:amount,shards:canShard?draft.shards:'',target}),false);
+   if(canShard)grid.append(field('ゆめのかけら',draft.shards,v=>draft.shards=v));return;
   }
-  title(card,p,slot);
+  if(!card.closest('.pokemon-figma-row'))title(card,p,slot);
   if(copies(p)){
    const sources=el('div',undefined,'skill-choice-grid copy-targets');sources.setAttribute('aria-label','コピー先');
    for(const q of copySources(p)){const b=button(q.nickname||C.speciesName(q.species),()=>{draft.sourceId=draft.sourceId===q.id?'':q.id;draft.target='';draft.candy=draft.shards='';if(card.closest('.pokemon-figma-row'))render();else{card.replaceChildren();rewards(card,p,slot);}});b.setAttribute('aria-pressed',String(draft.sourceId===q.id));b.dataset.sourceId=q.id;sources.append(b);}card.append(sources);
@@ -75,8 +75,8 @@ const SkillActions=(()=>{
    if(kind==='mew-copy'){
     const amounts=copiedMewAmounts(p,source),canShard=['metronome','dream_shard_s'].includes(SK.id(SK.forPokemon(source)));
     if(!amounts){manual(card,p,draft,{candy:true,shards:canShard},true);return;}
-    if(canShard)card.append(field('ゆめのかけら',draft.shards,v=>draft.shards=v));
-    targets(card,p,(target,candy)=>save(p,{...data,target,candy,shards:canShard?draft.shards:''}),false,amounts);return;
+    const grid=targets(card,p,(target,candy)=>save(p,{...data,target,candy,shards:canShard?draft.shards:''}),false,amounts);
+    if(canShard)grid.append(field('ゆめのかけら',draft.shards,v=>draft.shards=v));return;
    }
    if(kind==='candy'){targets(card,p,(target,amount)=>save(p,{...data,target,candy:amount,only:amount===0}),true);return;}
    if(kind!=='metronome'){
@@ -102,9 +102,11 @@ const SkillActions=(()=>{
   form.append(submit);valid();form.onsubmit=e=>{e.preventDefault();if(submit.disabled)return;const candy=cap.candy&&draft.target?draft.candy:'',shards=cap.shards?draft.shards:'';try{save(p,{sourceId:draft.sourceId,target:draft.target,candy,shards,only:!numeric(candy,'アメ')&&!numeric(shards,'ゆめのかけら')});}catch(error){notice(error.message,true);}};card.append(form);
  }
  function targets(card,p,recordTarget,zero,amounts=null){
-  const grid=el('div',undefined,'record-slots activation-targets');
-  currentTeam().forEach((q,i)=>{const box=el('div',undefined,'help-card candy-target-row'),content=el('span',undefined,'record-row-content');content.append(el('strong',q?candyMap[q.species]:'未設定'));box.append(el('small',i===0?'1R':String(i+1)),content);const actions=el('div',undefined,'mew-actions');for(const amount of (amounts||(zero?[4]:C.mewAmounts(eventSkill(p).effectiveLevel)))){const b=button(amount+'個',()=>recordTarget(i+1,amount));b.disabled=!q;actions.append(b);}box.append(actions);grid.append(box);});
-  if(zero){const box=el('div',undefined,'help-card candy-target-row skill-only-target'),actions=el('div',undefined,'mew-actions');actions.append(button('スキルのみ',()=>recordTarget(6,0)));box.append(actions);grid.append(box);}card.append(grid);
+  const grid=el('div',undefined,'record-slots activation-targets'),values=amounts||(zero?[4]:C.mewAmounts(eventSkill(p).effectiveLevel));grid.dataset.optionCount=String(values.length);
+  currentTeam().forEach((q,i)=>{const box=el('div',undefined,'help-card candy-target-row'),content=el('span',undefined,'record-row-content'),name=q?candyMap[q.species]:'未設定',label=el('strong');
+   if(q&&name.endsWith('のアメ')){const base=name.slice(0,-3);label.append(el('span',base),el('span','のアメ'));if([...base].length>=5)label.classList.add('split-candy-name');}else label.textContent=name;
+   content.append(label);box.append(el('small',i===0?'1R':String(i+1)),content);const actions=el('div',undefined,'mew-actions');for(const amount of values){const b=button(String(amount),()=>recordTarget(i+1,amount));b.disabled=!q;b.setAttribute('aria-label',(i===0?'1R':String(i+1))+' '+name+'を'+amount+'個記録');actions.append(b);}box.append(actions);grid.append(box);});
+  if(zero){const box=el('div',undefined,'help-card candy-target-row skill-only-target'),actions=el('div',undefined,'mew-actions');actions.append(button('スキルのみ',()=>recordTarget(6,0)));box.append(actions);grid.append(box);}card.append(grid);return grid;
  }
  function setupGuide(root){
   const empty=state.pokemon.length===0;if(!empty&&currentTeam().some(Boolean))return false;
@@ -171,9 +173,12 @@ const SkillActions=(()=>{
   const candy=button('',()=>record('help',slot,2),'pokemon-figma-candy');candy.type='button';candy.setAttribute('aria-label',recordPosition(slot)+' '+C.speciesName(p.species)+'のアメ拾いを記録');candy.disabled=!recordVisible('help')||!Object.hasOwn(candyMap,p.species);PokemonTypes.apply(candy,p.species);candy.append(el('span',undefined,'pokemon-figma-icon'));
   head.append(words,badge,candy);return head;
  }
+ function activationCount(date){
+  const period=C.range('day',C.gameDay(date));
+  return state.records.filter(r=>['mew','delibird','skill'].includes(r.method)&&C.inRange(r,period)).length+(state.shardRecords||[]).filter(r=>['skill','lucky'].includes(r.method)&&C.inRange(r,period)).length;
+ }
  function render(){
-  mount();const root=$('action-skills');if(!root)return;const skillsAllowed=C.actionAllowed(state.settings,'skills','displayActions');root.replaceChildren(el('h2','ポケモン','record-subheading'));if((!skillsAllowed&&!recordVisible('help'))||setupGuide(root)){show();return;}if(skillsAllowed&&typeof EventEffects!=='undefined')EventEffects.renderField(root,EventEffects.recordDay());
-  const shardRows=[...$('shard-skill-inputs').querySelectorAll('.shard-skill-row')].filter(n=>!n.classList.contains('copy-skill-card'));
+  mount();const root=$('action-skills');if(!root)return;const shardRows=[...$('shard-skill-inputs').querySelectorAll('.shard-skill-row'),...root.querySelectorAll('.pokemon-figma-shard')].filter(n=>!n.classList.contains('copy-skill-card'));const skillsAllowed=C.actionAllowed(state.settings,'skills','displayActions'),date=recordDate(),heading=el('h2',undefined,'record-subheading');heading.append(el('span','ポケモン','pokemon-section-name'),el('span','メインスキル','pokemon-section-skill'),el('strong',activationCount(Number.isFinite(date.getTime())?date:new Date())+'回','pokemon-section-count'));root.replaceChildren(heading);if((!skillsAllowed&&!recordVisible('help'))||setupGuide(root)){show();return;}if(skillsAllowed&&typeof EventEffects!=='undefined')EventEffects.renderField(root,EventEffects.recordDay());
   currentTeam().forEach((p,i)=>{if(!p||p.provisional)return;const slot=i+1,key=SK.id(SK.forPokemon(p)),cap=capabilities(p);
    if(!skillsAllowed&&!recordVisible('help'))return;
    const row=el('div',undefined,'pokemon-figma-row'),controls=el('div',undefined,'pokemon-figma-controls'),body=el('div',undefined,'pokemon-figma-body');row.dataset.actorId=p.id;row.append(pokemonHeading(p,slot),controls,body);
