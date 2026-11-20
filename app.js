@@ -68,7 +68,7 @@ function notice(s,error=false){
 const enabled=method=>Object.hasOwn(methods,method);
 const recordSettingKeys={help:'showCandyHelp',mew:'mew',delibird:'delibird',skill:'showOtherCandy',research:'showCandyResearch'};
 const recordVisible=method=>state.settings[recordSettingKeys[method]]!==false&&C.actionAllowed(state.settings,method==='skill'?'skills':method,'displayActions');
-const allCandyRecords=()=>[...state.records,...SleepResearch.candyRecords(state),...(typeof SocialResearch!=='undefined'?SocialResearch.records(state):[]),...Professor.candyRecords(state)];
+const allCandyRecords=()=>[...state.records.filter(r=>r.skillOnlyActivation!==true),...SleepResearch.candyRecords(state),...(typeof SocialResearch!=='undefined'?SocialResearch.records(state):[]),...Professor.candyRecords(state)];
 const recordCount=rs=>typeof SleepResearch!=='undefined'?SleepResearch.countSessions(rs):rs.length;
 const speciesEnabled=()=>true;
 const special=p=>p.species==='ミュウ'||p.species==='デリバード';
@@ -260,12 +260,12 @@ function historyTime(value){return DateUI.datetime(value).replace(/^(\d{2})(\d{2
 function historyPlace(slot){return slot===1?'1R':slot>=2&&slot<=5?slot+'番':slot===6?'アメなし':'獲得位置不明';}
 function historyCard(card,r,method,primary,target,actions){
  // 分類は保存済みの入手方法で判定。名称や獲得数からスキルを推測しない。
- const mewShards=r.method==='mew'&&SK.id(r.firedSkill)==='dream_shard_s',shards=card.classList.contains('shards')||mewShards;
+ const skillOnly=r.skillOnlyActivation===true,mewShards=r.method==='mew'&&SK.id(r.firedSkill)==='dream_shard_s',shards=card.classList.contains('shards')||mewShards;
  if(mewShards){card.classList.add('shards');card.dataset.shardSource='skill';const actor=actorOf(r.context);target=historyPlace(r.context?.actorSlot)+(actor?'　'+label(actor):'');}
- const categoryMethod=shards?(mewShards||['mew','delibird','skill','lucky'].includes(r.method)?'スキル':r.method==='research'?'睡眠リサーチ':r.method==='other'&&r.otherKind==='nap_island'?'おひるね島':r.method==='cluster'?'ゆめのかたまり':r.method==='other'?'その他':'入手方法不明'):(C.isNapRecord(r)?'おひるね島':r.activationVersion===1||['mew','delibird'].includes(r.method)?'スキル':r.method==='skill'?'その他':method||'入手方法不明');
+ const categoryMethod=shards?(mewShards||['mew','delibird','skill','lucky'].includes(r.method)?'スキル':r.method==='research'?'睡眠リサーチ':r.method==='other'&&r.otherKind==='nap_island'?'おひるね島':r.method==='cluster'?'ゆめのかたまり':r.method==='other'?'その他':'入手方法不明'):(C.isNapRecord(r)?'おひるね島':r.skillOnlyActivation===true||r.activationVersion===1||['mew','delibird'].includes(r.method)?'スキル':r.method==='skill'?'その他':method||'入手方法不明');
  card.dataset.historySource=categoryMethod==='アメ拾い'?'help':categoryMethod==='スキル'?'skills':categoryMethod==='睡眠リサーチ'?'research':['その他','おひるね島','ゆめのかたまり'].includes(categoryMethod)?'other':'';
- const stamp=historyTime(r.recordedAt||r.datetime).split(' '),head=el('div',undefined,'history-topline'),time=el('time',undefined,'history-time');time.dateTime=r.recordedAt||r.datetime;time.append(el('span',stamp[0].slice(3)),el('span',stamp[1]||''));head.append(el('strong',shards?'ゆめのかけら':'アメ','history-category'),time);
- const meta=el('div',undefined,'history-meta'),amount=qel('strong',(mewShards?r.shardAmount:r.amount)+'個','history-amount');meta.append(el('strong',categoryMethod,'history-method'),amount);
+ const stamp=historyTime(r.recordedAt||r.datetime).split(' '),head=el('div',undefined,'history-topline'),time=el('time',undefined,'history-time');time.dateTime=r.recordedAt||r.datetime;time.append(el('span',stamp[0].slice(3)),el('span',stamp[1]||''));head.append(el('strong',skillOnly?'メインスキル':shards?'ゆめのかけら':'アメ','history-category'),time);
+ const meta=el('div',undefined,'history-meta'),amount=qel('strong',skillOnly?'1回':(mewShards?r.shardAmount:r.amount)+'個','history-amount');meta.append(el('strong',categoryMethod,'history-method'),amount);
  if(!shards&&primary&&!['アメ','スキルのみ'].includes(primary)){const name=el('span',primary,'history-primary');name.title=primary;amount.append(name);}
  card.append(head,meta);
  // 過去のスナップショットを優先し、現在の登録名・編成を参照しない。
@@ -283,7 +283,7 @@ function finishHistoryCard(card){
 function historyActionIcons(root){if(!root.querySelectorAll)return;for(const b of root.querySelectorAll('.history-actions button, .field-history-change button')){const name=b.textContent.trim(),icon=name==='編集'||name==='訂正'?'pencil':name==='削除'||name==='取り消す'?'x':'';if(!icon)continue;b.setAttribute('aria-label',name);b.title=name;TabIcons.add(b,icon);b.classList.add('history-icon-action');}}
 
 function renderHistory(){PeriodPicker.sync();const period=historyRange();$('history-day').textContent=period?C.displayDate(period[0])+' 〜 '+C.displayDate(C.addDays(period[1],-1)):'全期間';const root=$('history-list');root.replaceChildren();for(const r of [...state.records].filter(r=>visibleRecord(r)&&C.inRange(r,period)).reverse().sort((a,b)=>Date.parse(b.datetime)-Date.parse(a.datetime))){
- if(r.activationVersion===1){SkillActions.history(root,r);continue;}
+ if(r.activationVersion===1||r.skillOnlyActivation===true){SkillActions.history(root,r);continue;}
  const card=el('div',undefined,'card '+r.method);card.dataset.datetime=r.datetime;const actions=el('div',undefined,'history-actions');
  actions.append(button('訂正',(host,done,cancel)=>openHistoryEditor(r,host,done,cancel)),button('削除',()=>{if(confirm('この記録を削除しますか？'))commit({...state,records:state.records.filter(x=>x.id!==r.id)},'削除しました。');},'danger'));
  historyCard(card,r,C.isNapRecord(r)?'おひるね島':methods[r.method],r.amount===0?'スキルのみ':r.candy||'アメ',C.isNapRecord(r)?C.speciesName(r.species):r.amount===0?historyPlace(r.slot):historyPlace(r.slot)+'　'+oldLabel(r),actions);finishHistoryCard(card);root.append(card);
@@ -304,7 +304,7 @@ function showTab(id){if(id==='sleep'){SleepUI.selectView('record',true);return;}
 function render(){SleepUI.syncNavigation();if(typeof SleepUI!=='undefined')SleepUI.render();ShardUI.renderSummary();renderRecord();renderActorFilters();renderSummary();renderHistory();renderTeam();renderSettings();renderCatalog();DateUI.update();}
 // 訂正は履歴のコピーを編集し、保存時だけ置き換えます。
 function openHistoryEditor(r,host,done,cancel){
- if(r.activationVersion===1){SkillActions.edit(r,host,done,cancel);return;}
+ if(r.activationVersion===1||r.skillOnlyActivation===true){SkillActions.edit(r,host,done,cancel);return;}
  if(C.isNapRecord(r)){NapIsland.edit(r,host,done,cancel);return;}
  if(r.method==='skill'){CopySkills.edit(r,host,done,cancel);return;}
  editingId=r.id;const pool=new Map();for(const p of [...(r.context?.team||[]),actorOf(r.context),...state.pokemon])if(p&&!pool.has(p.id))pool.set(p.id,clone(p));if(r.method==='mew'&&r.species&&!pool.has(r.pokemonId))pool.set(r.pokemonId,{id:r.pokemonId,species:r.species,nickname:r.nickname||''});editPool=[...pool.values()];

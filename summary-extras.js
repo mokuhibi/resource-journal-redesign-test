@@ -35,7 +35,7 @@ const SummaryExtras=(()=>{
  const skillDisplayName=scope=>{const on=candySkillSources.filter(([key])=>aggregateVisible('candy',key)&&filterOn(scope,key));return on.length===1?on[0][1]:'スキル';};
  const localVisible=(scope,record)=>{if(!scope)return true;const key=typeof record==='string'?record:candySource(record);return key==='skills'&&typeof record!=='string'?filterOn(scope,candyChild(record)):key==='skills'?candySkillSources.some(([child])=>filterOn(scope,child)):filterOn(scope,key);};
  const candySourceVisible=(method,scope)=>aggregateVisible('candy',method)&&localVisible(scope,method);
- const candyRecords=(records,scope)=>records.filter(r=>(r.activationVersion!==1||r.resourceFlags.candy)&&allowedRecord(r)&&localVisible(scope,r));
+ const candyRecords=(records,scope)=>records.filter(r=>r.skillOnlyActivation!==true&&(r.activationVersion!==1||r.resourceFlags.candy)&&allowedRecord(r)&&localVisible(scope,r));
  const visibleCandySources=scope=>candySources.filter(([key])=>candySourceVisible(key,scope)).map(([key,name])=>[key,key==='skills'?skillDisplayName(scope):name]);
  const shardSourceVisible=method=>(method==='other'?aggregateVisible('shard','other')||aggregateVisible('shard','cluster'):aggregateVisible('shard',method))&&shardSummaryOn(method);
  const shardRecords=records=>records.filter(r=>allowedRecord(r,'shard')&&shardSummaryOn(r.method));
