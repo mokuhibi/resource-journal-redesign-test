@@ -312,7 +312,9 @@ body .tabs .tab-icon{width:12px;height:12px}
 #record #action-skills .pokemon-figma-body .copy-targets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:8px}
 #record #action-skills .pokemon-figma-body .copy-targets button{min-width:0;min-height:38px;padding:4px;font-size:12px;overflow-wrap:anywhere}
 #record #action-skills .pokemon-figma-body .copy-targets button[aria-pressed=true]{background:#fff4d2;border:1px solid #ffc600}
-#record #action-skills .pokemon-figma-row[data-selected-source] .copy-targets{display:none}
+#record #action-skills .pokemon-figma-row[data-selected-source] .copy-targets{grid-template-columns:1fr}
+#record #action-skills .pokemon-figma-row[data-selected-source] .copy-targets button:not([aria-pressed=true]){display:none}
+#record #action-skills .pokemon-figma-row[data-selected-source] .pokemon-figma-controls .pokemon-figma-action:last-child>.pokemon-figma-icon{background:var(--skill-color,currentColor)}
 #record #action-skills .pokemon-figma-shard{display:contents}
 #record #action-skills .pokemon-figma-shard>.shard-record-name{display:none}
 #record #action-skills .pokemon-figma-controls .shard-skill-form{display:flex;gap:3px;align-items:center;margin:0}
