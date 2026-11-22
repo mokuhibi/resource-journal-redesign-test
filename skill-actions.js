@@ -121,7 +121,7 @@ const SkillActions=(()=>{
   form.append(submit);valid();form.onsubmit=e=>{e.preventDefault();if(submit.disabled)return;const candy=cap.candy&&draft.target?draft.candy:'',shards=cap.shards?draft.shards:'';try{save(p,{sourceId:draft.sourceId,target:draft.target,candy,shards,only:!numeric(candy,'アメ')&&!numeric(shards,'ゆめのかけら')});}catch(error){notice(error.message,true);}};card.append(form);
  }
  function targets(card,p,recordTarget,zero,amounts=null,shardField=null){
-  const grid=el('div',undefined,'record-slots activation-targets'),values=amounts||(zero?[4]:C.mewAmounts(eventSkill(p).effectiveLevel));grid.dataset.optionCount=String(values.length);
+  const grid=el('div',undefined,'record-slots activation-targets'),defaults=zero?[4]:C.mewAmounts(eventSkill(p).effectiveLevel),values=amounts||(p.species==='ミュウ'&&card.closest('.pokemon-figma-row')?[...defaults].reverse():defaults);grid.dataset.optionCount=String(values.length);
   currentTeam().forEach((q,i)=>{const box=el('div',undefined,'help-card candy-target-row'),content=el('span',undefined,'record-row-content'),name=q?candyMap[q.species]:'未設定',label=el('strong');
    if(q&&name.endsWith('のアメ')){const base=name.slice(0,-3);label.append(el('span',base),el('span','のアメ'));label.classList.add('split-candy-name');}else label.textContent=name;
    content.append(label);box.append(el('small',i===0?'1R':String(i+1)),content);if(shardField){const input=shardField(i+1);input.disabled=!q;box.append(input);}const actions=el('div',undefined,'mew-actions');for(const amount of values){const b=button('',()=>recordTarget(i+1,amount));b.disabled=!q;b.setAttribute('aria-label',(i===0?'1R':String(i+1))+' '+name+'を'+amount+'個記録');if(p.species==='ミュウ'&&!zero){const [icon,color]=skillAppearance(p);b.classList.add('pokemon-figma-mew-amount');b.dataset.icon=icon;b.style.setProperty('--skill-color',color);b.style.setProperty('--skill-icon',`url("assets/record-pokemon/${icon==='metronome'?'finger':icon}.svg")`);b.append(el('span',undefined,'pokemon-figma-icon'),el('span',String(amount),'pokemon-figma-amount'));}else b.textContent=String(amount);actions.append(b);}box.append(actions);grid.append(box);});
@@ -187,8 +187,7 @@ const SkillActions=(()=>{
  function pokemonHeading(p,slot){
   const head=el('div',undefined,'pokemon-figma-identity'),words=el('div',undefined,'pokemon-figma-words'),badge=el('span',undefined,'pokemon-figma-skill');
   words.append(el('strong',p.nickname?.trim()||C.speciesName(p.species)),el('small',C.speciesName(p.species)));
-  const [icon,color]=skillAppearance(p);badge.dataset.icon=icon;badge.style.setProperty('--skill-color',color);
-  badge.append(el('span',undefined,'pokemon-figma-icon'),el('span','Lv.'+C.recordProfile(p).skillLevel));
+  badge.append(el('span','Lv.'+C.recordProfile(p).skillLevel));
   const candy=button('',()=>record('help',slot,2),'pokemon-figma-candy');candy.type='button';candy.setAttribute('aria-label',recordPosition(slot)+' '+C.speciesName(p.species)+'のアメ拾いを記録');candy.disabled=!recordVisible('help')||!Object.hasOwn(candyMap,p.species);PokemonTypes.apply(candy,p.species);candy.append(el('span',undefined,'pokemon-figma-icon'));
   head.append(words,badge,candy);return head;
  }
