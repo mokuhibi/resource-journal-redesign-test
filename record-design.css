@@ -327,3 +327,54 @@ body .tabs .tab-icon{width:12px;height:12px}
 #record #action-skills .pokemon-figma-controls .shard-lucky-actions button{min-width:34px;min-height:40px;padding:2px;font-size:11px}
 #record #action-skills .pokemon-figma-controls .shard-amount-option button{min-width:64px;padding:3px 8px;border:1px solid #bfbfbf;border-radius:20px;box-shadow:0 1px 0 #888;background:#fefefe;font-size:15px;font-weight:700}
 @media(max-width:359px){#record #action-skills .pokemon-figma-row{column-gap:6px}#record #action-skills .pokemon-figma-identity{grid-template-columns:minmax(0,1fr) 36px}#record #action-skills .pokemon-figma-candy,#record #action-skills .pokemon-figma-action{width:36px;min-width:36px;height:36px;min-height:36px}#record #action-skills .pokemon-figma-body .activation-targets{gap:6px 5px;padding:0 2px}#record #action-skills .pokemon-figma-body .activation-targets .record-row-content>strong{font-size:10px}#record #action-skills .pokemon-figma-body .activation-targets .record-row-content>strong>span:last-child{display:block}#record #action-skills .pokemon-figma-body .activation-targets .mew-actions{gap:2px}#record #action-skills .pokemon-figma-body .activation-targets .mew-actions button{width:36px;min-width:36px;height:36px;min-height:36px}}
+
+/* 完成見本：ミュウ基本（Lv.1〜5／Lv.6以上）。既存の獲得数ボタンを同じ円形の位置に置く。 */
+#record #action-skills .figma-mew .activation-targets{row-gap:8px;margin-top:10px}
+#record #action-skills .figma-mew .activation-targets .candy-target-row{min-height:58px}
+#record #action-skills .figma-mew .activation-targets .candy-target-row:nth-child(odd) .mew-actions{margin-right:clamp(6px,3.75vw,15px)}
+#record #action-skills .figma-mew .pokemon-figma-mew-amount{position:relative;display:grid;place-items:center}
+#record #action-skills .figma-mew .pokemon-figma-mew-amount>.pokemon-figma-icon{width:22px;height:25px;background:var(--skill-color,#f5ad13);mask-image:var(--skill-icon);mask-size:contain;mask-position:center;mask-repeat:no-repeat}
+#record #action-skills .figma-mew .pokemon-figma-mew-amount>.pokemon-figma-amount{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:15px;line-height:1;font-weight:700;color:#555;text-shadow:0 1px #fff,1px 0 #fff,-1px 0 #fff}
+#record #action-skills .figma-mew-random .activation-targets .candy-target-row{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:18px 40px;column-gap:4px;align-items:center;min-height:70px}
+#record #action-skills .figma-mew-random .activation-targets .record-row-content{grid-column:1/-1;grid-row:1}
+#record #action-skills .figma-mew-random .activation-targets .record-row-content>strong>span{display:inline;white-space:nowrap}
+#record #action-skills .figma-mew-random .activation-targets input{grid-column:1;grid-row:2;width:60px;max-width:100%;min-width:0;height:32px;min-height:32px;margin:0;padding:3px 4px;border-radius:0;font-size:10px;justify-self:end}
+#record #action-skills .figma-mew-random .activation-targets[data-option-count="1"] input{transform:translateX(-10px)}
+#record #action-skills .figma-mew-random .activation-targets[data-option-count="2"] input{justify-self:start}
+#record #action-skills .figma-mew-random .activation-targets .mew-actions{grid-column:2;grid-row:2}
+#record #action-skills .figma-mew-random .activation-targets .mew-actions button{width:36px;min-width:36px;height:36px;min-height:36px}
+/* ゆびをふる：画面1の矢印と、追加報酬を選ぶ画面2。 */
+#record #action-skills .figma-mew-metronome .figma-metronome-switch{width:40px;min-width:40px;height:40px;min-height:40px;padding:0;border:1px solid #bfbfbf;border-radius:50%;box-shadow:0 1px 0 #888;background:#fefefe;color:#555;font-size:25px;font-weight:400;line-height:1}
+#record #action-skills .figma-mew-metronome .activation-targets .candy-target-row{min-height:58px}
+#record #action-skills .figma-mew-metronome-expanded .pokemon-figma-controls{justify-content:space-between;gap:4px}
+#record #action-skills .figma-metronome-target{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#777;font-size:11px}
+#record #action-skills .figma-mew-metronome-expanded .activation-targets{background:#fff6e9;padding:5px 8px 10px}
+#record #action-skills .figma-mew-metronome-expanded .activation-targets .candy-target-row{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:15px 36px;min-height:58px}
+#record #action-skills .figma-mew-metronome-expanded .activation-targets .record-row-content{grid-column:1/-1;grid-row:1}
+#record #action-skills .figma-mew-metronome-expanded .figma-metronome-bonus{grid-column:1;grid-row:2;text-align:center;color:#555;font-size:16px;font-weight:700}
+#record #action-skills .figma-mew-metronome-expanded .activation-targets .mew-actions{grid-column:2;grid-row:2}
+#record #action-skills .figma-mew-metronome-expanded .activation-targets>input{grid-column:1/-1;width:130px;max-width:100%;justify-self:end}
+@media(max-width:359px){#record #action-skills .figma-mew-metronome .figma-metronome-switch{width:36px;min-width:36px;height:36px;min-height:36px}}
+/* ランダムかけら：従来の入力・保存フォームを、完成見本の右側の入力欄と丸ボタンに収める。 */
+#record #action-skills .figma-random-shards{min-height:80px;align-items:center}
+#record #action-skills .figma-random-shards .pokemon-figma-controls{justify-content:flex-end}
+#record #action-skills .figma-random-shards .shard-skill-form{gap:10px}
+#record #action-skills .figma-random-shards .shard-skill-form input{width:74px;height:32px;min-height:32px;font-size:11px;padding:3px 5px;border-radius:0}
+#record #action-skills .figma-random-shards .shard-skill-form button{width:40px;min-width:40px;height:40px;min-height:40px;padding:0;border:1px solid #bfbfbf;border-radius:50%;box-shadow:0 1px 0 #888;background:#fefefe}
+#record #action-skills .figma-random-shards .shard-skill-form button>.pokemon-figma-icon{display:block;width:25px;height:25px;margin:auto;background:#f5bd00;mask:url('assets/record-pokemon/stone.svg') center/contain no-repeat}
+/* スキルコピーで「きょううん」を選んだ画面2。Lv別の既存報酬値を表示する。 */
+#record #action-skills .figma-copy-lucky{min-height:220px;align-content:start}
+#record #action-skills .figma-copy-lucky .pokemon-figma-controls{justify-content:flex-end}
+#record #action-skills .figma-copy-lucky .pokemon-figma-body{min-height:130px;background:#fff6e9}
+#record #action-skills .figma-copy-lucky .copy-targets[hidden]{display:none}
+#record #action-skills .figma-copy-lucky .copied-shard-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 10px;margin:12px 0 0;padding:0 4px}
+#record #action-skills .figma-copy-lucky .figma-lucky-choice{display:flex;align-items:center;justify-content:flex-end;gap:12px;min-width:0;height:46px}
+#record #action-skills .figma-copy-lucky .figma-lucky-choice:first-child{grid-column:2;grid-row:1}
+#record #action-skills .figma-copy-lucky .figma-lucky-choice:nth-child(2){grid-column:1;grid-row:2}
+#record #action-skills .figma-copy-lucky .figma-lucky-choice:nth-child(2){gap:clamp(12px,8vw,40px)}
+#record #action-skills .figma-copy-lucky .figma-lucky-choice:nth-child(3){grid-column:2;grid-row:2}
+#record #action-skills .figma-copy-lucky .figma-lucky-choice strong{font-size:15px;font-weight:700;color:#555;font-variant-numeric:tabular-nums;white-space:nowrap}
+#record #action-skills .figma-copy-lucky .figma-lucky-choice button{width:40px;min-width:40px;height:40px;min-height:40px;padding:0;border:1px solid #bfbfbf;border-radius:50%;box-shadow:0 1px 0 #888;background:#fefefe}
+#record #action-skills .figma-copy-lucky .figma-lucky-choice .pokemon-figma-icon{display:block;width:27px;height:27px;background:#f5bd00;mask-size:contain;mask-position:center;mask-repeat:no-repeat}
+#record #action-skills .figma-copy-lucky .figma-lucky-choice [data-icon=stone] .pokemon-figma-icon{mask-image:url('assets/record-pokemon/stone.svg')}
+#record #action-skills .figma-copy-lucky .figma-lucky-choice [data-icon=apple] .pokemon-figma-icon{mask-image:url('assets/record-pokemon/apple.svg')}
