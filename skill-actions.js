@@ -53,7 +53,7 @@ const SkillActions=(()=>{
  }
  async function save(p,data){try{const r=build(p,data);if($('auto-now').checked)$('datetime').value=C.localInput(r.datetime);if(await commit({...state,records:[...state.records,r]},resourceNotice(r))){drafts.delete(p.id);renderRecord();return true;}}catch(e){notice(e.message,true);}return false;}
  function saveActivation(p,source=null){
-  const date=recordDate(),context=skillContext('skill',p.id),mainSkillId=SK.id(SK.forPokemon(p));
+  const date=recordDate(),context=skillContext('skill',p.id,date),mainSkillId=SK.id(SK.forPokemon(p));
   if(!context||!Number.isFinite(date.getTime())||!SK.find(mainSkillId)||source&&!copySources(p).some(q=>q.id===source.id)){notice('メインスキルと記録日時を確認してください。',true);return false;}
   const r={id:uid(),datetime:date.toISOString(),method:'skill',skillOnlyActivation:true,amount:0,slot:null,pokemonId:null,pokemon:'スキルのみ',species:null,nickname:'',candy:null,mainSkillId,registeredMainSkill:SK.value(mainSkillId),recordedSkillLevel:context.actor.profile.skillLevel,context,...(source?{sourcePokemonId:source.id,sourcePokemon:clone(source),sourceSkillId:SK.id(SK.forPokemon(source))}:{})};
   return commit({...state,records:[...state.records,r]},'メインスキルを記録しました。');

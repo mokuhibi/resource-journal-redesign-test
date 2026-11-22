@@ -1,14 +1,24 @@
 'use strict';
 const FieldHistoryUI=(()=>{
- let selected='',start='',editing=null,body=null,ready=false,manualDay='',manualField='';
+ let selected='',start='',editing=null,body=null,ready=false,manualDay='',manualField='',bar=null;
  const stamp=date=>Number.isFinite(date.getTime())?C.localInput(date):'';
  function context(date=recordDate()){const key=stamp(date);if(!key)return {field:'',status:'missing',confirmed:false};return manualDay===C.gameDay(date)?{field:manualField,status:'manual',confirmed:false}:FieldHistory.inherited(state,date);}
  function field(date=recordDate()){return context(date).field;}
  function saved(){manualDay='';manualField='';}
+ function syncBar(){
+  if(!bar)return;
+  const date=recordDate();if(!Number.isFinite(date.getTime()))return;
+  const value=C.localInput(date),day=value.slice(0,10),weekday=['日曜日','月曜日','火曜日','水曜日','木曜日','金曜日','土曜日'][new Date(day+'T12:00:00Z').getUTCDay()];
+  bar.date.textContent=day.replaceAll('-','/')+' '+weekday;
+  bar.compact.textContent=Number(day.slice(5,7))+'/'+Number(day.slice(8))+' '+weekday[0];
+  bar.time.textContent=value.slice(11,16);
+  bar.now.hidden=$('auto-now').checked;
+ }
+ function keepClockField(day){if(manualDay&&manualField)manualDay=day;}
  function select(value,aria){const input=el('select');input.setAttribute('aria-label',aria);input.add(new Option('フィールドを選択',''));for(const f of FieldHistory.definitions)input.add(new Option(f.name,f.id));if(value&&!FieldHistory.fields.includes(value))input.add(new Option(value,value));input.value=value||'';return input;}
  function sync(){
-  if(!ready)return;const root=$('record-field-row'),date=recordDate(),day=Number.isFinite(date.getTime())?C.gameDay(date):'';if(manualDay&&manualDay!==day){manualDay='';manualField='';}const value=context(date);root.replaceChildren();
-  const choice=select(value.field,'記録フィールド');choice.id='record-field';choice.className='record-event-field';const colors=FieldHistory.labelColors(value.field);if(value.field){choice.style.backgroundColor=colors.background;choice.style.color=colors.color;}root.append(choice);
+  if(!ready)return;syncBar();const root=$('record-field-row'),date=recordDate(),day=Number.isFinite(date.getTime())?C.gameDay(date):'';if(manualDay&&manualDay!==day){manualDay='';manualField='';}const value=context(date);root.replaceChildren();
+  const choice=select(value.field,'記録フィールド');choice.id='record-field';choice.className='record-event-field';root.append(choice);
   const hint=$('record-field-hint');hint.replaceChildren();hint.hidden=value.confirmed===true||value.status==='inherited';hint.style.display=hint.hidden?'none':'';
   if(!hint.hidden)hint.append(el('small',value.field?'記録するまで保存されません':'フィールドを選択'));
   choice.onchange=()=>{manualDay=day;manualField=choice.value;sync();render();};
@@ -42,6 +52,13 @@ const FieldHistoryUI=(()=>{
    form.onsubmit=async e=>{e.preventDefault();try{const item={...(original||{}),id:original?.id||uid(),date:toggle.checked&&time.value?C.gameDay(C.fromInput(date.value+'T'+time.value)):date.value,time:toggle.checked?time.value:null,field:fieldInput.value};if(toggle.checked&&!time.value)throw Error('変更時刻を入力してください。');const next=!original||original.scope==='week'?FieldHistory.saveWeek(state,item.date,item.field,item.id,view.confirmed&&original?.confirmed!==false):FieldHistory.save(state,item);if(await commit(next,'フィールドを保存')){selected=item.date;editing=null;sync();render();}}catch(e){error.textContent=e.message;}};box.append(form);}
   body.append(box);
  }
- function init(){const card=$('record').querySelector('.record-date-card'),row=el('div',undefined,'record-date-row'),fieldRow=el('div',undefined,'record-field-row'),hint=el('div',undefined,'record-field-hint');row.append(...card.children);fieldRow.id='record-field-row';hint.id='record-field-hint';card.append(row,fieldRow,hint);ready=true;sync();}
- return {init,sync,context,field,saved,open,showHistory};
+ function init(){
+  const card=$('record').querySelector('.record-date-card'),row=el('div',undefined,'record-date-row'),fieldRow=el('div',undefined,'record-field-row'),hint=el('div',undefined,'record-field-hint'),timeBox=el('div',undefined,'record-bar-time-box');
+  const shift=offset=>{const input=$('datetime'),value=C.localInput(recordDate()),day=C.addDays(value.slice(0,10),offset);input.value=day+value.slice(10);input.dispatchEvent(new Event('input',{bubbles:true}));};
+  const prev=button('‹',()=>shift(-1),'record-bar-arrow'),date=button('',()=>{},'record-bar-date'),full=el('span',undefined,'record-bar-full'),compact=el('span',undefined,'record-bar-compact'),next=button('›',()=>shift(1),'record-bar-arrow'),time=button('',()=>{},'record-bar-time'),now=button('現在',()=>{keepClockField(C.gameDay(new Date()));$('auto-now').checked=true;$('auto-now').dispatchEvent(new Event('change',{bubbles:true}));},'record-bar-now');
+  prev.setAttribute('aria-label','前日');next.setAttribute('aria-label','翌日');date.id='record-bar-date';time.id='record-bar-time';date.setAttribute('aria-label','記録日を選択');time.setAttribute('aria-label','記録時刻を選択');date.append(full,compact);timeBox.append(time,now);
+  const icon=document.createElementNS('http://www.w3.org/2000/svg','svg');icon.setAttribute('viewBox','0 0 24 24');icon.setAttribute('fill','none');icon.setAttribute('stroke','currentColor');icon.setAttribute('stroke-width','2');icon.setAttribute('stroke-linecap','round');icon.setAttribute('stroke-linejoin','round');icon.setAttribute('aria-hidden','true');icon.classList.add('record-bar-field-icon');icon.innerHTML='<path d="m8 3 4 8 5-5 5 15H2L8 3z" />';
+  fieldRow.id='record-field-row';hint.id='record-field-hint';row.append(prev,date,next,timeBox,icon,fieldRow,...card.children);card.append(row,hint);bar={date:full,compact,time,now};ready=true;sync();
+ }
+ return {init,sync,syncBar,keepClockField,context,field,saved,open,showHistory};
 })();

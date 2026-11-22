@@ -28,6 +28,10 @@ const RecordPicker=(()=>{
   trigger.className='record-picker-trigger';trigger.setAttribute('aria-label','記録日時を選択');trigger.setAttribute('aria-haspopup','dialog');
   // 元のinputとイベントは維持し、標準ピッカーを開く操作だけを置き換えます。
   if(!config.dateOnly){input.hidden=true;wrapper.append(trigger);}
+  if(input.id==='datetime'&&document.getElementById('record-bar-date')){
+   trigger.hidden=true;
+   for(const id of ['record-bar-date','record-bar-time'])document.getElementById(id).onclick=()=>trigger.click();
+  }
   function sync(){trigger.textContent=wrapper.querySelector('.date-weekday').textContent;}
   if(!config.dateOnly){new MutationObserver(sync).observe(wrapper.querySelector('.date-weekday'),{childList:true,characterData:true,subtree:true});sync();}
   form.onsubmit=e=>{e.preventDefault();const value=config.dateOnly?day:day+'T'+hour.value+':'+minute.value;
