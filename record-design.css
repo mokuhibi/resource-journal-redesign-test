@@ -261,6 +261,7 @@ body .tabs .tab-icon{width:12px;height:12px}
 #record #action-skills .pokemon-section-name{color:#ff7d61;font-weight:700}
 #record #action-skills .pokemon-section-count{margin-left:auto;font-size:18px;color:#777;white-space:nowrap}
 #record #action-skills .pokemon-figma-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:10px;align-items:end;min-width:0;padding:0 0 10px;border-bottom:1px solid var(--record-line);background:#fffcf6}
+#record #action-skills .pokemon-figma-row:is(.figma-copy,.figma-lucky-shards),#record #action-skills .pokemon-figma-row:not(.figma-mew):not(.figma-delibird):not(.figma-copy):not(.figma-random-shards):not(.figma-lucky-shards){margin-right:-16px}
 #record #action-skills .pokemon-figma-identity{display:grid;grid-template-columns:minmax(0,1fr) 40px;grid-template-rows:40px 20px;align-items:center;min-width:0;max-width:170px;padding-top:10px;transform:translateX(-6px)}
 #record #action-skills .pokemon-figma-words{grid-column:1;grid-row:1;display:flex;flex-direction:column;gap:5px;align-self:start;min-width:0;line-height:1.2;transform:translateY(5px)}
 #record #action-skills .pokemon-figma-words strong{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -274,6 +275,7 @@ body .tabs .tab-icon{width:12px;height:12px}
 #record #action-skills .pokemon-figma-candy>.pokemon-figma-icon,#record #action-skills .pokemon-figma-action>.pokemon-figma-icon{display:block;width:27px;height:27px;background:currentColor;mask-size:contain;mask-position:center;mask-repeat:no-repeat}
 #record #action-skills .pokemon-figma-candy>.pokemon-figma-icon{background:var(--pokemon-type-color,#555);mask-image:url('assets/record-pokemon/candy.svg')}
 #record #action-skills .pokemon-figma-controls{display:flex;align-items:center;justify-content:flex-start;min-width:0;min-height:40px}
+#record #action-skills .pokemon-figma-row:not(.figma-mew):not(.figma-delibird):not(.figma-copy)>.pokemon-figma-controls{justify-content:flex-end;padding-right:4px}
 #record #action-skills .pokemon-figma-row .pokemon-figma-action:not(:disabled){background:#fefefe;color:#555;border-color:#bfbfbf}
 #record #action-skills .pokemon-figma-row .pokemon-figma-candy:not(:disabled){background:#fefefe;color:#555;border-color:#bfbfbf}
 #record #action-skills .pokemon-figma-row button:active:not(:disabled){background:#f2f2f2}
@@ -312,6 +314,12 @@ body .tabs .tab-icon{width:12px;height:12px}
 #record #action-skills .pokemon-figma-body .activation-targets .skill-only-target button{min-width:66px}
 #record #action-skills .pokemon-figma-body .copy-targets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:8px}
 #record #action-skills .pokemon-figma-body .copy-targets button{min-width:0;min-height:38px;padding:4px;font-size:12px;overflow-wrap:anywhere}
+#record #action-skills .figma-copy:not([data-selected-source]) .copy-targets{column-gap:32px;row-gap:10px;margin:10px 0 0;padding:0 5px}
+#record #action-skills .figma-copy-option{display:grid;grid-template-rows:15px 40px;min-width:0;min-height:60px}
+#record #action-skills .figma-copy-name{color:#777;font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#record #action-skills .figma-copy-option button.pokemon-figma-action{justify-self:end;width:40px;min-width:40px;height:40px;min-height:40px;padding:0;border:1px solid #bfbfbf;border-radius:50%;box-shadow:0 1px 0 #888;background:#fefefe}
+#record #action-skills .figma-copy-option button>.pokemon-figma-icon{background:#ffc600}
+#record #action-skills .figma-copy:not([data-selected-source])>.pokemon-figma-controls{visibility:hidden}
 #record #action-skills .pokemon-figma-body .copy-targets button[aria-pressed=true]{background:#fff4d2;border:1px solid #ffc600}
 #record #action-skills .pokemon-figma-row[data-selected-source] .copy-targets{grid-template-columns:1fr}
 #record #action-skills .pokemon-figma-row[data-selected-source] .copy-targets button:not([aria-pressed=true]){display:none}
@@ -327,6 +335,13 @@ body .tabs .tab-icon{width:12px;height:12px}
 #record #action-skills .pokemon-figma-controls .shard-lucky-actions{display:flex;gap:3px}
 #record #action-skills .pokemon-figma-controls .shard-lucky-actions button{min-width:34px;min-height:40px;padding:2px;font-size:11px}
 #record #action-skills .pokemon-figma-controls .shard-amount-option button{min-width:64px;padding:3px 8px;border:1px solid #bfbfbf;border-radius:20px;box-shadow:0 1px 0 #888;background:#fefefe;font-size:15px;font-weight:700}
+#record #action-skills .figma-lucky-shards{padding-bottom:20px}
+#record #action-skills .figma-lucky-shard-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px;margin-top:10px;padding:0 4px}
+#record #action-skills .figma-lucky-shard-choice{display:flex;align-items:center;justify-content:flex-end;gap:24px;min-width:0;min-height:50px}
+#record #action-skills .figma-lucky-shard-choice strong{color:#555;font-size:15px;font-weight:700;white-space:nowrap}
+#record #action-skills .figma-lucky-shards .pokemon-figma-action>.pokemon-figma-icon{background:#ffbd00}
+@media(max-width:359px){#record #action-skills .figma-lucky-shard-choices{column-gap:10px}#record #action-skills .figma-lucky-shard-choice{gap:10px}#record #action-skills .figma-copy:not([data-selected-source]) .copy-targets{column-gap:10px}}
+@media(max-width:359px){#record #action-skills .pokemon-figma-row:is(.figma-copy,.figma-lucky-shards),#record #action-skills .pokemon-figma-row:not(.figma-mew):not(.figma-delibird):not(.figma-copy):not(.figma-random-shards):not(.figma-lucky-shards){margin-right:-6px}}
 @media(max-width:359px){#record #action-skills .pokemon-figma-row{column-gap:6px}#record #action-skills .pokemon-figma-identity{grid-template-columns:minmax(0,1fr) 36px}#record #action-skills .pokemon-figma-candy,#record #action-skills .pokemon-figma-action{width:36px;min-width:36px;height:36px;min-height:36px}#record #action-skills .pokemon-figma-body .activation-targets{gap:6px 5px;padding:0 2px}#record #action-skills .pokemon-figma-body .activation-targets .record-row-content>strong{font-size:10px}#record #action-skills .pokemon-figma-body .activation-targets .record-row-content>strong>span:last-child{display:block}#record #action-skills .pokemon-figma-body .activation-targets .mew-actions{gap:2px}#record #action-skills .pokemon-figma-body .activation-targets .mew-actions button{width:36px;min-width:36px;height:36px;min-height:36px}}
 
 /* 完成見本：ミュウ基本（Lv.1〜5／Lv.6以上）。既存の獲得数ボタンを同じ円形の位置に置く。 */
