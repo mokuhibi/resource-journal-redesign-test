@@ -288,6 +288,7 @@ body .tabs .tab-icon{width:12px;height:12px}
 #record #action-skills [data-icon=copy]>.pokemon-figma-icon{mask-image:url('assets/record-pokemon/copy.svg')}
 #record #action-skills [data-icon=back]>.pokemon-figma-icon{mask-image:url('assets/record-pokemon/back.svg')}
 #record #action-skills [data-icon=metronome]>.pokemon-figma-icon{mask-image:url('assets/record-pokemon/flame.svg')}
+#record #action-skills .pokemon-figma-action[data-skill-svg]>.pokemon-figma-icon{background:var(--skill-svg) center/contain no-repeat;mask:none}
 #record #action-skills .pokemon-figma-skill[data-icon=metronome]>.pokemon-figma-icon{mask:none;background:var(--skill-color)}
 #record #action-skills .pokemon-figma-skill[data-icon=flame]>.pokemon-figma-icon::after,#record #action-skills .pokemon-figma-skill[data-icon=metronome]>.pokemon-figma-icon::after{mask-image:url('assets/record-pokemon/flame.svg')}
 #record #action-skills .pokemon-figma-skill[data-icon=stone]>.pokemon-figma-icon::after{mask-image:url('assets/record-pokemon/stone.svg')}
@@ -324,6 +325,7 @@ body .tabs .tab-icon{width:12px;height:12px}
 #record #action-skills .pokemon-figma-row[data-selected-source] .copy-targets{grid-template-columns:1fr}
 #record #action-skills .pokemon-figma-row[data-selected-source] .copy-targets button:not([aria-pressed=true]){display:none}
 #record #action-skills .pokemon-figma-row[data-selected-source] .pokemon-figma-controls .pokemon-figma-action:last-child>.pokemon-figma-icon{background:var(--skill-color,currentColor)}
+#record #action-skills .pokemon-figma-row[data-selected-source] .pokemon-figma-controls .pokemon-figma-action[data-skill-svg]:last-child>.pokemon-figma-icon{background:var(--skill-svg) center/contain no-repeat}
 #record #action-skills .pokemon-figma-shard{display:contents}
 #record #action-skills .pokemon-figma-shard>.shard-record-name{display:none}
 #record #action-skills .pokemon-figma-controls .shard-skill-form{display:flex;gap:3px;align-items:center;margin:0}
@@ -340,6 +342,7 @@ body .tabs .tab-icon{width:12px;height:12px}
 #record #action-skills .figma-lucky-shard-choice{display:flex;align-items:center;justify-content:flex-end;gap:24px;min-width:0;min-height:50px}
 #record #action-skills .figma-lucky-shard-choice strong{color:#555;font-size:15px;font-weight:700;white-space:nowrap}
 #record #action-skills .figma-lucky-shards .pokemon-figma-action>.pokemon-figma-icon{background:#ffbd00}
+#record #action-skills .figma-lucky-shards .pokemon-figma-action[data-skill-svg]>.pokemon-figma-icon{background:var(--skill-svg) center/contain no-repeat}
 @media(max-width:359px){#record #action-skills .figma-lucky-shard-choices{column-gap:10px}#record #action-skills .figma-lucky-shard-choice{gap:10px}#record #action-skills .figma-copy:not([data-selected-source]) .copy-targets{column-gap:10px}}
 @media(max-width:359px){#record #action-skills .pokemon-figma-row:is(.figma-copy,.figma-lucky-shards),#record #action-skills .pokemon-figma-row:not(.figma-mew):not(.figma-delibird):not(.figma-copy):not(.figma-random-shards):not(.figma-lucky-shards){margin-right:-6px}}
 @media(max-width:359px){#record #action-skills .pokemon-figma-row{column-gap:6px}#record #action-skills .pokemon-figma-identity{grid-template-columns:minmax(0,1fr) 36px}#record #action-skills .pokemon-figma-candy,#record #action-skills .pokemon-figma-action{width:36px;min-width:36px;height:36px;min-height:36px}#record #action-skills .pokemon-figma-body .activation-targets{gap:6px 5px;padding:0 2px}#record #action-skills .pokemon-figma-body .activation-targets .record-row-content>strong{font-size:10px}#record #action-skills .pokemon-figma-body .activation-targets .record-row-content>strong>span:last-child{display:block}#record #action-skills .pokemon-figma-body .activation-targets .mew-actions{gap:2px}#record #action-skills .pokemon-figma-body .activation-targets .mew-actions button{width:36px;min-width:36px;height:36px;min-height:36px}}
@@ -355,6 +358,7 @@ body .tabs .tab-icon{width:12px;height:12px}
 #record #action-skills .figma-mew .activation-targets .candy-target-row:nth-child(odd) .mew-actions{margin-right:0}
 #record #action-skills .figma-mew .pokemon-figma-mew-amount{position:relative;display:grid;place-items:center}
 #record #action-skills .figma-mew .pokemon-figma-mew-amount>.pokemon-figma-icon{width:22px;height:25px;background:var(--skill-color,#f5ad13);mask-image:var(--skill-icon);mask-size:contain;mask-position:center;mask-repeat:no-repeat}
+#record #action-skills .figma-mew .pokemon-figma-mew-amount[data-skill-svg]>.pokemon-figma-icon{background:var(--skill-svg) center/contain no-repeat;mask:none}
 #record #action-skills .figma-mew .pokemon-figma-mew-amount>.pokemon-figma-amount{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:15px;line-height:1;font-weight:700;color:#555;text-shadow:0 1px #fff,1px 0 #fff,-1px 0 #fff}
 #record #action-skills .figma-mew-random .activation-targets{margin-top:15px}
 #record #action-skills .figma-mew-random .activation-targets .candy-target-row{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:15px 36px;column-gap:4px;align-items:center;min-height:60px}
@@ -402,5 +406,6 @@ body .tabs .tab-icon{width:12px;height:12px}
 #record #action-skills .figma-copy-lucky .figma-lucky-choice strong{font-size:15px;font-weight:700;color:#555;font-variant-numeric:tabular-nums;white-space:nowrap}
 #record #action-skills .figma-copy-lucky .figma-lucky-choice button{width:40px;min-width:40px;height:40px;min-height:40px;padding:0;border:1px solid #bfbfbf;border-radius:50%;box-shadow:0 1px 0 #888;background:#fefefe}
 #record #action-skills .figma-copy-lucky .figma-lucky-choice .pokemon-figma-icon{display:block;width:27px;height:27px;background:#f5bd00;mask-size:contain;mask-position:center;mask-repeat:no-repeat}
+#record #action-skills .figma-copy-lucky .figma-lucky-choice [data-skill-svg]>.pokemon-figma-icon{background:var(--skill-svg) center/contain no-repeat;mask:none}
 #record #action-skills .figma-copy-lucky .figma-lucky-choice [data-icon=stone] .pokemon-figma-icon{mask-image:url('assets/record-pokemon/stone.svg')}
 #record #action-skills .figma-copy-lucky .figma-lucky-choice [data-icon=apple] .pokemon-figma-icon{mask-image:url('assets/record-pokemon/apple.svg')}
