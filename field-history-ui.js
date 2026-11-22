@@ -1,6 +1,7 @@
 'use strict';
 const FieldHistoryUI=(()=>{
  let selected='',start='',editing=null,body=null,ready=false,manualDay='',manualField='',bar=null;
+ const fieldIcons=Object.fromEntries(['ワカクサ本島','シアンの砂浜','トープ洞窟','ウノハナ雪原','ラピスラズリ湖畔','ゴールド旧発電所','アンバー渓谷'].map(name=>[name,'assets/record-fields/'+encodeURIComponent(name)+'.svg']));
  const stamp=date=>Number.isFinite(date.getTime())?C.localInput(date):'';
  function context(date=recordDate()){const key=stamp(date);if(!key)return {field:'',status:'missing',confirmed:false};return manualDay===C.gameDay(date)?{field:manualField,status:'manual',confirmed:false}:FieldHistory.inherited(state,date);}
  function field(date=recordDate()){return context(date).field;}
@@ -23,7 +24,7 @@ const FieldHistoryUI=(()=>{
   const choice=select(value.field,'記録フィールド');choice.id='record-field';choice.className='record-event-field';root.append(choice);
   const hint=$('record-field-hint');hint.replaceChildren();hint.hidden=value.confirmed===true||value.status==='inherited';hint.style.display=hint.hidden?'none':'';
   if(!hint.hidden)hint.append(el('small',value.field?'記録するまで保存されません':'フィールドを選択'));
-  bar.icon.style.color=FieldHistory.info(choice.value).color;
+  const icon=fieldIcons[choice.value];bar.icon.style.visibility=icon?'visible':'hidden';if(icon)bar.icon.src=icon;else bar.icon.removeAttribute('src');
   choice.onchange=()=>{manualDay=day;manualField=choice.value;sync();render();};
  }
 
@@ -69,7 +70,7 @@ const FieldHistoryUI=(()=>{
   dateInput.onchange=()=>{if(Number.isFinite(C.fromInput(dateInput.value).getTime()))apply(dateInput.value);};
   timeInput.onchange=()=>{if(/^([01]\d|2[0-3]):[0-5]\d$/.test(timeInput.value))apply((timeBase||C.localInput(recordDate())).slice(0,11)+timeInput.value);};
   prev.setAttribute('aria-label','前日');next.setAttribute('aria-label','翌日');date.id='record-bar-date';time.id='record-bar-time';date.append(full,compact);dateTap.append(date,dateInput);timeTap.append(time,timeInput);timeBox.append(timeTap,now);
-  const icon=document.createElementNS('http://www.w3.org/2000/svg','svg');icon.setAttribute('viewBox','0 0 24 24');icon.setAttribute('fill','none');icon.setAttribute('stroke','currentColor');icon.setAttribute('stroke-width','2');icon.setAttribute('stroke-linecap','round');icon.setAttribute('stroke-linejoin','round');icon.setAttribute('aria-hidden','true');icon.classList.add('record-bar-field-icon');icon.innerHTML='<path d="m8 3 4 8 5-5 5 15H2L8 3z" />';
+  const icon=el('img');icon.alt='';icon.className='record-bar-field-icon';
   fieldRow.id='record-field-row';hint.id='record-field-hint';row.append(prev,dateTap,next,timeBox,icon,fieldRow,...card.children);card.append(row,hint);bar={date:full,compact,time,now,dateInput,timeInput,icon};ready=true;sync();
  }
  return {init,sync,syncBar,keepClockField,context,field,saved,open,showHistory};
