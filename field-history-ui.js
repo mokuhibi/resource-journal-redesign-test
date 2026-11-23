@@ -3,7 +3,7 @@ const FieldHistoryUI=(()=>{
  let selected='',start='',editing=null,body=null,ready=false,manualDay='',manualField='',bar=null;
  const fieldIcons=Object.fromEntries(['ワカクサ本島','シアンの砂浜','トープ洞窟','ウノハナ雪原','ラピスラズリ湖畔','ゴールド旧発電所','アンバー渓谷'].map(name=>[name,'assets/record-fields/'+encodeURIComponent(name)+'.svg']));
  const stamp=date=>Number.isFinite(date.getTime())?C.localInput(date):'';
- function context(date=recordDate()){const key=stamp(date);if(!key)return {field:'',status:'missing',confirmed:false};return manualDay===C.gameDay(date)?{field:manualField,status:'manual',confirmed:false}:FieldHistory.inherited(state,date);}
+ function context(date=recordDate()){const key=stamp(date);if(!key)return {field:'',status:'missing',confirmed:false};const day=C.gameDay(date);if(manualDay===day)return {field:manualField,status:'manual',confirmed:false};const selected=state.settings?.recordFieldSelection;if(day===C.gameDay(new Date())&&(selected===''||FieldHistory.fields.includes(selected)))return {field:selected,status:'manual',confirmed:false};return FieldHistory.inherited(state,date);}
  function field(date=recordDate()){return context(date).field;}
  function saved(){manualDay='';manualField='';}
  function syncBar(){
@@ -22,10 +22,9 @@ const FieldHistoryUI=(()=>{
  function sync(){
   if(!ready)return;syncBar();const root=$('record-field-row'),date=recordDate(),day=Number.isFinite(date.getTime())?C.gameDay(date):'';if(manualDay&&manualDay!==day){manualDay='';manualField='';}const value=context(date);root.replaceChildren();
   const choice=select(value.field,'記録フィールド');choice.id='record-field';choice.className='record-event-field';root.append(choice);
-  const hint=$('record-field-hint');hint.replaceChildren();hint.hidden=value.confirmed===true||value.status==='inherited';hint.style.display=hint.hidden?'none':'';
-  if(!hint.hidden)hint.append(el('small',value.field?'記録するまで保存されません':'フィールドを選択'));
+  const hint=$('record-field-hint');hint.replaceChildren();hint.hidden=true;hint.style.display='none';
   const icon=fieldIcons[choice.value];bar.icon.style.visibility=icon?'visible':'hidden';if(icon)bar.icon.src=icon;else bar.icon.removeAttribute('src');
-  choice.onchange=()=>{manualDay=day;manualField=choice.value;sync();render();};
+  choice.onchange=async()=>{const field=choice.value;if(await commit({...state,settings:{...state.settings,recordFieldSelection:field}},null,false,true)){manualDay=day;manualField=field;sync();render();}else sync();};
  }
 
  function showHistory(root){body=root;if(!selected){selected=C.gameDay(new Date());start=selected.slice(0,7)+'-01';}render();}

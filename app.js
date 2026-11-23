@@ -84,11 +84,11 @@ let sorting=false,editingId=null,editPool=[],historyEditDone=null,historyEditCan
 async function load(){try{state=await JournalStorage.load(KEY,()=>fresh(),raw=>C.migrate(raw,candyMap));blocked=false;}catch(e){blocked=true;notice('保存データを読み込めません。上書きを停止しました：'+e.message,true);}}
 // 履歴と編成をまとめて保存。保存できた時だけ画面の状態を確定します。
 let saving=false;
-async function commit(next,message,refresh=true){
+async function commit(next,message,refresh=true,settingsOnly=false){
  if(blocked||saving){notice(blocked?'保存を停止しています。再読み込みする前にバックアップを確認してください。':'前の保存が完了するまでお待ちください。',true);return false;}
  try{
   if(message!=='バックアップを復元しました。'&&Professor.linkedLosses(state,next).length&&!confirm('GETを取り消すと、紐付く博士送りまたは仮登録も取り消されます。続けますか？'))return false;
-  const checked=C.migrate(message==='バックアップを復元しました。'?next:Professor.reconcile(state,FieldHistory.syncSaved(state,next)),candyMap);
+  const checked=C.migrate(settingsOnly||message==='バックアップを復元しました。'?next:Professor.reconcile(state,FieldHistory.syncSaved(state,next)),candyMap);
   const fieldSaved=JSON.stringify((checked.fieldHistory||[]).filter(r=>r.scope==='record'))!==JSON.stringify((state.fieldHistory||[]).filter(r=>r.scope==='record'));
   saving=true;await JournalStorage.save(checked);state=checked;saving=false;
   if(fieldSaved&&typeof FieldHistoryUI!=='undefined')FieldHistoryUI.saved();
