@@ -636,14 +636,14 @@ body[data-main-tab=settings]{--main-tab-color:#CBCBCD;--main-tab-bg:#FCFCFD}
 body[data-main-tab]{background:var(--main-tab-bg)!important}
 body[data-main-tab] .app{min-height:100dvh;padding-bottom:calc(166px + env(safe-area-inset-bottom));background:var(--main-tab-bg)!important}
 body .tabs,body:has(#record[hidden]) .tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));height:calc(98px + env(safe-area-inset-bottom));max-width:840px;width:100vw;right:auto;left:0;transform:none;margin:auto;padding:7px 0 calc(7px + env(safe-area-inset-bottom));gap:0;border:0;border-top:2px solid #00c77a;background:#f2faf6;backdrop-filter:none}
-body .tabs button,body:has(#record[hidden]) .tabs button{display:flex;flex-direction:column-reverse;align-items:center;justify-content:flex-end;gap:4px;height:70px;min-height:0;padding:0 1px;border:0;border-radius:0;background:none;box-shadow:none;font-size:12px;font-weight:700;color:var(--tab-color)!important;white-space:nowrap}
+body .tabs button.has-tab-icon,body:has(#record[hidden]) .tabs button.has-tab-icon{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:29px 22px;align-content:start;justify-items:center;row-gap:4px;box-sizing:border-box;width:100%;height:70px;min-height:70px;margin:0;padding:0 1px;border:0;border-radius:0;background:none;box-shadow:none;font-size:12px;font-weight:700;color:var(--tab-color)!important;white-space:nowrap}
 body .tabs button[data-tab=record]{--tab-color:#FFA81B}
 body .tabs button[data-tab=analysis]{--tab-color:#00D3F3}
 body .tabs button[data-tab=team]{--tab-color:#FF7D61}
 body .tabs button[data-tab=bag]{--tab-color:#FFC12A}
 body .tabs button[data-tab=settings]{--tab-color:#CBCBCD}
-body .tabs .tab-label{display:flex;align-items:center;justify-content:center;width:calc(100% - 6px);height:29px;min-height:29px;padding:0 2px;border-radius:17px;font-size:12px;line-height:1;white-space:nowrap}
-body .tabs .tab-icon{width:22px;height:22px;flex:none}
+body .tabs .tab-label{grid-column:1;grid-row:1;display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:calc(100% - 6px);height:29px;min-height:29px;margin:0;padding:0 2px;border-radius:17px;font-size:12px;line-height:1;white-space:nowrap}
+body .tabs .tab-icon{grid-column:1;grid-row:2;display:block;width:22px;height:22px;margin:0;flex:none}
 body .tabs button[data-tab=record] .tab-icon{visibility:hidden}
 body .tabs button[data-tab=record]::after{content:'';position:absolute;top:33px;left:calc(50% - 11px);width:22px;height:22px;background:currentColor;-webkit-mask:url('assets/record-tabs/record.svg') center/contain no-repeat;mask:url('assets/record-tabs/record.svg') center/contain no-repeat}
 body .tabs button[aria-current=page] .tab-label{background:var(--tab-color);color:#fff}
