@@ -38,7 +38,7 @@ const IndividualDev=(()=>{
   const registerHead=el('div',undefined,'individual-editor-head'),registerTitle=$('register-panel').querySelector('h2'),registerActions=el('div',undefined,'profile-editor-actions');const cancel=button('キャンセル',()=>{if(typeof ProfessorUI!=='undefined'&&ProfessorUI.registrationTarget())ProfessorUI.finishRegistration();else TeamUI.show('team');}),save=$('add-pokemon');save.textContent='保存';registerActions.append(cancel,save);registerHead.append(registerTitle,registerActions);$('register-panel').prepend(registerHead);
   sync();
  }
- return {init,sync,subs,nature,natureEffect};
+ return {init,sync,subs,nature,natureEffect,rank};
 })();
 
 if(typeof module!=='undefined')module.exports=IndividualDev;

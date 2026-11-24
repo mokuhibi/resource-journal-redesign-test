@@ -90,7 +90,7 @@ const TeamUI=(()=>{
    if(file){const img=el('img');img.className='box-compact-ingredient';img.src='assets/ingredients/'+file+'.svg';img.alt=item;row.append(img);}
    else{const fallback=el('span',item,'box-compact-ingredient-fallback');fallback.title=item;row.append(fallback);}
   }card.append(row);}
-  const specialty=({berry:'きのみ',ingredient:'食材',skill:'スキル'})[pokemonSpecialties[p.species]];
+  const specialty=({berry:'きのみ',ingredient:'食材',skill:'スキル',all:'オール'})[pokemonSpecialties[p.species]];
   if(specialty){const badge=el('small',specialty,'box-compact-specialty');PokemonTypes.applySpecialty(badge,pokemonSpecialties[p.species]);card.append(badge);}
   if(mode==='team')card.append(levelRow);
   card.append(el('small',p.nickname?.trim()||species,'box-compact-nickname'));
