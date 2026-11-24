@@ -46,8 +46,8 @@ const TeamUI=(()=>{
   for(const b of document.querySelectorAll('[data-team-view]')){b.setAttribute('aria-selected',String(b.dataset.teamView===view));b.tabIndex=b.dataset.teamView===view?0:-1;}
   syncEntry();
  }
- function show(name,entry=''){view=name;editing=false;if(name==='register'){registerEntry=entry;selected='';catalogOpen=false;$('pokemon-search').value='';$('add-pokemon').disabled=true;ProfileForm.reset('');}sync();window.scrollTo({top:0});}
- function edit(origin='roster'){editOrigin=['team','roster'].includes(origin)?origin:'roster';view=editOrigin;editing=true;sync();window.scrollTo({top:0});$('profile-back').focus({preventScroll:true});}
+ function show(name,entry=''){view=name;editing=false;if(name==='register'){registerEntry=entry;selected='';catalogOpen=false;$('pokemon-search').value='';$('nickname').value='';$('add-pokemon').disabled=true;ProfileForm.reset('');RegistrationDesign.select();}sync();window.scrollTo({top:0});}
+ function edit(origin='roster'){editOrigin=['team','roster'].includes(origin)?origin:'roster';view=editOrigin;editing=true;sync();RegistrationDesign.edit();window.scrollTo({top:0});$('profile-back').focus({preventScroll:true});}
  function finishEdit(){show(editOrigin);}
  function registration(){$('registration-fields').hidden=false;ProfileForm.refresh(selected);}
  function renderRoster(root=$('registered-pokemon-list'),displayView=rosterView,search=$('roster-search').value){

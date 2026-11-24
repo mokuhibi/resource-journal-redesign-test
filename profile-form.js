@@ -16,13 +16,14 @@ const ProfileForm=(()=>{
   const v=p?.importedIndividual||{};
   for(let i=0;i<3;i++)$(prefix+'ingredient-'+i).value=v.ingredients?.[i]||'';
   $(prefix+'sleep-hours').value=v.sleepHours??'';$(prefix+'shiny').checked=v.shiny===true;
+  if($(prefix+'met-date'))$(prefix+'met-date').value=v.metDate||'';
  }
  function supplemental(prefix,p){
-  if(p)return {...p.importedIndividual,shiny:$(prefix+'shiny').checked};
   const value=$(prefix+'sleep-hours').value;
   if(value!==''&&(!Number.isInteger(Number(value))||Number(value)<0||Number(value)>1000000))throw Error('一緒に眠った時間を確認してください。');
   const v={...p?.importedIndividual,ingredients:Array.from({length:3},(_,i)=>$(prefix+'ingredient-'+i).value),shiny:$(prefix+'shiny').checked};
   if(value!=='')v.sleepHours=Number(value);else delete v.sleepHours;
+  const metDate=$(prefix+'met-date')?.value;if(metDate)v.metDate=metDate;else delete v.metDate;
   return v;
  }
  function layout(prefix){
