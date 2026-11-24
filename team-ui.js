@@ -67,16 +67,33 @@ const TeamUI=(()=>{
   if(!visible.length)root.append(el('p',q?'一致する登録ポケモンがありません。':'表示できる登録ポケモンがありません。'));
  }
  const combinedTeam=page=>page===0?state.team:(savedTeam(page-1).team||Array(5).fill(null));
- function compactCard(p){
-  const card=el('div',undefined,'box-compact-card');
+ function compactCard(p,mode){
+  const card=el('div',undefined,'box-compact-card box-compact-'+mode);
   if(!p)return card;
   typeBorder(card,p);
-  const species=C.speciesName(p.species)||'未確認',lv=level(p),skill=SK.name(SK.forPokemon(p));
+  const species=C.speciesName(p.species)||'未確認',lv=level(p),skill=SK.name(SK.forPokemon(p)),skillLv=p.profile?.skillLevel??p.importedIndividual?.mainSkillLevel;
+  const levelRow=el('div',undefined,'box-compact-level-row');if(lv!==null)levelRow.append(el('small','Lv.'+lv,'box-compact-level'));
+  const type=card.dataset.pokemonTypeLabel?el('small',card.dataset.pokemonTypeLabel,'box-compact-type'):null;
+  if(mode==='box')card.append(levelRow);
+  if(type)card.append(type);
   card.append(el('span',species,'box-compact-name'));
-  const meta=el('div',undefined,'box-compact-meta');if(lv!==null)meta.append(el('small','Lv.'+lv,'box-compact-level'));if(card.dataset.pokemonTypeLabel)meta.append(el('small',card.dataset.pokemonTypeLabel,'box-compact-type'));card.append(meta);
+  if(SK.forPokemon(p)){
+   const row=el('div',undefined,'box-compact-skill-row'),icon=el('span',undefined,'box-compact-skill-icon'),[file,color]=SkillActions.appearance(p);
+   icon.style.setProperty('--card-skill-icon',`url("assets/record-pokemon/${file}.svg")`);icon.style.backgroundColor=color;row.title=skill;row.append(icon);
+   if(Number(skillLv)>0)row.append(el('small','Lv.'+skillLv,'box-compact-skill-level'));
+   card.append(row);
+  }
   const ingredients=(p.importedIndividual?.ingredients||[]).filter(Boolean);
-  if(ingredients.length){const row=el('div',undefined,'box-compact-ingredients');for(const item of ingredients.slice(0,3)){const mark=el('span',item,'box-compact-ingredient');mark.title=item;row.append(mark);}card.append(row);}
-  if(skill)card.append(el('small',skill,'box-compact-skill'));
+  if(ingredients.length){const row=el('div',undefined,'box-compact-ingredients');for(const item of ingredients.slice(0,3)){
+   const key=Object.entries(IndividualImportMaps.ingredients).find(([english,japanese])=>/^[a-z]+$/.test(english)&&japanese===item)?.[0];
+   const file=key==='soy'?'Soybean':key?key[0].toUpperCase()+key.slice(1):null;
+   if(file){const img=el('img');img.className='box-compact-ingredient';img.src='assets/ingredients/'+file+'.svg';img.alt=item;row.append(img);}
+   else{const fallback=el('span',item,'box-compact-ingredient-fallback');fallback.title=item;row.append(fallback);}
+  }card.append(row);}
+  const specialty=({berry:'きのみ',ingredient:'食材',skill:'スキル'})[pokemonSpecialties[p.species]];
+  if(specialty)card.append(el('small',specialty,'box-compact-specialty'));
+  if(mode==='team')card.append(levelRow);
+  card.append(el('small',p.nickname?.trim()||species,'box-compact-nickname'));
   return card;
  }
  function renderCombined(){
@@ -90,7 +107,7 @@ const TeamUI=(()=>{
    for(let i=0;i<5;i++){
     const p=state.pokemon.find(p=>p.id===team[i]),slot=button('',()=>{selectedSlot=selectedSlot?.page===page&&selectedSlot.slot===i?null:{page,slot:i};renderCombinedSelection();},'team-combined-slot');
     slot.dataset.page=String(page);slot.dataset.slot=String(i);slot.setAttribute('aria-label',(page===0?'現在のチーム':savedTeam(page-1).name)+' '+(i===0?'1R':i+1)+'枠 '+(p?label(p):'空き枠'));
-    slot.append(el('span',i===0?'1R':String(i+1),'team-combined-slot-number'),compactCard(p));if(p)slot.append(el('small',p.nickname?.trim()||C.speciesName(p.species),'team-combined-nickname'));slots.append(slot);
+    slot.append(el('span',i===0?'1R':String(i+1),'team-combined-slot-number'),compactCard(p,'team'));slots.append(slot);
    }
    wrap.append(head,slots);track.append(wrap);
    const dot=button('',()=>{track.scrollTo({left:track.clientWidth*page,behavior:'smooth'});},'team-combined-dot');dot.setAttribute('aria-label',(page===0?'現在のチーム':savedTeam(page-1).name)+'を表示');dots.append(dot);
@@ -100,7 +117,7 @@ const TeamUI=(()=>{
   const query=normalize($('roster-search').value);box.replaceChildren();
   for(const p of state.pokemon.filter(p=>!query||[p.species,C.speciesName(p.species),p.nickname].some(v=>normalize(v||'').includes(query)))){
    const b=button('',()=>selectedSlot?assignCombined(p):openIndividualEditor(p,'team'),'team-combined-pokemon');b.dataset.pokemonId=p.id;b.setAttribute('aria-label',label(p)+(selectedSlot?'を編成':'の個体情報を表示'));
-   b.append(compactCard(p),el('small',p.nickname?.trim()||C.speciesName(p.species),'team-combined-nickname'));box.append(b);
+   b.append(compactCard(p,'box'));box.append(b);
   }
   if(!box.children.length)box.append(el('p',query?'一致するポケモンがありません。':'登録済みポケモンがありません。'));
   renderCombinedSelection();
@@ -110,7 +127,7 @@ const TeamUI=(()=>{
   for(const slot of $('team-combined-track').querySelectorAll('.team-combined-slot'))slot.classList.toggle('is-selected',Number(slot.dataset.page)===selectedSlot?.page&&Number(slot.dataset.slot)===selectedSlot?.slot);
   for(const b of $('team-combined-box').querySelectorAll('.team-combined-pokemon')){
    const slot=team.indexOf(b.dataset.pokemonId);b.classList.toggle('is-teammate',slot>=0);b.setAttribute('aria-label',b.getAttribute('aria-label').replace(/を編成$|の個体情報を表示$/,'')+(selectedSlot?'を編成':'の個体情報を表示'));
-   let mark=b.querySelector('.team-combined-member-mark');if(mark)mark.remove();if(slot>=0){mark=el('span',slot===0?'1R':String(slot+1),'team-combined-member-mark');b.querySelector('.box-compact-meta').prepend(mark);}
+   let mark=b.querySelector('.team-combined-member-mark');if(mark)mark.remove();if(slot>=0){mark=el('span',slot===0?'1R':String(slot+1),'team-combined-member-mark');b.querySelector('.box-compact-level-row').prepend(mark);}
   }
   [...$('team-combined-dots').children].forEach((dot,i)=>dot.setAttribute('aria-current',i===combinedPage?'true':'false'));
  }

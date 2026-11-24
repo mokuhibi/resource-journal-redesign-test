@@ -673,26 +673,39 @@ body .tabs button:not(:last-child) .tab-label::after{content:'';position:absolut
 #team-combined .team-combined-name>input{width:140px}
 #team-combined .team-combined-name .team-combined-save{min-width:0;min-height:22px;height:22px;margin:0;padding:2px 8px;border:1px solid #ff7d61;border-radius:20px;background:#fff;color:#ff7d61;font-size:10px;box-shadow:none}
 #team-combined .team-combined-slots{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
-#team-combined .team-combined-slot{box-sizing:border-box;position:relative;display:flex;flex-direction:column;min-width:0;width:100%;height:102px;min-height:102px;margin:0;padding:0;border:1px solid transparent;border-radius:5px;background:#fffbdc;color:#303030;text-align:left;box-shadow:none}
+#team-combined .team-combined-slot{box-sizing:border-box;position:relative;display:flex;flex-direction:column;min-width:0;width:100%;height:112px;min-height:112px;margin:0;padding:0;border:1px solid transparent;border-radius:5px;background:#fffbdc;color:#303030;text-align:left;box-shadow:none}
 #team-combined .team-combined-slot.is-selected{border:2px solid #ff4e48}
 #team-combined .team-combined-slot-number{display:block;height:16px;padding-left:2px;font-size:10px;font-weight:700;line-height:16px}
-#team-combined .team-combined-slot .box-compact-card{width:100%;height:69px;min-height:0;border:0;background:transparent}
+#team-combined .team-combined-slot .box-compact-card{width:100%;height:94px;min-height:0;padding:0 1px;border:0;border-radius:0;background:transparent}
 #team-combined .team-combined-dots{display:flex;align-items:center;justify-content:center;gap:6px;height:19px;margin:0 0 12px}
 #team-combined .team-combined-dot{width:6px;min-width:6px;height:6px;min-height:6px;margin:0;padding:0;border:0;border-radius:50%;background:#d0d0d0;box-shadow:none}
 #team-combined .team-combined-dot[aria-current=true]{background:#00c77a}
-#team-combined .team-combined-box{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-content:start;gap:18px 6px;min-height:120px;padding-bottom:18px;border-bottom:1px solid #e5e6e6}
-#team-combined .team-combined-pokemon{box-sizing:border-box;position:relative;display:block;width:100%;max-width:100px;min-width:0;height:115px;min-height:115px;margin:0;padding:15px 0 0;border:0;border-radius:0;background:none;text-align:left;box-shadow:none;color:#202020}
+#team-combined .team-combined-box{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-content:start;gap:12px 8px;min-height:120px;padding-bottom:18px;border-bottom:1px solid #e5e6e6}
+#team-combined .team-combined-pokemon{box-sizing:border-box;position:relative;display:block;width:100%;max-width:120px;min-width:0;height:120px;min-height:120px;margin:0;padding:0;border:0;border-radius:0;background:none;text-align:left;box-shadow:none;color:#202020}
 #team-combined .team-combined-pokemon.is-teammate>.box-compact-card{border-color:#ff4e48}
 #team-combined .team-combined-member-mark{display:grid;place-items:center;flex:none;width:16px;height:16px;border-radius:50%;background:#ff7d61;color:#252525;font-size:8px;font-weight:700}
-#team-combined .box-compact-card{box-sizing:border-box;display:flex;flex-direction:column;align-items:center;min-width:0;width:100%;height:98px;padding:2px 2px 1px;border:1px solid #ff7d61;border-radius:19px;background:#fffbdc;overflow:hidden;color:#303030}
-#team-combined .box-compact-name{display:block;max-width:100%;min-height:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-weight:700;line-height:16px}
-#team-combined .box-compact-meta{display:flex;align-items:center;justify-content:center;gap:2px;max-width:100%;min-height:16px;overflow:hidden}
-#team-combined .box-compact-type{max-width:58px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:1px 3px;border-radius:6px;background:var(--pokemon-type-color,#ff7d61);color:#fff;font-size:8px;line-height:12px}
-#team-combined .box-compact-level{padding:1px 3px;border:1px solid #bbb;border-radius:8px;background:#fff;color:#222;font-size:8px;line-height:12px;white-space:nowrap}
-#team-combined .box-compact-ingredients{display:flex;justify-content:center;gap:2px;width:100%;min-height:23px;overflow:hidden}
-#team-combined .box-compact-ingredient{display:grid;place-items:center;width:20px;height:20px;min-width:0;overflow:hidden;border:1px solid #ccc;border-radius:50%;background:#fff;color:#555;font-size:7px;line-height:1;text-align:center}
-#team-combined .box-compact-skill{display:block;max-width:96%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:auto;padding:1px 5px;border-radius:9px;background:#ff7d61;color:#fff;font-size:8px;line-height:12px}
-#team-combined .team-combined-nickname{display:block;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#303030;text-align:center;font-size:9px;font-weight:700;line-height:13px}
+#team-combined .box-compact-card{box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:0;width:100%;height:120px;padding:2px;border:1px solid #ddd;border-radius:19px;background:#fffbdc;overflow:hidden;color:#303030}
+#team-combined .box-compact-level-row{display:flex;align-items:center;justify-content:center;gap:2px;min-height:15px}
+#team-combined .box-compact-level{color:#222;font-size:10px;font-weight:700;line-height:14px;white-space:nowrap}
+#team-combined .box-compact-type{max-width:95%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 4px;border-radius:6px;background:var(--pokemon-type-color,#ff7d61);color:#fff;font-size:8px;line-height:12px}
+#team-combined .box-compact-name{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-weight:700;line-height:15px}
+#team-combined .box-compact-skill-row{display:flex;align-items:center;justify-content:center;gap:2px;min-height:16px}
+#team-combined .box-compact-skill-icon{display:block;flex:none;width:16px;height:16px;-webkit-mask:var(--card-skill-icon) center/contain no-repeat;mask:var(--card-skill-icon) center/contain no-repeat}
+#team-combined .box-compact-skill-level{padding:0 2px;border:1px solid #bbb;border-radius:7px;background:#fff;color:#555;font-size:8px;line-height:12px;white-space:nowrap}
+#team-combined .box-compact-ingredients{display:flex;align-items:center;justify-content:center;gap:2px;width:100%;min-height:19px;overflow:hidden}
+#team-combined .box-compact-ingredient{display:block;width:18px;height:18px;object-fit:contain}
+#team-combined .box-compact-ingredient-fallback{max-width:20px;overflow:hidden;text-overflow:clip;white-space:nowrap;font-size:7px}
+#team-combined .box-compact-specialty{max-width:95%;overflow:hidden;white-space:nowrap;padding:0 6px;border-radius:8px;background:#ff7d61;color:#fff;font-size:8px;line-height:12px}
+#team-combined .box-compact-nickname{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#303030;font-size:9px;font-weight:700;line-height:12px}
+#team-combined .box-compact-team{gap:0}
+#team-combined .box-compact-team .box-compact-level-row{min-height:11px}
+#team-combined .box-compact-team .box-compact-level{font-size:8px;line-height:11px}
+#team-combined .box-compact-team .box-compact-name{font-size:9px;line-height:12px}
+#team-combined .box-compact-team .box-compact-skill-row{min-height:13px}
+#team-combined .box-compact-team .box-compact-skill-icon{width:13px;height:13px}
+#team-combined .box-compact-team .box-compact-ingredients{min-height:16px}
+#team-combined .box-compact-team .box-compact-ingredient{width:15px;height:15px}
+#team-combined .box-compact-team .box-compact-nickname{font-size:8px;line-height:11px}
 #team-combined .team-combined-search{margin:2px 0 8px}
 #team-combined .team-combined-search label{font-size:12px}
 #team-combined .team-combined-search input{width:100%;min-height:38px}
