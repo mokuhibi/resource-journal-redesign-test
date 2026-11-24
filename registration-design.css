@@ -116,3 +116,65 @@
 #team .registration-redesign-panel .registration-left-head{position:relative}
 #team .registration-redesign-panel .registration-left-head .individual-field:has(#profile-species-select){position:absolute;top:0;left:0;width:100%;height:18px;opacity:0}
 #team .registration-redesign-panel .registration-left-head .individual-field:has(#profile-species-select) select{height:18px;min-height:18px;cursor:pointer}
+
+/* 登録・編集は項目ごとに左右を一つの段として揃える。 */
+#team .registration-redesign-panel .registration-design-shell{display:block;min-width:0}
+#team .registration-redesign-panel .registration-editor-layout{display:flex;flex-direction:column;min-width:0}
+#team .registration-redesign-panel .registration-editor-layout[hidden],#team .registration-redesign-panel .registration-select-shell[hidden]{display:none}
+#team .registration-redesign-panel .registration-editor-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0;border-bottom:1px solid #ddd}
+#team .registration-redesign-panel .registration-editor-left,#team .registration-redesign-panel .registration-editor-right{min-width:0}
+#team .registration-redesign-panel .registration-editor-basic{min-height:88px}
+#team .registration-redesign-panel .registration-basic-left{padding-top:2px}
+#team .registration-redesign-panel .registration-left-head{display:grid;grid-template-columns:28px auto minmax(0,1fr);align-items:center;gap:3px;min-height:26px}
+#team .registration-redesign-panel .registration-left-head strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+#team .registration-redesign-panel .registration-left-head .individual-field:has(#profile-species-select){left:58px;width:calc(100% - 58px);height:24px}
+#team .registration-redesign-panel .registration-left-head .individual-field:has(#profile-species-select) select{height:24px;min-height:24px}
+#team .registration-redesign-panel .registration-type,#team .registration-redesign-panel .registration-specialty{display:inline-block;max-width:100%;padding:2px 5px;border-radius:8px;color:#fff;font-size:9px;line-height:1.1;white-space:nowrap}
+#team .registration-redesign-panel .registration-specialty{grid-column:2;grid-row:2;justify-self:start}
+#team .registration-redesign-panel .registration-shiny{display:grid;place-items:center;grid-column:1;grid-row:1/3;width:27px;height:27px;min-height:27px;margin:0;padding:2px;border:1px solid #aaa;border-radius:50%;color:#777;background:#fff}
+#team .registration-redesign-panel .registration-shiny .tab-icon{width:19px;height:19px}
+#team .registration-redesign-panel .registration-shiny .tab-label{display:none}
+#team .registration-redesign-panel .registration-shiny[aria-pressed=true]{color:#ffae35;border-color:#ffae35;background:#fff8e6}
+#team .registration-redesign-panel .registration-level-row{grid-template-columns:auto auto minmax(0,1fr);gap:4px;min-height:28px;margin-top:4px}
+#team .registration-redesign-panel .registration-level-value{font-size:22px}
+#team .registration-redesign-panel .registration-level-row input{min-height:22px;height:22px}
+#team .registration-redesign-panel .registration-level-options{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;padding:4px 0}
+#team .registration-redesign-panel .registration-level-options .registration-option{min-height:20px;height:20px;padding:0;border-radius:50%;font-size:9px}
+#team .registration-redesign-panel .registration-editor-food{min-height:118px;padding:5px 0}
+#team .registration-redesign-panel .registration-held{min-height:20px}
+#team .registration-redesign-panel .registration-berry-row{display:flex;align-items:center;gap:5px;min-height:22px}
+#team .registration-redesign-panel .registration-berry{background:#8e519a}
+#team .registration-redesign-panel .registration-berry-count{padding:1px 5px;border:1px solid #e5a240;border-radius:10px;font-size:9px}
+#team .registration-redesign-panel .registration-food-preview{margin-top:4px}
+#team .registration-redesign-panel .registration-food-slot{aspect-ratio:1.18}
+#team .registration-redesign-panel .registration-food-combinations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px;max-height:105px;overflow-y:auto;overscroll-behavior:contain;align-content:start;-webkit-overflow-scrolling:touch}
+#team .registration-redesign-panel .registration-food-combination{display:flex;align-items:center;justify-content:space-around;gap:1px;min-width:0;min-height:30px;padding:1px;border-radius:15px;background:#fff}
+#team .registration-redesign-panel .registration-food-combination img{width:24px;height:24px;max-width:33%;object-fit:contain}
+#team .registration-redesign-panel .registration-food-combination[aria-pressed=true]{border-color:#ff7d61;background:#fff1ed}
+#team .registration-redesign-panel .registration-food-combination small{overflow:hidden;font-size:8px}
+#team .registration-redesign-panel .registration-editor-skill{min-height:61px;padding:7px 0}
+#team .registration-redesign-panel .registration-skill-preview{min-height:43px;margin:0}
+#team .registration-redesign-panel .registration-skill-options{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;padding-top:10px}
+#team .registration-redesign-panel .registration-skill-options .registration-option{height:21px;min-height:21px;padding:0;border-radius:50%;font-size:9px}
+#team .registration-redesign-panel .registration-editor-sub{min-height:164px;padding:9px 0}
+#team .registration-redesign-panel .registration-subskill-preview{gap:9px 4px}
+#team .registration-redesign-panel .registration-subskill-slot{height:31px;min-height:31px;padding:8px 2px 1px;text-align:left;box-shadow:none}
+#team .registration-redesign-panel .registration-subskill-slot[aria-pressed=true]{outline:2px solid #ff7d61;outline-offset:1px}
+#team .registration-redesign-panel .registration-subskill-slot.registration-subskill-gold{background:#ffdc78}
+#team .registration-redesign-panel .registration-subskill-slot.registration-subskill-blue{background:#d8ecff}
+#team .registration-redesign-panel .registration-subskill-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;align-content:start;padding:0}
+#team .registration-redesign-panel .registration-subskill-options .registration-option{height:22px;min-height:22px;padding:1px;font-size:8px}
+#team .registration-redesign-panel .registration-editor-nature{min-height:145px;padding:8px 0}
+#team .registration-redesign-panel .registration-nature-preview{min-height:30px}
+#team .registration-redesign-panel .registration-nature-modes{display:flex;gap:3px;margin-top:5px}
+#team .registration-redesign-panel .registration-nature-mode{height:20px;min-height:20px;padding:0 9px;border:1px solid #bbb;border-radius:11px;background:#fff;box-shadow:none;font-size:10px}
+#team .registration-redesign-panel .registration-nature-mode[aria-pressed=true]{background:#ff7d61;color:#fff;border-color:#ff7d61}
+#team .registration-redesign-panel .registration-nature-effects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;margin-top:4px}
+#team .registration-redesign-panel .registration-nature-effect{height:19px;min-height:19px;margin:0;padding:0 2px;border:0;border-radius:0;background:transparent;box-shadow:none;text-align:left;font-size:9px}
+#team .registration-redesign-panel .registration-nature-options{display:grid;grid-template-columns:1fr;gap:2px;height:132px;min-height:132px;max-height:132px;overflow-y:auto;align-content:start;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#team .registration-redesign-panel .registration-nature-options .registration-option{display:flex;align-items:center;justify-content:space-between;gap:2px;height:22px;min-height:22px;padding:1px 5px;font-size:9px}
+#team .registration-redesign-panel .registration-nature-options .registration-option small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:7px}
+#team .registration-redesign-panel .registration-editor-extra{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:7px 0;color:#26b94d}
+#team .registration-redesign-panel .registration-editor-extra small{padding:1px 7px;border-radius:9px;background:#26e06f;color:#fff;font-size:9px}
+#team .registration-redesign-panel .registration-select-shell{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+@media(max-width:350px){#team .registration-redesign-panel .registration-editor-row{gap:6px}#team .registration-redesign-panel .registration-food-combination img{width:20px;height:20px}}
