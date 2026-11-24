@@ -29,6 +29,8 @@ const TabIcons=(()=>{
  paths.boxes='<path d="m12 2 5 3-5 3-5-3 5-3Z" /><path d="M7 5v6l5 3 5-3V5" /><path d="M12 8v6" /><path d="m5 11 5 3-5 3-5-3 5-3Z" /><path d="M0 14v6l5 3 5-3v-6" /><path d="M5 17v6" /><path d="m19 11 5 3-5 3-5-3 5-3Z" /><path d="M14 14v6l5 3 5-3v-6" /><path d="M19 17v6" />';
  paths.backpack='<path d="M5 9V7a7 7 0 0 1 14 0v2" /><rect x="4" y="9" width="16" height="13" rx="2" /><path d="M8 9V7a4 4 0 0 1 8 0v2" /><rect x="8" y="14" width="8" height="5" rx="1" />';
  paths.menu='<path d="M4 6h16" /><path d="M4 12h16" /><path d="M4 18h16" />';
+ paths.plus='<path d="M12 5v14" /><path d="M5 12h14" />';
+ paths.search='<circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />';
  const main={record:'notebook-pen',analysis:'analysis',bag:'backpack',summary:'candy',shards:'diamond',history:'history',team:'boxes',settings:'menu'},record={main:'notebook-pen',sleep:'moon',social:'mail',professor:'arrow-right-left',nap:'mountain'};
  function add(button,name){
   if(!paths[name]||button.querySelector('.tab-icon'))return;
