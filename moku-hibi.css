@@ -626,3 +626,35 @@ body :is(#app-panel,#history-field-view) .field-history-days>button.field-histor
 #record #record-field{display:block;width:100%;height:36px;min-height:0;margin:0;padding:0;border:0;border-radius:0;appearance:none;-webkit-appearance:none;background:transparent;color:#292a2b;font-size:11px;font-weight:700;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:400px){#record .record-date-card{width:calc(100% + 22px);margin-left:-16px!important}}
 @media(max-width:359px){#record .record-date-row{grid-template-columns:14px minmax(0,1.3fr) 14px 39px 18px minmax(0,1fr);gap:1px;padding-inline:5px}#record .record-bar-full{display:none}#record .record-bar-compact{display:inline}#record .record-bar-field-icon{width:18px;height:18px}#record .record-bar-date,#record #record-field{font-size:10px}}
+
+/* 新デザインの5タブと、その上の独立した操作領域。 */
+body[data-main-tab=record]{--main-tab-color:#FFA81B;--main-tab-bg:#FFFBF4}
+body[data-main-tab=analysis]{--main-tab-color:#00D3F3;--main-tab-bg:#F2FDFE}
+body[data-main-tab=team]{--main-tab-color:#FF7D61;--main-tab-bg:#FFF9F7}
+body[data-main-tab=bag]{--main-tab-color:#FFC12A;--main-tab-bg:#FFFCF4}
+body[data-main-tab=settings]{--main-tab-color:#CBCBCD;--main-tab-bg:#FCFCFD}
+body[data-main-tab]{background:var(--main-tab-bg)!important}
+body[data-main-tab] .app{min-height:100dvh;padding-bottom:calc(166px + env(safe-area-inset-bottom));background:var(--main-tab-bg)!important}
+body .tabs,body:has(#record[hidden]) .tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));height:calc(98px + env(safe-area-inset-bottom));max-width:840px;width:100vw;right:auto;left:0;transform:none;margin:auto;padding:7px 0 calc(7px + env(safe-area-inset-bottom));gap:0;border:0;border-top:2px solid #00c77a;background:#f2faf6;backdrop-filter:none}
+body .tabs button,body:has(#record[hidden]) .tabs button{display:flex;flex-direction:column-reverse;align-items:center;justify-content:flex-end;gap:4px;height:70px;min-height:0;padding:0 1px;border:0;border-radius:0;background:none;box-shadow:none;font-size:12px;font-weight:700;color:var(--tab-color)!important;white-space:nowrap}
+body .tabs button[data-tab=record]{--tab-color:#FFA81B}
+body .tabs button[data-tab=analysis]{--tab-color:#00D3F3}
+body .tabs button[data-tab=team]{--tab-color:#FF7D61}
+body .tabs button[data-tab=bag]{--tab-color:#FFC12A}
+body .tabs button[data-tab=settings]{--tab-color:#CBCBCD}
+body .tabs .tab-label{display:flex;align-items:center;justify-content:center;width:calc(100% - 6px);height:29px;min-height:29px;padding:0 2px;border-radius:17px;font-size:12px;line-height:1;white-space:nowrap}
+body .tabs .tab-icon{width:22px;height:22px;flex:none}
+body .tabs button[data-tab=record] .tab-icon{visibility:hidden}
+body .tabs button[data-tab=record]::after{content:'';position:absolute;top:33px;left:calc(50% - 11px);width:22px;height:22px;background:currentColor;-webkit-mask:url('assets/record-tabs/record.svg') center/contain no-repeat;mask:url('assets/record-tabs/record.svg') center/contain no-repeat}
+body .tabs button[aria-current=page] .tab-label{background:var(--tab-color);color:#fff}
+body .tabs button[aria-current=page]::before{content:none}
+body .tabs button:not(:last-child) .tab-label::after{content:'';position:absolute;right:0;top:33px;width:1px;height:25px;background:#d3d8d5}
+#bottom-actions{position:fixed;left:0;right:0;bottom:calc(98px + env(safe-area-inset-bottom));z-index:39;box-sizing:border-box;width:100vw;max-width:840px;height:51px;margin:auto;left:0;right:auto;transform:none;border-bottom:2px solid #00c77a;border-radius:8px 8px 0 0;background:var(--main-tab-color)}
+#bottom-actions #record-history-button{position:absolute;right:18px;top:6px;display:flex;align-items:center;justify-content:center;width:38px;height:38px;min-width:38px;min-height:38px;margin:0;padding:5px;border:1px solid #aaa;border-radius:50%;background:#fff;color:#242424;box-shadow:0 2px 3px #0005}
+#bottom-actions #record-history-button svg{width:25px;height:25px}
+#analysis-switch{display:flex;gap:8px;margin:0 0 16px}
+#analysis-switch button{min-height:40px;padding:6px 14px;border-color:var(--mh-border);background:#fff;font-size:13px}
+#analysis-switch button[aria-selected=true]{border-color:#00D3F3;color:#009fb9;font-weight:700}
+@media(max-width:360px){body .tabs .tab-label{font-size:10px}body .tabs .tab-icon{width:20px;height:20px}body .tabs button[data-tab=record]::after{left:calc(50% - 10px);width:20px;height:20px}}
+
+@media(min-width:840px){body .tabs,body:has(#record[hidden]) .tabs,#bottom-actions{left:50%;transform:translateX(-50%)}}

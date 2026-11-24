@@ -25,7 +25,11 @@ const TabIcons=(()=>{
  paths["image-plus"]="<path d=\"M16 5h6\" />\n  <path d=\"M19 2v6\" />\n  <path d=\"M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5\" />\n  <path d=\"m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21\" />\n  <circle cx=\"9\" cy=\"9\" r=\"2\" />";
  paths.pencil='<path d="m18 2 4 4-14 14-6 2 2-6L18 2Z" /><path d="m14.5 5.5 4 4" />';
  paths.x='<path d="M18 6 6 18" /><path d="m6 6 12 12" />';
- const main={record:'notebook-pen',summary:'candy',shards:'diamond',history:'history',team:'users',settings:'settings'},record={main:'notebook-pen',sleep:'moon',social:'mail',professor:'arrow-right-left',nap:'mountain'};
+ paths.analysis='<path d="M3 20V11" /><path d="M8 20v-5" /><path d="M13 20v-8" /><path d="M18 20V7" /><path d="m3 10 6-5 4 3 8-6" />';
+ paths.boxes='<path d="m12 2 5 3-5 3-5-3 5-3Z" /><path d="M7 5v6l5 3 5-3V5" /><path d="M12 8v6" /><path d="m5 11 5 3-5 3-5-3 5-3Z" /><path d="M0 14v6l5 3 5-3v-6" /><path d="M5 17v6" /><path d="m19 11 5 3-5 3-5-3 5-3Z" /><path d="M14 14v6l5 3 5-3v-6" /><path d="M19 17v6" />';
+ paths.backpack='<path d="M5 9V7a7 7 0 0 1 14 0v2" /><rect x="4" y="9" width="16" height="13" rx="2" /><path d="M8 9V7a4 4 0 0 1 8 0v2" /><rect x="8" y="14" width="8" height="5" rx="1" />';
+ paths.menu='<path d="M4 6h16" /><path d="M4 12h16" /><path d="M4 18h16" />';
+ const main={record:'notebook-pen',analysis:'analysis',bag:'backpack',summary:'candy',shards:'diamond',history:'history',team:'boxes',settings:'menu'},record={main:'notebook-pen',sleep:'moon',social:'mail',professor:'arrow-right-left',nap:'mountain'};
  function add(button,name){
   if(!paths[name]||button.querySelector('.tab-icon'))return;
   const label=document.createElement('span');label.className='tab-label';while(button.firstChild)label.append(button.firstChild);

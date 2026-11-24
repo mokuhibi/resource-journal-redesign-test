@@ -1,6 +1,6 @@
 'use strict';
 const SleepUI=(()=>{
- let date='',draft=null,number=1,loaded=false,mode='candy',query='',showOtherTypes=false,historyKind='all',historyDay='',researchSource=null,inputMode='candy',recordView=false,socialView=false,professorRecordView=false,historyView=false,socialHistoryView=false,fieldView=false,professorHistoryView=false,navigationReady=false,pickupOnly=false,calendarMonth='',calendarOpen=true,searchViewportCleanup=null;
+ let date='',draft=null,number=1,loaded=false,mode='candy',query='',showOtherTypes=false,historyKind='all',historyDay='',researchSource=null,inputMode='candy',recordView=false,socialView=false,professorRecordView=false,historyView=false,socialHistoryView=false,fieldView=false,professorHistoryView=false,navigationReady=false,pickupOnly=false,calendarMonth='',calendarOpen=true,searchViewportCleanup=null,recordHistoryReturn='main';
  const fields=(typeof FieldHistory!=='undefined'?FieldHistory:require('./field-history.js')).fields;
  const editing=new Set(),sessions=()=>state.sleepSessions||[],draftKey=()=>date+':'+number,editKey=()=>draftKey()+':'+mode;
  function savedComponent(){const r=rowFor(),s=r?.kind==='session'?r.record:r?.sleepSession;return mode==='candy'?Boolean(s&&s.candyRecorded!==false):Boolean(r&&(r.kind==='legacy'||r.record.shardsRecorded!==false));}
@@ -119,6 +119,8 @@ const SleepUI=(()=>{
  function selectResearch(day,round){if(!SleepResearch.validDate(day)||![1,2].includes(round))return;date=day;number=round;draft=loadDraft();loaded=true;researchSource=null;if(!rowFor())applyBonus();}
  function selectFieldHistory(){historyView=socialHistoryView=false;fieldView=true;professorHistoryView=false;showTab('history');}
  function selectSocialHistory(){historyView=fieldView=professorHistoryView=false;socialHistoryView=true;showTab('history');}
+ function openRecordHistory(){recordHistoryReturn=professorRecordView?'professor':socialView?'social':recordView?'sleep':'main';if(professorRecordView)return selectProfessor('history');if(socialView)return selectSocialHistory();selectView('history',recordView);}
+ function returnFromRecordHistory(){if(recordHistoryReturn==='professor')return selectProfessor('record');if(recordHistoryReturn==='social')return selectSocial();selectView('record',recordHistoryReturn==='sleep');}
  function selectView(host,sleep){if(host==='record'){if(recordView&&!sleep&&date&&(readOnly()||draft?.entries.length))SleepShards.selectResearch(date,number);if(!recordView&&sleep){const selected=SleepShards.selection();if(selected)selectResearch(selected.date,selected.number);}recordView=sleep;socialView=professorRecordView=false;}else{if(sleep&&!historyView){historyKind='week';historyDay=C.gameDay(new Date());calendarMonth=historyDay.slice(0,7);}historyView=sleep;socialHistoryView=fieldView=professorHistoryView=false;}showTab(host);}
  async function openResearch(day,round,nextMode){
   if(mode!=='history'&&!await keep())return false;date=day;number=round;mode=inputMode=nextMode;draft=loadDraft();loaded=true;researchSource=null;recordView=true;socialView=professorRecordView=false;showTab('record');
@@ -258,5 +260,5 @@ const SleepUI=(()=>{
  function matchingOCR(rows){const hashes=new Set(rows.map(r=>r.imageHash).filter(Boolean));return draft.entries.filter(e=>hashes.has(e.ocrSource?.imageHash)).length;}
  async function appendOCR(rows,expected,replaceMatching=false,preserveSelected=false,sourceRows=rows){if(date!==expected.date||number!==expected.number)throw Error('日付・回数が変更されました。選び直してください。');const hashes=new Set(sourceRows.map(r=>r.imageHash).filter(Boolean)),retained=replaceMatching?draft.entries.filter(e=>!hashes.has(e.ocrSource?.imageHash)):draft.entries,result=SleepOCR.draftEntries(rows,{...draft,entries:retained},candyMap,uid,preserveSelected),previous=draft;draft={...draft,entries:[...retained,...result.entries]};if(number===2)recalculateEntries();if(!await keep()){draft=previous;throw Error('入力途中の保存ができません。読み取りを再実行してください。');}render();return {...result,total:draft.entries.length};}
  function invalidateOCR(){draft=null;loaded=false;researchSource=null;}
- return {selectSocial,appendOCR,matchingOCR,entryRow,invalidateOCR,selectFieldHistory,selectResearch,render,edit,appendHistory,reset,initNavigation,syncNavigation,navigate,selectView,home,pickupsChanged,saveStatus};
+ return {selectSocial,openRecordHistory,returnFromRecordHistory,appendOCR,matchingOCR,entryRow,invalidateOCR,selectFieldHistory,selectResearch,render,edit,appendHistory,reset,initNavigation,syncNavigation,navigate,selectView,home,pickupsChanged,saveStatus};
 })();
