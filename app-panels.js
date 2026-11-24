@@ -23,7 +23,7 @@ const AppRelease=(()=>{
    const releases=el('section',undefined,'release-history');releases.append(el('h3','更新履歴'));for(const entry of history){const section=el('section',undefined,'release-entry'),h=el('h4','v'+entry.version),date=el('time',entry.date);date.dateTime=entry.date;const list=el('ul');for(const change of entry.changes)list.append(el('li',change));section.append(h,date,list);releases.append(section);}body.append(releases);
   });
   b.textContent='Ver.'+current.version+' REDESIGN TEST';b.setAttribute('aria-label','バージョン・お知らせ・更新履歴');b.onclick=open;
-  const historyButton=button(announcements.some(item=>item.active)?'お知らせ':'更新履歴',open);historyButton.id='release-history-button';historyButton.setAttribute('aria-label','お知らせと更新履歴');const controls=el('div',undefined,'release-controls');b.before(controls);controls.append(b,historyButton);
+  const historyButton=button('更新履歴・お知らせ',open);historyButton.id='release-history-button';historyButton.setAttribute('aria-label','お知らせと更新履歴');const controls=el('div',undefined,'release-controls');b.before(controls);controls.append(b,historyButton);
   const key=KEY+'-release-seen';let seen;try{seen=localStorage.getItem(key);}catch(_){return;}
   if(current.version==='1.0.0'||seen===current.version)return;
   const banner=el('aside',undefined,'release-banner'),head=el('div',undefined,'section-head');head.append(el('strong','v'+current.version+' の更新'),button('閉じる',()=>{try{localStorage.setItem(key,current.version);banner.remove();}catch(e){notice('お知らせの既読状態を保存できません。',true);}}));const list=el('ul');for(const text of current.changes)list.append(el('li',text));banner.append(head,list);document.querySelector('header').after(banner);
