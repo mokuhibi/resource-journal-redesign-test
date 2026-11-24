@@ -91,7 +91,7 @@ const TeamUI=(()=>{
    else{const fallback=el('span',item,'box-compact-ingredient-fallback');fallback.title=item;row.append(fallback);}
   }card.append(row);}
   const specialty=({berry:'きのみ',ingredient:'食材',skill:'スキル'})[pokemonSpecialties[p.species]];
-  if(specialty)card.append(el('small',specialty,'box-compact-specialty'));
+  if(specialty){const badge=el('small',specialty,'box-compact-specialty');PokemonTypes.applySpecialty(badge,pokemonSpecialties[p.species]);card.append(badge);}
   if(mode==='team')card.append(levelRow);
   card.append(el('small',p.nickname?.trim()||species,'box-compact-nickname'));
   return card;
