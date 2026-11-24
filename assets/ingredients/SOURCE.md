@@ -31,3 +31,7 @@
 ## 変換修正（2026-10-17）
 
 Pumpkin / Avocado の `<g>` 内の図形を正しく抽出。Reactの未展開参照タグを除去し、数値のJSX属性をSVG属性へ変換。元のtransform・座標・色・MIT全文を維持。読み込み成功だけでなく実図形を検証する。その他17ファイル・ID対応・不透明度・計算・保存形式は変更なし。
+
+## ひとくちナッツ（2026-11-24）
+
+`Nuts.svg` は [NutsIcon.tsx](https://github.com/nitoyon/pokesleep-tool/blob/e4bc581bc2c89e0cc2016625d39c644e0dfe626b/src/ui/Resources/NutsIcon.tsx) から図形を抽出。Copyright (c) 2026 ちゃんりわ、MIT。元の図形・色・viewBoxを維持し、JSX属性のみSVG属性へ変換。SVG内に原文のライセンスを保持。

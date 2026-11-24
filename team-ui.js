@@ -86,7 +86,7 @@ const TeamUI=(()=>{
   const ingredients=(p.importedIndividual?.ingredients||[]).filter(Boolean);
   if(ingredients.length){const row=el('div',undefined,'box-compact-ingredients');for(const item of ingredients.slice(0,3)){
    const key=Object.entries(IndividualImportMaps.ingredients).find(([english,japanese])=>/^[a-z]+$/.test(english)&&japanese===item)?.[0];
-   const file=key==='soy'?'Soybean':key?key[0].toUpperCase()+key.slice(1):null;
+   const file=item==='ひとくちナッツ'?'Nuts':key==='soy'?'Soybean':key?key[0].toUpperCase()+key.slice(1):null;
    if(file){const img=el('img');img.className='box-compact-ingredient';img.src='assets/ingredients/'+file+'.svg';img.alt=item;row.append(img);}
    else{const fallback=el('span',item,'box-compact-ingredient-fallback');fallback.title=item;row.append(fallback);}
   }card.append(row);}
