@@ -991,6 +991,9 @@ const MainSkillMaster=(()=>{
  entries.push({id:"mystical_fire_cooking_advance_s",name:"マジカルフレイム(料理アドバンスS)",legacyName:"マジカルフレイム(料理アドバンスS)",mew:false});
  species["ムウマ"]={skillId:"cooking_power_s"};
  species["ムウマージ"]={skillId:"mystical_fire_cooking_advance_s"};
+ // タマゲタケ系統の基本スキル（保存済みの個体別指定は forPokemon で優先）。
+ species["タマゲタケ"]={skillId:"energy_s"};
+ species["モロバレル"]={skillId:"energy_s"};
  const find=value=>entries.find(s=>s.id===value||s.legacyName===value||s.name===value||s.aliases?.includes(value));
  const id=value=>find(value)?.id||value||'';
  const name=value=>String(find(value)?.name||value||'未設定').replaceAll('（','(').replaceAll('）',')');
