@@ -97,5 +97,5 @@ const RegistrationDesign=(()=>{
   for(const input of shell.querySelectorAll('input,select'))input.addEventListener('change',()=>{if(!applyingFood)refresh(prefix);});
  }
  function init(){const register=byId('register-panel'),form=register.querySelector('.register-entry-form'),editForm=byId('profile-form');register.classList.add('registration-redesign-panel');byId('individual-editor').classList.add('registration-redesign-panel');attach('register-',form);attach('profile-',editForm);select();}
- return {init,select,selectedSpecies,edit,refresh,speciesList};
+ return {foodImage,typeNames,init,select,selectedSpecies,edit,refresh,speciesList};
 })();

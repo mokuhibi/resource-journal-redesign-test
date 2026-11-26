@@ -40,6 +40,7 @@ const TeamUI=(()=>{
  }
  function sync(){
   for(const name of ['team','roster','register'])$(name+'-panel').hidden=view!==name||editing;
+  $('pokemon-individual-detail').hidden=view!=='detail'||editing;
   $('individual-editor').hidden=!editing;
   $('team-combined').hidden=view!=='team'||editing;
   $('team-action-buttons').hidden=view!=='team'||editing||document.body.dataset.mainTab!=='team';
@@ -47,8 +48,8 @@ const TeamUI=(()=>{
   syncEntry();
  }
  function show(name,entry=''){view=name;editing=false;if(name==='register'){registerEntry=entry;selected='';catalogOpen=false;$('pokemon-search').value='';$('nickname').value='';$('add-pokemon').disabled=true;ProfileForm.reset('');RegistrationDesign.select();}sync();window.scrollTo({top:0});}
- function edit(origin='roster'){editOrigin=['team','roster'].includes(origin)?origin:'roster';view=editOrigin;editing=true;sync();RegistrationDesign.edit();window.scrollTo({top:0});$('profile-back').focus({preventScroll:true});}
- function finishEdit(){show(editOrigin);}
+ function edit(origin='roster'){editOrigin=['team','roster','detail'].includes(origin)?origin:'roster';view=editOrigin;editing=true;sync();RegistrationDesign.edit();window.scrollTo({top:0});$('profile-back').focus({preventScroll:true});}
+ function finishEdit(){if(editOrigin==='detail'&&IndividualDetail.refresh()){show('detail');return;}show(editOrigin==='detail'?'team':editOrigin);}
  function registration(){$('registration-fields').hidden=false;ProfileForm.refresh(selected);}
  function renderRoster(root=$('registered-pokemon-list'),displayView=rosterView,search=$('roster-search').value){
   const q=normalize(search);root.replaceChildren();root.style.setProperty('--roster-columns',columns);root.dataset.columns=String(columns);
@@ -116,7 +117,7 @@ const TeamUI=(()=>{
   $('team-combined-count').textContent=String(state.pokemon.length);
   const query=normalize($('roster-search').value);box.replaceChildren();
   for(const p of state.pokemon.filter(p=>!query||[p.species,C.speciesName(p.species),p.nickname].some(v=>normalize(v||'').includes(query)))){
-   const b=button('',()=>selectedSlot?assignCombined(p):openIndividualEditor(p,'team'),'team-combined-pokemon');b.dataset.pokemonId=p.id;b.setAttribute('aria-label',label(p)+(selectedSlot?'を編成':'の個体情報を表示'));
+   const b=button('',()=>selectedSlot?assignCombined(p):IndividualDetail.open(p.id),'team-combined-pokemon');b.dataset.pokemonId=p.id;b.setAttribute('aria-label',label(p)+(selectedSlot?'を編成':'の個体情報を表示'));
    b.append(compactCard(p,'box'));box.append(b);
   }
   if(!box.children.length)box.append(el('p',query?'一致するポケモンがありません。':'登録済みポケモンがありません。'));
@@ -156,6 +157,7 @@ const TeamUI=(()=>{
   line.onpointercancel=()=>{active=false;start=null;clear();};line.oncontextmenu=e=>e.preventDefault();
  }
  function init(){
+  IndividualDetail.init();
   const combined=el('div',undefined,'team-combined');combined.id='team-combined';
   const teamHeading=el('h2',undefined,'team-combined-heading');teamHeading.append(el('span','チーム編成'));
   const track=el('div',undefined,'team-combined-track');track.id='team-combined-track';track.setAttribute('aria-label','現在のチームと保存済みチーム');

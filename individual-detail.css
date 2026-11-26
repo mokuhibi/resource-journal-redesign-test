@@ -1,0 +1,40 @@
+#pokemon-individual-detail{background:white;padding:0 10px 12px;color:#353535;font-size:12px}
+#pokemon-individual-detail .detail-tabs{display:grid;grid-template-columns:1fr 1fr;margin-bottom:14px}
+#pokemon-individual-detail button{font:inherit;font-weight:700;min-width:0}
+#pokemon-individual-detail .detail-tabs button{background:transparent;border:0;border-bottom:2px solid #ededed;border-radius:0;color:#888;padding:9px 2px}
+#pokemon-individual-detail .detail-tabs [aria-pressed=true]{color:#ff7d61;border-color:currentColor}
+.detail-columns{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+.detail-column{min-width:0;display:grid;gap:10px;overflow-wrap:anywhere}
+.detail-heading,.detail-skill,.detail-items,.detail-foods,.detail-yields,.detail-actions{display:flex;align-items:center;gap:4px}
+.detail-level{font-weight:800;font-size:clamp(18px,5.5vw,26px);color:#1ab64a}
+.detail-names,.detail-nature,.detail-subskill,.detail-performance{display:grid;min-width:0}
+.detail-names span:first-child,.detail-caption{color:#777;font-size:10px}
+.detail-names span:last-child{font-weight:700}
+.detail-type,.detail-items span,.detail-nature,.detail-date,.detail-subskill,.detail-skill{border-radius:7px;padding:4px}
+.detail-type{justify-self:start;font-weight:bold;color:white}
+.detail-items,.detail-graph,.detail-costs{font-size:11px}
+.detail-items span,.detail-food img{background:#fffbd9}
+.detail-foods,.detail-yields{justify-content:space-around;flex-wrap:wrap}
+.detail-food{display:grid;justify-items:center;align-content:center;min-width:0;font-size:10px}
+.detail-food img{height:clamp(24px,9vw,40px);width:auto;max-width:100%;border-radius:50%;object-fit:contain}
+.detail-skill{border:1px solid #ffc12a;font-size:11px;font-weight:bold}
+.detail-skill span:last-child{margin-left:auto;white-space:nowrap}
+.detail-subs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.detail-subskill{font-size:11px;border:1px solid #ccc;background:white;font-weight:bold}
+.detail-subskill span:first-child{font-size:9px;color:#777}
+.detail-subskill[data-rank=gold]{background:#ffdf78}.detail-subskill[data-rank=blue]{background:#def2ff}
+.detail-subskill.locked{opacity:.65}.detail-nature{border:1px solid #26e06f}
+.detail-date{font-size:10px}.detail-performance{border:2px solid #9282a5;padding:8px;gap:7px}
+.detail-total{font-size:clamp(19px,5vw,26px);font-weight:800;text-align:right}
+.detail-targets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+#pokemon-individual-detail .detail-targets button{padding:2px;min-height:24px;border-radius:16px;border:1px solid #bbb;background:white;color:#444}
+#pokemon-individual-detail .detail-targets [aria-pressed=true]{background:#ddf7e4}
+#pokemon-individual-detail .detail-targets button:disabled{opacity:.35}
+.detail-costs{min-width:0;table-layout:fixed;border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+.detail-costs td{padding:4px 1px;border-bottom:1px solid #ddd;text-align:right}.detail-costs td:first-child{text-align:left}
+.detail-graph{border:1px solid #ccc;border-radius:9px;padding:4px}
+.detail-milestone{display:grid;grid-template-columns:minmax(0,1fr) 36px minmax(0,.8fr);min-height:32px;align-items:center;gap:3px}
+.detail-marker{align-self:stretch;display:grid;place-items:center;background:#eee;font-size:10px;font-weight:bold}
+.detail-milestone[data-phase=current] .detail-marker{background:#07bc62;color:white}
+.detail-milestone[data-phase=target] .detail-marker{background:#b4f1c5}
+.detail-actions{justify-content:space-between;margin-top:16px}.detail-actions button{padding:4px 14px}
